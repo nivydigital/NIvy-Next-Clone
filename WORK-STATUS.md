@@ -1,21 +1,20 @@
 # WORK STATUS — SINGLE RESUME POINT
 
 - Last updated: 2026-09-17
-- Testing: **DEFERRED** (`docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`)
-- Last completed: Registry-aligned operational agents through A049
+- Testing: **DEFERRED**
+- Last completed: Registry operational agents through **A060**
 
-## Verification
-- A034–A038: **correct** (match `agents/registry.yaml` + source plans)
-- A039, A041, A043, A044, A049: **reused from registry** (not invented)
+## Implemented (registry-aligned)
 
-## Implemented ranges
-| Range | Source | Status |
-|-------|--------|--------|
-| A001–A033 | Strategy extension track | implementation |
-| A034–A038 | registry (Lead Discovery → Verification) | implementation |
-| A039, A041, A043, A044, A049 | registry (Scoring → Personalization) | implementation |
+| Range | Agents |
+|-------|--------|
+| A034–A038 | Lead Discovery → Verification |
+| A039, A041, A043, A044, A049 | Scoring → Personalization |
+| A050, A052, A054, A055, A060 | Follow-Up → Proposal |
+
+Plus strategy track A001–A033.
 
 ## Next registry agents
-A050 Follow-Up, A052 Reply Triage, A054 Qualification, A055 Meeting Prep, A060 Proposal, …
+A065 Onboarding Agent, then A066–A071 (communications), A072–A077 (customer success), …
 
 Update after every meaningful session.
