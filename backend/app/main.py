@@ -11,6 +11,8 @@ from .runtime.discovery import execute_agent, get_agent, list_agents
 from .runtime.engine import RuntimeDenied, runtime_engine
 from .runtime.skills import resolve_agent_skills, skill_coverage_report
 from .runtime.workflows import list_workflow_defs, load_workflow, run_workflow
+from .runtime.audit import audit_log
+from .runtime.observability import audit_summary, health_snapshot
 
 app = FastAPI(title="Nivy Next AIOS API", version="0.9.1")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
@@ -30,7 +32,7 @@ class WorkflowRunRequest(BaseModel):
     payload: dict = Field(default_factory=dict)
     dry_run: bool | None = None
     stop_after_stage: str | None = None
-class A001ResearchRequest(BaseModel): research_question: str; target_market: str; geography: str | None = None; industry: str | None = None; customer_segment: str | None = None; time_horizon: str | None = None; competitor_set: list[str] | None = None; source_policy: dict = Field(default_factory=dict); output_format: str | None = None; evidence: list[dict] = Field(default_factory=list)
+class A001ResearchRequest(BaseModel): research_question: str; target_market: str; geography: str | None = None; industry: str | None = None; customer_segment: str | None = None; time_horizon: str | None = None; competitor_set: list[str] = Field(default_factory=list); source_policy: dict = Field(default_factory=dict); output_format: str | None = None; evidence: list[dict] = Field(default_factory=list)
 class A002ICPRequest(BaseModel): market_research: dict; business_offer: dict = Field(default_factory=dict); existing_customers: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); geography: str | None = None; revenue_targets: dict = Field(default_factory=dict); request_id: str | None = None
 class A003PersonaRequest(BaseModel): icp_definition: dict; market_research: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); customer_interviews: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); request_id: str | None = None
 class A004CompetitorRequest(BaseModel): market_research: dict; icp_definition: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); competitor_set: list[str] = Field(default_factory=list); geography: str | None = None; request_id: str | None = None
@@ -87,7 +89,6 @@ def skills_resolve(agent_id: str):
     except RuntimeDenied as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
 
-# --- Phase 5 Workflows ---
 @app.get("/api/v1/runtime/workflows")
 def runtime_list_workflows():
     return {"items": list_workflow_defs()}
@@ -160,6 +161,35 @@ def list_approvals():
                 row = {"approval_id": key, "value": value}
             items.append(row)
     return {"items": items, "count": len(items)}
+
+@app.get("/api/v1/runtime/audit")
+def list_runtime_audit(limit: int = 100, event_type: str | None = None, status: str | None = None):
+    """Owner Console Phase 4 / OC-4.1 — run history / audit browser."""
+    events = list(runtime_engine.audit) if isinstance(getattr(runtime_engine, "audit", None), list) else []
+    if not events:
+        events = audit_log.list()
+    if event_type:
+        events = [e for e in events if e.get("event_type") == event_type]
+    if status:
+        events = [e for e in events if e.get("status") == status]
+    events = list(reversed(events))[: max(1, min(limit, 500))]
+    return {"items": events, "count": len(events)}
+
+@app.get("/api/v1/runtime/observability/summary")
+def observability_summary():
+    """Owner Console Phase 4 / OC-4.2 — ops summary for console embeds."""
+    summary = audit_summary()
+    snap = health_snapshot(checks={"audit_store": True, "approval_store": isinstance(runtime_engine.approvals, dict)})
+    pending = 0
+    store = getattr(runtime_engine, "approvals", {}) or {}
+    if isinstance(store, dict):
+        pending = sum(1 for a in store.values() if isinstance(a, dict) and a.get("status") == "pending")
+    return {
+        "audit": summary,
+        "health": snap,
+        "approvals_pending": pending,
+        "dashboard_spec": "ops/observability/dashboard-spec.yaml",
+    }
 
 @app.post("/api/v1/runtime/approvals")
 def request_approval(request: ApprovalRequest):
