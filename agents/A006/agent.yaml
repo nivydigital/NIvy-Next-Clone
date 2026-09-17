@@ -1,0 +1,43 @@
+id: A006
+name: Messaging & Positioning Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Transform approved ICP, buyer personas, competitor intelligence and channel strategy into clear, evidence-backed messaging pillars, value propositions and market positioning statements.
+inputs:
+  required: [icp_definition, buyer_personas]
+  optional: [market_research, competitor_intelligence, channel_strategy, business_offer, brand_constraints]
+outputs:
+  primary: messaging_positioning
+  required_fields: [positioning_statement, value_propositions, messaging_pillars, proof_points, objections_and_responses, tone_and_voice, confidence, assumptions, derived_from]
+  downstream_events: [messaging_positioning.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, synthesize_positioning, define_value_props, build_messaging_pillars, attach_proof_points, map_objections, define_tone, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - positioning_and_messaging_are_traceable_to_prior_strategy_artifacts
+  - value_propositions_are_specific_and_differentiated
+  - material_assumptions_and_uncertainty_are_explicit
+provenance:
+  source: Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/02-agents/registry.yaml
+  source_type: internal
+  modifications: "Created as sequential strategy agent after A005 Channel Strategy following deferred-testing policy."
