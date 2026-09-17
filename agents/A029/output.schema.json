@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A029 Brand Strategy Output",
+  "type": "object",
+  "required": ["status", "brand_positioning", "personality", "narrative_pillars", "visual_verbal_guardrails", "proof_themes", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "brand_positioning": {"type": "string"},
+    "personality": {"type": "object"},
+    "narrative_pillars": {"type": "array", "items": {"type": "object"}},
+    "visual_verbal_guardrails": {"type": "array", "items": {"type": "object"}},
+    "proof_themes": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
