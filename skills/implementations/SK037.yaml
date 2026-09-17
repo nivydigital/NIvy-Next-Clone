@@ -1,24 +1,64 @@
 id: SK037
 name: Data Quality
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: Detect and classify record-quality problems against rules.
-inputs: [records, rules]
-outputs: [quality_report, corrections, blockers]
+category: sales
+standard: STD-01/v2
+objective: Detect and classify record-quality problems against explicit rules without inventing corrections.
+non_goals:
+  - Inventing field values or corrections not derivable from rules and records
+  - Silent drop of blockers
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: records, type: array, constraints: "list of lead/account records"}
+    - {name: rules, type: object, constraints: "quality rules with rule_id and field checks"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: quality_report, type: object}
+    - {name: corrections, type: array}
+    - {name: blockers, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - step: 1
-    action: validate_records_array
-  - step: 2
-    action: apply_rules
-  - step: 3
-    action: classify_issues
-  - step: 4
-    action: propose_corrections
-  - step: 5
-    action: flag_blockers
-quality_checks: [every_issue_has_rule_id, blockers_explicit]
-failure_policy: fail_closed_on_empty_rules
-evidence_policy: cite rule and field path
-dependencies: [SK036]
-tools: [tool.ollama.generate]
-acceptance: [quality_report is object, corrections is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require records array and non-empty rules. Fail closed if rules empty.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Index rules by rule_id; list required vs optional field checks.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "For each record apply rules: flag missing/invalid/inconsistent fields. Classify issues (missing, format, inconsistency). Propose corrections only when rule defines a deterministic fix. Flag blockers for issues that prevent downstream use.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure every issue has rule_id and field path. blockers explicit. corrections only for safe deterministic fixes.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm quality_report object, corrections array, blockers array.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return quality_report, corrections, blockers, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - records and rules present
+  - rules non-empty
+postconditions:
+  - every issue cites rule_id and field path
+  - blockers listed when present
+quality_checks:
+  - every_issue_has_rule_id
+  - blockers_explicit
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on empty rules; partial when some records scored and gaps listed
+evidence_policy: cite rule and field path; never invent citations
+dependencies:
+  skills: [SK036]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns quality_report, corrections, blockers", verify: schema}
+  - {id: AC2, statement: "Rejects empty rules", verify: test}
+  - {id: AC3, statement: "Every issue has rule_id", verify: test}
+evaluation:
+  unit_cases: [happy_path, empty_rules, blockers_present, clean_records]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
