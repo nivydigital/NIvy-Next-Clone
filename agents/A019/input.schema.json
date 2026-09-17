@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A019 Retention & Expansion Strategy Input",
+  "type": "object",
+  "required": ["onboarding_strategy", "offer_pricing_strategy"],
+  "properties": {
+    "onboarding_strategy": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "historical_retention": {"type": "object"},
+    "retention_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
