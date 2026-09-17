@@ -1,0 +1,9 @@
+version: "1.0"
+title: Nivy AIOS Operations
+panels:
+  - {id: audit_rate, title: Audit events per minute, type: timeseries}
+  - {id: tool_errors, title: Tool execution errors, type: timeseries}
+  - {id: workflow_states, title: Lead-outreach transitions, type: timeseries}
+  - {id: knowledge_ingest, title: Knowledge ingest completions, type: stat}
+  - {id: dry_run_ratio, title: Dry-run vs live sends, type: pie}
+  - {id: health, title: Dependency health, type: status, targets: [postgres, redis, qdrant, ollama, backend]}
