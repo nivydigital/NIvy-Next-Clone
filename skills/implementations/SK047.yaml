@@ -1,0 +1,18 @@
+id: SK047
+name: WhatsApp Outreach
+version: "1.0"
+status: implementation
+objective: draft consent-aware WhatsApp outreach
+inputs: [contact, context, offer]
+outputs: [message, stop_rules, approval_state]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: check_consent_context}
+  - {step: 3, action: draft_message}
+  - {step: 4, action: set_stop_rules_and_approval}
+quality_checks: [stop_rules_present, approval_state_set]
+failure_policy: fail_closed_without_consent_signal_when_required
+evidence_policy: cite consent/context
+dependencies: [SK043, SK049]
+tools: [tool.ollama.generate]
+acceptance: [message present, approval_state present]
