@@ -1,0 +1,22 @@
+id: SK036
+name: Lead Enrichment
+version: "1.0"
+status: implementation
+objective: Add verified account and contact attributes from allowed sources.
+inputs: [lead, allowed_sources]
+outputs: [enriched_lead, evidence, confidence]
+procedure:
+  - step: 1
+    action: validate_lead
+  - step: 2
+    action: enrich_from_allowed_sources
+  - step: 3
+    action: score_confidence
+  - step: 4
+    action: attach_evidence
+quality_checks: [no_attributes_without_evidence, confidence_in_high_medium_low]
+failure_policy: fail_closed_on_disallowed_sources
+evidence_policy: attribute-level provenance
+dependencies: [SK034, SK035]
+tools: [tool.ollama.generate]
+acceptance: [enriched_lead is object, evidence is array]
