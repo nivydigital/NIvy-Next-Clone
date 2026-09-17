@@ -1,0 +1,46 @@
+version: "1.0"
+status: implementation
+purpose: Multi-agent chain tests for Phase 9 evaluation
+
+chains:
+  - id: lead-path
+    description: Discover → enrich path (dry-run friendly)
+    steps:
+      - {agent: A034, fixture: evaluation/fixtures/golden/A034.input.json}
+      - {agent: A035, depends_on: A034}
+      - {agent: A036, depends_on: A035}
+    mode: dry_schema  # validate fixtures + entrypoints only unless LIVE=1
+
+  - id: inbound-comms
+    description: Inbound triage workflow dry-run
+    workflow: inbound-email-triage
+    mode: workflow_dry_run
+
+  - id: response-qa
+    workflow: response-qa
+    mode: workflow_dry_run
+
+  - id: conversation-intel
+    workflow: conversation-intel
+    mode: workflow_dry_run
+
+  - id: marketing-content
+    workflow: content-calendar
+    mode: workflow_dry_run
+
+  - id: marketing-seo
+    workflow: seo-audit
+    mode: workflow_dry_run
+
+  - id: marketing-social
+    workflow: social-content-pipeline
+    mode: workflow_dry_run
+
+  - id: control-eval
+    description: Control and evaluation agents schema presence
+    agents: [A092, A093, A094, A095, A096, A097, A098, A099, A100, A101]
+    mode: schema_presence
+
+  - id: learning-agents
+    agents: [A102, A103, A104, A105, A106, A107, A108]
+    mode: schema_presence
