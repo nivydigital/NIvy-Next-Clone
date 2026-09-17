@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A009 Go-to-Market Strategy Output",
+  "type": "object",
+  "required": ["status", "target_segments", "channel_mix", "messaging_summary", "offer_summary", "launch_sequence", "success_metrics", "risks", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "target_segments": {"type": "array", "items": {"type": "object"}},
+    "channel_mix": {"type": "object"},
+    "messaging_summary": {"type": "object"},
+    "offer_summary": {"type": "object"},
+    "launch_sequence": {"type": "array", "items": {"type": "object"}},
+    "success_metrics": {"type": "array", "items": {"type": "object"}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
