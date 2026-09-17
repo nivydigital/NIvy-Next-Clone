@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A098 Evaluation Analyst Input",
+  "type": "object",
+  "required": ["evaluation_target"],
+  "properties": {
+    "evaluation_target": {"type": "object"},
+    "rubric": {"type": "object"},
+    "baseline": {"type": "object"},
+    "evaluation_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
