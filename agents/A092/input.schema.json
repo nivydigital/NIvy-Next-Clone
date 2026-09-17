@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A092 KPI Intelligence Analyst Input",
+  "type": "object",
+  "required": ["kpi_pack"],
+  "properties": {
+    "kpi_pack": {"type": "object"},
+    "targets": {"type": "object"},
+    "prior_period": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
