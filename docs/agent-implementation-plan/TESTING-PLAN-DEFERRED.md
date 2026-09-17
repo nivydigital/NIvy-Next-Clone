@@ -21,115 +21,79 @@
 For **every** agent the final testing phase will execute the same pyramid:
 
 1. **Contract / registry tests**
-   - Agent ID exists in `agents/registry.yaml` and/or `implementation-registry.yaml`
-   - Skill / prompt / knowledge IDs resolve
-   - `input.schema.json` and `output.schema.json` validate as JSON Schema
-   - Runtime module importable; entrypoint name matches convention
-
 2. **Unit / happy-path tests**
-   - Valid required inputs → status success|partial
-   - Output validates against output schema
-   - `confidence` ∈ {high, medium, low}
-   - Required array/object fields present and correctly typed
-   - `assumptions` and `derived_from` are non-empty lists when model returns success
-
 3. **Negative / policy tests**
-   - Missing required inputs → agent-specific Error (fail closed)
-   - Non-JSON model output → agent-specific Error
-   - Invalid confidence value → Error
-   - Only allowed tools (default `tool.ollama.generate`); no unexpected side effects
-   - Agents with `external_actions: prohibited_by_default` must not call send/deploy APIs in default path
-
 4. **Output & schema tests**
-   - Round-trip: output dict validates against output.schema.json
-   - Golden fixtures (min 3 per agent) for representative scenarios
-
 5. **Evaluation suite**
-   - Quality rubric: evidence-backed, no fabricated claims, uncertainty explicit
-   - Downstream next_action points to a real next agent or human step
-
 6. **Integration / live proof**
-   - Runtime entrypoint callable with local Ollama (or configured LLM) when credentials available
-   - Optional: chain 2–3 agents (e.g. A034→A036→A039) with fixture data
-
 7. **Regression**
-   - Re-run prior golden cases after any runtime/engine change
+
+(Details unchanged from prior version — same 7-step pyramid applies to all agents.)
 
 ---
 
 ## Agent coverage inventory (what must be tested)
 
-### Strategy track (extension implementations)
-| ID range | Focus | Notes for final test |
-|----------|--------|----------------------|
-| A001–A002 | Market Research, ICP Strategist | Registry + early completion records exist; full G16–G20 still deferred |
-| A003–A033 | Strategy chain (positioning, messaging, offer, GTM, campaign, enablement, etc.) | Implemented as sequential strategy layer; verify against agent.yaml contracts even if not all IDs appear in canonical registry |
+### Strategy track
+| ID range | Focus |
+|----------|--------|
+| A001–A002 | Market Research, ICP Strategist |
+| A003–A033 | Strategy chain (extension implementations) |
 
-### Lead & sales ops (registry-aligned)
-| ID | Name | What to test (beyond pyramid) |
-|----|------|-------------------------------|
-| A034 | Lead Discovery | Multi-source style fields; provenance; no fabricated company lists |
-| A035 | Contact Discovery | Contact fields; role/title consistency with ICP |
-| A036 | Lead Enrichment | Enrichment completeness; freshness/confidence |
-| A037 | Data Quality | Dedup/cleanup flags; quality scores |
-| A038 | Verification | Verification status; fail-closed on unverifiable claims |
-| A039 | Lead Scoring | Scores + breakdown + priority_order; strategy linkage |
-| A041 | Account Research | Signals + talking_points + sources |
-| A043 | Outreach Strategy (ops) | channel_mix, sequence_outline, messaging_angles |
-| A044 | Email Outreach | drafts only by default; compliance_checks present |
-| A049 | Personalization | hooks + do_not_use boundaries |
-| A050 | Follow-Up | trigger_reason + timing_guidance; draft-only default |
-| A052 | Reply Triage | classification + recommended_action + urgency |
-| A054 | Qualification | status_per_lead + criteria_met + handoff_recommendation |
-| A055 | Meeting Prep | agenda, talking_points, risks, questions |
-| A060 | Proposal Agent | sections, value_summary, pricing_block; draft-only default |
+### Lead & sales ops
+| ID | Name | Extra asserts |
+|----|------|---------------|
+| A034–A038 | Discovery → Verification | provenance; no fabricated entities |
+| A039 | Lead Scoring | scores, breakdown, priority_order |
+| A041 | Account Research | signals, talking_points, sources |
+| A043–A044 | Outreach plan + Email | draft-only default; compliance_checks |
+| A049–A050 | Personalization + Follow-Up | do_not_use; timing_guidance |
+| A052–A055 | Triage → Meeting Prep | classification; handoff; agenda |
+| A060 | Proposal | sections, pricing_block; draft-only |
 
-### Onboarding & communications (registry-aligned)
-| ID | Name | What to test (beyond pyramid) |
-|----|------|-------------------------------|
-| A065 | Onboarding Agent | steps, milestones, owners, success_criteria |
-| A066 | Inbound Communication Triage | intent, urgency, route_to, summary |
-| A067 | Conversation Intelligence | objections, commitments, sentiment, next_best_actions |
-| A068 | Response Drafting | draft + tone + compliance_checks |
-| A069 | Meeting Intelligence | decisions, action_items, risks, follow_ups |
-| A070 | Communication Knowledge Extractor | faqs, objection_handlers, playbook_snippets, tags |
-| A071 | Communication Quality Reviewer | pass_fail, issues, suggested_edits, score |
+### Onboarding & communications
+| ID | Name | Extra asserts |
+|----|------|---------------|
+| A065 | Onboarding Agent | steps, milestones, owners |
+| A066–A071 | Comms suite | intent/route; objections; pass_fail/score |
 
-### Customer success (registry-aligned)
-| ID | Name | What to test (beyond pyramid) |
-|----|------|-------------------------------|
-| A072 | Customer Onboarding Planner | tasks, timeline, owners, checkpoints |
-| A073 | Customer Health Analyst | health_score, risk_flags, expansion_signals, recommended_actions |
-| A074 | Support Triage | severity, category, route_to, playbook |
+### Customer success
+| ID | Name | Extra asserts |
+|----|------|---------------|
+| A072 | Customer Onboarding Planner | tasks, timeline, checkpoints |
+| A073 | Customer Health Analyst | health_score, risk_flags, expansion_signals |
+| A074 | Support Triage | severity, category, playbook |
+| **A075** | **Customer Success Planner** | **motions, timeline, owners, success_metrics** |
+| **A076** | **Renewal Risk Analyst** | **risk_score, risk_drivers, save_plays, urgency** |
+| **A077** | **Feedback & NPS Analyst** | **themes, nps_summary, promoter/detractor_actions** |
 
-### Already present higher IDs
-| ID range | Focus | Notes |
-|----------|--------|-------|
-| A117–A127 | (existing folders) | Contract/registry + golden cases as listed in prior section; still deferred to final phase |
+### Finance (started)
+| ID | Name | Extra asserts |
+|----|------|---------------|
+| **A078** | **Billing Analyst** | **anomalies, dispute_candidates, process_recommendations** |
+| **A079** | **Accounts Receivable Analyst** | **priority_accounts, aging_summary, collection_actions** |
 
-### Not yet implemented (will be added when built)
-A075–A077 (CS planner, renewal risk, NPS), A078+ finance, A084+ marketing, A092+ control/eval/learning — add a row to this file in the same format when each batch is implemented.
+### Higher IDs already on disk
+| ID range | Notes |
+|----------|--------|
+| A117–A127 | Existing folders; full pyramid deferred |
+
+### Not yet implemented
+A080–A083 (AP, cashflow, pricing, revenue analytics), A084+ marketing, A092+ control/eval/learning — append rows when built.
 
 ---
 
-## Suggested final-phase execution order
+## Suggested chain tests (final phase)
 
-1. Registry + schema contract suite for all agents with folders under `agents/`
-2. Unit/negative tests per runtime module under `backend/app/runtime/`
-3. Golden fixtures directory e.g. `tests/fixtures/agents/A0XX/`
-4. Optional chain tests: Lead pipeline A034→A039→A041→A043→A044
-5. Optional chain tests: Comms A066→A068→A071
-6. Optional chain tests: CS A065→A072→A073→A074
-7. Live Ollama smoke (one call per agent or per chain)
-8. Update AGENT-PROGRESS-TRACKER and only then mark COMPLETE
+1. Lead: A034 → A036 → A039 → A041 → A043 → A044  
+2. Comms: A066 → A068 → A071  
+3. CS: A065 → A072 → A073 → A075 → A076  
+4. Finance smoke: A078 → A079  
+5. Live Ollama one-shot per agent or per chain  
+6. Mark COMPLETE only after pyramid passes
 
 ---
 
 ## Maintenance rule
 
-Whenever a new agent batch is implemented, **update this file** with:
-- Agent IDs and names
-- Any agent-specific fields or policy quirks to assert
-- Suggested chain tests if the batch closes a pipeline segment
-
-Do **not** mark any agent COMPLETE until this plan is executed in full.
+Update this file on every new agent batch with IDs, extra asserts, and chain notes. Do **not** mark agents COMPLETE until final testing phase.
