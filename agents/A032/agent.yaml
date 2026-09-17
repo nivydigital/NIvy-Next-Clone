@@ -1,0 +1,43 @@
+id: A032
+name: Competitive Response Strategy Agent
+version: "1.0"
+status: implementation
+category: market_intelligence
+purpose: Define competitive monitoring triggers, response playbooks and messaging counters from competitor intelligence and messaging strategy.
+inputs:
+  required: [competitor_intelligence, messaging_positioning]
+  optional: [brand_strategy, product_marketing_strategy, response_constraints]
+outputs:
+  primary: competitive_response_strategy
+  required_fields: [monitoring_triggers, response_playbooks, messaging_counters, escalation_rules, review_cadence, confidence, assumptions, derived_from]
+  downstream_events: [competitive_response_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_triggers, build_playbooks, set_counters, define_escalation, set_review, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - responses_are_traceable_to_competitor_evidence
+  - playbooks_and_escalation_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A031
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
