@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A119/input.schema.json",
+  "title": "A119 Agent Compatibility Analyst Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidate_agent_spec", "platform_baseline"],
+  "properties": {
+    "candidate_agent_spec": {"type": "object"},
+    "platform_baseline": {"type": "object"},
+    "skill_contract_map": {"type": "object"},
+    "tool_allowlist": {"type": "array", "items": {"type": "string"}},
+    "schema_versions": {"type": "object"},
+    "prior_compatibility_report": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

@@ -1,0 +1,38 @@
+id: A118
+name: Agent Certification Agent
+version: "1.0"
+status: implementation
+category: agent_factory
+purpose: Evaluate whether a candidate agent meets AIOS completeness, policy, security and quality gates — produce a certification verdict and evidence checklist without activating the agent.
+inputs:
+  required: [candidate_agent_spec]
+  optional: [completeness_checklist, policy_baseline, security_baseline, evaluation_evidence, prior_certification]
+outputs:
+  primary: a118_result
+  required_fields: [verdict, gate_results, evidence_gaps, remediation, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+  downstream_events: [a118_result.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+workflow:
+  sequence: [validate_input, validate_provenance, execute, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  external_actions: prohibited
+  side_effects: false
+observability:
+  audit_required: true
+failure_handling:
+  fail_closed_on_policy_or_schema_error: true
+provenance:
+  source: Phase-16 Factory Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a118
+  entrypoint: run_a118_agent_certification

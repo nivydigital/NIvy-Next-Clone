@@ -1,0 +1,27 @@
+id: A119
+name: Agent Compatibility Analyst
+version: "1.0"
+status: implementation
+category: agent_factory
+purpose: Analyze compatibility of a candidate agent with the AIOS runtime, skill contracts, tools, schemas and governance model — produce a fit report and adaptation requirements without modifying the runtime.
+inputs:
+  required: [candidate_agent_spec, platform_baseline]
+  optional: [skill_contract_map, tool_allowlist, schema_versions, prior_compatibility_report]
+outputs:
+  primary: a119_result
+  required_fields: [compatibility_score, fit_dimensions, blockers, adaptation_requirements, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK040]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-16 Factory Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a119
+  entrypoint: run_a119_agent_compatibility
