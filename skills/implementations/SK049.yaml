@@ -1,18 +1,65 @@
 id: SK049
 name: Personalization
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: derive relevant personalization only from verified context
-inputs: [account_context, offer, channel]
-outputs: [personalization, evidence, confidence]
+category: sales
+standard: STD-01/v2
+objective: Derive relevant personalization only from verified context; empty personalization is valid when no verified hooks exist.
+non_goals:
+  - Inventing personalization hooks not present in account_context
+  - Generic flattery without evidence
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: account_context, type: object, constraints: "verified account brief, enrichment, or research notes"}
+    - {name: offer, type: object, constraints: "approved offer for relevance mapping"}
+    - {name: channel, type: string, constraints: "email|linkedin|whatsapp|sms|call"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: personalization, type: object}
+    - {name: evidence, type: array}
+    - {name: confidence, type: string}
+  common: [status, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: extract_verified_hooks}
-  - {step: 3, action: map_to_channel}
-  - {step: 4, action: score_confidence}
-quality_checks: [hooks_have_evidence]
-failure_policy: empty_personalization_ok_if_no_verified_hooks
-evidence_policy: each hook cites context field
-dependencies: [SK041, SK008]
-tools: [tool.ollama.generate]
-acceptance: [personalization present, evidence is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require account_context, offer, and channel. Fail closed if channel not in allowed set. Empty account_context yields empty personalization (not failure).", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Scan account_context for candidate hooks: company name, role, recent news/signal, product usage, location, mutual connection — only fields marked verified or with source. Map offer value props to possible relevance angles.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Select up to N strongest verified hooks relevant to channel and offer. For each hook produce a short personalization line and evidence entry (context field path + optional source). If zero verified hooks, return empty personalization with confidence=low and status=ok.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure every hook has evidence. Score confidence: high if >=2 verified hooks; medium if 1; low if 0. Reject any line that invents facts.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm personalization object, evidence array, confidence in {high, medium, low}.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return personalization, evidence, confidence, status, next_action.", on_failure: fail_closed}
+preconditions:
+  - account_context, offer, channel present
+  - channel is one of email|linkedin|whatsapp|sms|call
+postconditions:
+  - every personalization hook has evidence
+  - empty personalization allowed when no verified hooks
+quality_checks:
+  - hooks_have_evidence
+  - no_invented_hooks
+  - schema_valid
+  - policy_compliant
+failure_policy: empty_personalization_ok_if_no_verified_hooks; fail_closed on invalid channel
+evidence_policy: each hook cites context field; never invent citations
+dependencies:
+  skills: [SK041, SK008]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns personalization, evidence, confidence", verify: schema}
+  - {id: AC2, statement: "Empty personalization allowed when no verified hooks", verify: test}
+  - {id: AC3, statement: "Every non-empty hook has evidence entry", verify: test}
+evaluation:
+  unit_cases: [happy_path, no_hooks, invalid_channel, single_hook]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
