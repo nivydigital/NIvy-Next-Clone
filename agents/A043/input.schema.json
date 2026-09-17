@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A043 Outreach Strategy Input",
+  "type": "object",
+  "required": ["account_research", "outreach_strategy"],
+  "properties": {
+    "account_research": {"type": "object"},
+    "outreach_strategy": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "scored_leads": {"type": "object"},
+    "outreach_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
