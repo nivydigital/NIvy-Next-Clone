@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A031 Demand Generation Strategy Input",
+  "type": "object",
+  "required": ["campaign_strategy", "content_strategy"],
+  "properties": {
+    "campaign_strategy": {"type": "object"},
+    "content_strategy": {"type": "object"},
+    "lead_generation_strategy": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "demand_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
