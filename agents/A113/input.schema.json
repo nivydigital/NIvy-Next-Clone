@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A113/input.schema.json",
+  "title": "A113 Collaboration Policy Agent Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["policy_scope", "participant_roles"],
+  "properties": {
+    "policy_scope": {"type": "object"},
+    "participant_roles": {"type": "object"},
+    "existing_policies": {"type": "object"},
+    "risk_appetite": {"type": "object"},
+    "regulatory_constraints": {"type": "array", "items": {"type": "string"}},
+    "prior_policy_report": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

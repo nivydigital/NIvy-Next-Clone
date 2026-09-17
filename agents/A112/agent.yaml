@@ -1,0 +1,38 @@
+id: A112
+name: Shared Context Manager
+version: "1.0"
+status: implementation
+category: collaboration
+purpose: Manage shared collaboration context across multi-agent workflows — scope, visibility, retention and handoff rules — without writing to production systems of record.
+inputs:
+  required: [collaboration_scope, participant_agents]
+  optional: [context_payload, retention_policy, visibility_rules, prior_context, constraints]
+outputs:
+  primary: a112_result
+  required_fields: [context_plan, visibility_map, retention_rules, handoff_rules, risks, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+  downstream_events: [a112_result.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+skills: [SK041, SK047]
+prompts: [PR003]
+knowledge: [KP004, KP007]
+workflow:
+  sequence: [validate_input, validate_provenance, execute, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  external_actions: prohibited
+  side_effects: false
+observability:
+  audit_required: true
+failure_handling:
+  fail_closed_on_policy_or_schema_error: true
+provenance:
+  source: Phase-15 Collaboration Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy; pushed to GitHub."
+runtime:
+  adapter: backend.app.runtime.a112
+  entrypoint: run_a112_shared_context

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A116/input.schema.json",
+  "title": "A116 Agent Package Builder Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["agent_spec", "certification_verdict"],
+  "properties": {
+    "agent_spec": {"type": "object"},
+    "certification_verdict": {"type": "object"},
+    "dependency_map": {"type": "object"},
+    "skill_bindings": {"type": "object"},
+    "schema_versions": {"type": "object"},
+    "prior_package": {"type": "object"},
+    "packaging_constraints": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}
