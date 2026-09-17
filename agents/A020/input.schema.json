@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A020 Customer Health Strategy Input",
+  "type": "object",
+  "required": ["retention_expansion_strategy", "onboarding_strategy"],
+  "properties": {
+    "retention_expansion_strategy": {"type": "object"},
+    "onboarding_strategy": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "historical_health": {"type": "object"},
+    "health_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
