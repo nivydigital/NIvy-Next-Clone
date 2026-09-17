@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A076 Renewal Risk Analyst Output",
+  "type": "object",
+  "required": ["status", "risk_score", "risk_drivers", "save_plays", "urgency", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "risk_score": {"type": "number"},
+    "risk_drivers": {"type": "array", "items": {"type": "object"}},
+    "save_plays": {"type": "array", "items": {"type": "object"}},
+    "urgency": {"type": "string"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
