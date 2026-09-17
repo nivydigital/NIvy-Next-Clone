@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A086 SEO Strategist Input",
+  "type": "object",
+  "required": ["marketing_strategy"],
+  "properties": {
+    "marketing_strategy": {"type": "object"},
+    "content_strategy": {"type": "object"},
+    "keyword_seeds": {"type": "array", "items": {"type": "string"}},
+    "seo_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
