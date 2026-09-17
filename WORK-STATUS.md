@@ -1,28 +1,21 @@
 # WORK STATUS — SINGLE RESUME POINT
 
 - Last updated: 2026-09-17
-- Testing: **DEFERRED** — `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`
-- Agents last completed: **A095–A099**
-- **Complete automation plan (skills/workflows/tools/gaps):** `docs/complete-automation-plan/`
+- Testing: **DEFERRED**
+- Agents scaffold: through **A099** (+ partial A100–A108 in registry)
+- **Complete automation:** `docs/complete-automation-plan/`
 
-## Agent registry progress (scaffold only)
-| Range | Focus |
-|-------|--------|
-| A034–A060 | Lead ops → Proposal |
-| A065–A077 | Onboarding, Comms, CS |
-| A078–A083 | Finance |
-| A084–A091 | Marketing |
-| A092–A099 | Control + Evaluation start |
+## Phase 0 status
+| ID | Status |
+|----|--------|
+| P0.1 Agent inventory | 🟢 `phase-0/P0.1-AGENT-INVENTORY.md` |
+| P0.2 Coverage matrix | 🟢 `phase-0/P0.2-COVERAGE-MATRIX.md` |
+| P0.3 Runtime discovery API | 🟡 documented; code pending |
+| P0.4 Standard run path | 🟡 documented; `/execute` pending |
 
-## Next agents
-A100–A108 (Trace, Runtime Quality, Cost, Evidence, Learning suite)
-
-## Next for full automation (recommended)
-See `docs/complete-automation-plan/PROGRESS-TRACKER.md` Phase 0–1:
-1. Inventory coverage matrix
-2. Tools (mock-first)
-3. Executable prompts PR001–PR008
-4. Skills for lead path
-5. Lead→Outreach workflow dry-run
+## Next recommended
+1. Finish P0.3: implement `GET /api/v1/runtime/agents` discovery
+2. Finish P0.4: `POST .../execute` with schema validate + dynamic import
+3. Start **Phase 1 Tools** (normalize tool IDs + mocks)
 
 Update after every meaningful session.
