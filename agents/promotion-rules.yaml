@@ -1,0 +1,25 @@
+version: "1.0"
+status: canonical
+purpose: Gate agent status changes in registry.yaml and implementation-registry.yaml
+
+rules:
+  declared_to_implementation:
+    required:
+      - agent_folder
+      - agent_yaml
+      - input_schema
+      - output_schema
+      - runtime_module_with_entrypoint
+    script: scripts/promote_agents.py
+    notes: Does not require live LLM tests (deferred testing policy).
+
+  implementation_to_production:
+    required:
+      - evaluation_suite_pass
+      - no_open_critical_findings
+      - skills_resolved
+      - prompts_bound
+    notes: Blocked until TESTING-PLAN-DEFERRED.md suites are executed.
+
+scope:
+  phase_6_targets: [A100, A101, A102, A103, A104, A105, A106, A107, A108]
