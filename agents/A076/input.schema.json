@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A076 Renewal Risk Analyst Input",
+  "type": "object",
+  "required": ["health_assessment"],
+  "properties": {
+    "health_assessment": {"type": "object"},
+    "support_history": {"type": "object"},
+    "commercial_context": {"type": "object"},
+    "risk_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
