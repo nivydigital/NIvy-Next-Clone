@@ -1,0 +1,26 @@
+id: A100
+name: Trace Auditor
+version: "1.0"
+status: implementation
+category: evaluation
+purpose: Audit execution traces for policy compliance, tool use and data handling — findings only, no trace mutation.
+inputs:
+  required: [trace_bundle, policy_baseline]
+  optional: [tool_allowlist, known_exceptions, prior_audit, sensitivity_tags]
+outputs:
+  primary: a100_result
+  required_fields: [audit_summary, policy_findings, tool_findings, data_handling_findings, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-13 Evaluation Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a100
+  entrypoint: run_a100_trace_auditor
