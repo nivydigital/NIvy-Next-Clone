@@ -1,0 +1,44 @@
+name: quality-gates
+
+# P3 F1 + F2 — skill validate, secret scan, contract tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  secrets-and-skills:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml pytest
+
+      - name: Secret scanner (F2)
+        run: python scripts/check_no_secrets_in_git.py
+
+      - name: Validate STD-01 skills (F1)
+        run: python scripts/validate_skills_std01.py
+
+      - name: Prompt schema alignment (F1)
+        run: |
+          if [ -f scripts/check_prompt_schema_alignment.py ]; then
+            python scripts/check_prompt_schema_alignment.py || true
+          fi
+
+      - name: Lead skill unit tests
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+          NIVY_KNOWLEDGE_STORE: mock
+        run: |
+          pytest backend/app/test_lead_skills.py backend/app/test_knowledge_retrieval.py -q --tb=short
