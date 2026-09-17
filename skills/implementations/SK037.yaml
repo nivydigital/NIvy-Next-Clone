@@ -1,0 +1,24 @@
+id: SK037
+name: Data Quality
+version: "1.0"
+status: implementation
+objective: Detect and classify record-quality problems against rules.
+inputs: [records, rules]
+outputs: [quality_report, corrections, blockers]
+procedure:
+  - step: 1
+    action: validate_records_array
+  - step: 2
+    action: apply_rules
+  - step: 3
+    action: classify_issues
+  - step: 4
+    action: propose_corrections
+  - step: 5
+    action: flag_blockers
+quality_checks: [every_issue_has_rule_id, blockers_explicit]
+failure_policy: fail_closed_on_empty_rules
+evidence_policy: cite rule and field path
+dependencies: [SK036]
+tools: [tool.ollama.generate]
+acceptance: [quality_report is object, corrections is array]
