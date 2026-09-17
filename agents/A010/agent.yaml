@@ -1,0 +1,43 @@
+id: A010
+name: Campaign Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Translate GTM, messaging, content and offer strategy into concrete campaign plans with goals, audiences, channels, sequences and success metrics.
+inputs:
+  required: [gtm_strategy, messaging_positioning]
+  optional: [content_strategy, offer_pricing_strategy, channel_strategy, icp_definition, campaign_constraints]
+outputs:
+  primary: campaign_strategy
+  required_fields: [campaigns, goals, audiences, channel_plan, sequences, success_metrics, budget_guidance, confidence, assumptions, derived_from]
+  downstream_events: [campaign_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_campaigns, set_goals, map_audiences, plan_channels, design_sequences, define_metrics, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - campaigns_are_aligned_with_gtm_and_messaging
+  - sequences_and_metrics_are_actionable
+  - assumptions_and_constraints_are_explicit
+provenance:
+  source: sequential strategy chain after A009
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
