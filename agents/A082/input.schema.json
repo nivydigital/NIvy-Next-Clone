@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A082 Pricing Analyst Input",
+  "type": "object",
+  "required": ["offer_pricing_strategy"],
+  "properties": {
+    "offer_pricing_strategy": {"type": "object"},
+    "revenue_signals": {"type": "object"},
+    "competitor_pricing": {"type": "object"},
+    "pricing_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
