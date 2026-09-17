@@ -9,30 +9,26 @@ Contract → unit happy-path → negative/policy → schema/golden → eval → 
 ## Coverage inventory
 
 ### Prior ranges
-A001–A033 strategy; A034–A060 lead/sales; A065–A077 CS/comms; A078–A083 finance; A084–A089 marketing — as previously documented.
+A001–A094 as previously documented (strategy, lead, CS, finance, marketing, control start).
 
-### Marketing close + Control start (A090–A094)
+### Control + Evaluation start (A095–A099)
 | ID | Name | Extra asserts |
 |----|------|---------------|
-| **A090** | **Growth Experiment Planner** | **hypotheses, variants, success_metrics, run_plan** |
-| **A091** | **Campaign QA Reviewer** | **pass_fail, issues, suggested_fixes, score** |
-| **A092** | **KPI Intelligence Analyst** | **variance_summary, drivers, recommended_actions** |
-| **A093** | **Planning Analyst** | **priorities, workstreams, owners, checkpoints** |
-| **A094** | **Anomaly Detection Analyst** | **anomalies, severity, investigation_paths** |
+| **A095** | **Risk Analyst** | **risks, severity, mitigations, residual_risk** |
+| **A096** | **Executive Intelligence Analyst** | **summary, key_decisions, asks, risks_opportunities** |
+| **A097** | **Resource Planning Analyst** | **allocations, gaps, reallocation_options** |
+| **A098** | **Evaluation Analyst** | **scores, findings, pass_fail, recommendations** |
+| **A099** | **Regression QA Agent** | **regressions, severity, pass_fail, recommended_fixes** |
 
 ### Higher IDs
 A117–A127 existing — deferred.
 
 ### Not yet implemented
-A095 Risk Analyst, A096 Executive Intelligence, A097 Resource Planning, A098–A103 evaluation, A104–A108 learning.
+A100 Trace Auditor, A101 Runtime Quality Monitor, A102 Cost Observability, A103 Evidence Collector, A104–A108 learning agents.
 
-## Chain tests (final phase)
-1. Lead: A034→A039→A041→A043→A044  
-2. Comms: A066→A068→A071  
-3. CS: A065→A072→A073→A075→A076  
-4. Finance: A078→A079→A080→A081  
-5. Marketing: A084→A085→A089→A090→A091  
-6. Control: A092→A093→A094  
+## Chain tests
+Control: A092→A093→A094→A095→A096→A097  
+Eval: A098→A099→A100 (when built)
 
 ## Maintenance
 Update on every new batch. Do not mark COMPLETE until final testing phase.
