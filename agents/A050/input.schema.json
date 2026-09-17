@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A050 Follow-Up Input",
+  "type": "object",
+  "required": ["email_drafts", "account_research"],
+  "properties": {
+    "email_drafts": {"type": "object"},
+    "account_research": {"type": "object"},
+    "outreach_plan": {"type": "object"},
+    "conversation_context": {"type": "object"},
+    "follow_up_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
