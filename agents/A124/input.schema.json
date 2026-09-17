@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A124/input.schema.json",
+  "title": "A124 Tenant Isolation Auditor Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tenant_map", "isolation_controls"],
+  "properties": {
+    "tenant_map": {"type": "object"},
+    "isolation_controls": {"type": "object"},
+    "access_logs_summary": {"type": "object"},
+    "shared_resource_map": {"type": "object"},
+    "policy_matrix": {"type": "object"},
+    "prior_isolation_audit": {"type": "object"},
+    "known_incidents": {"type": "array", "items": {"type": "object"}},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

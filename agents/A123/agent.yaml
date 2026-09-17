@@ -1,0 +1,27 @@
+id: A123
+name: Capacity Planner
+version: "1.0"
+status: implementation
+category: scale_operations
+purpose: Forecast and plan capacity for AIOS compute, model throughput, queues and storage — headroom, scale triggers and cost-aware recommendations — without executing scale actions.
+inputs:
+  required: [workload_forecast, current_capacity]
+  optional: [growth_assumptions, cost_constraints, reliability_signals, historical_utilization, prior_capacity_plan]
+outputs:
+  primary: a123_result
+  required_fields: [forecast_summary, headroom, scale_triggers, recommendations, cost_notes, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK019, SK040]
+prompts: [PR002]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-17 Scale Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a123
+  entrypoint: run_a123_capacity_planner

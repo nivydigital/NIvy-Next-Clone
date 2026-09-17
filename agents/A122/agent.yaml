@@ -1,0 +1,27 @@
+id: A122
+name: Reliability Monitor
+version: "1.0"
+status: implementation
+category: scale_operations
+purpose: Continuously assess reliability of AIOS runtimes, agents and dependencies — error budgets, SLO/SLI signals, anomaly patterns and risk escalation — without mutating production systems.
+inputs:
+  required: [telemetry_snapshot, service_inventory]
+  optional: [slo_targets, error_budget_state, incident_history, dependency_health, prior_reliability_report]
+outputs:
+  primary: a122_result
+  required_fields: [slo_status, error_budget, anomalies, risk_escalations, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-17 Scale Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a122
+  entrypoint: run_a122_reliability_monitor

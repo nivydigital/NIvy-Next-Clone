@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A123/input.schema.json",
+  "title": "A123 Capacity Planner Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["workload_forecast", "current_capacity"],
+  "properties": {
+    "workload_forecast": {"type": "object"},
+    "current_capacity": {"type": "object"},
+    "growth_assumptions": {"type": "object"},
+    "cost_constraints": {"type": "object"},
+    "reliability_signals": {"type": "object"},
+    "historical_utilization": {"type": "object"},
+    "prior_capacity_plan": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}
