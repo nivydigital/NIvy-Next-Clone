@@ -1,0 +1,30 @@
+id: SK035
+name: Contact Discovery
+version: "1.0"
+status: implementation
+objective: Find supported contact information for known accounts and target roles.
+inputs: [account, target_role]
+outputs: [contacts, evidence, unknowns]
+procedure:
+  - step: 1
+    action: validate_account
+    detail: Require account identity (name or domain).
+  - step: 2
+    action: search_public_contacts
+    detail: Search approved public pages for role-matching contacts.
+  - step: 3
+    action: extract_fields
+    detail: Extract name, role, email, linkedin only when evidenced.
+  - step: 4
+    action: mark_unknowns
+    detail: Explicitly list fields not found; never invent emails.
+quality_checks:
+  - contacts_backed_by_evidence
+  - unknowns_explicit
+failure_policy: fail_closed if account missing; empty contacts allowed with unknowns
+evidence_policy: each contact field cites source
+dependencies: [SK034]
+tools: [tool.ollama.generate]
+acceptance:
+  - contacts is an array
+  - evidence is an array
