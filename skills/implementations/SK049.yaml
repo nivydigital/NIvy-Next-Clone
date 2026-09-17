@@ -1,0 +1,18 @@
+id: SK049
+name: Personalization
+version: "1.0"
+status: implementation
+objective: derive relevant personalization only from verified context
+inputs: [account_context, offer, channel]
+outputs: [personalization, evidence, confidence]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: extract_verified_hooks}
+  - {step: 3, action: map_to_channel}
+  - {step: 4, action: score_confidence}
+quality_checks: [hooks_have_evidence]
+failure_policy: empty_personalization_ok_if_no_verified_hooks
+evidence_policy: each hook cites context field
+dependencies: [SK041, SK008]
+tools: [tool.ollama.generate]
+acceptance: [personalization present, evidence is array]
