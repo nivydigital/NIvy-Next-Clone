@@ -1,0 +1,26 @@
+version: "1.0"
+status: canonical
+purpose: "Implementation contract applied to every SK001-SK050 capability."
+required:
+  - id
+  - objective
+  - inputs
+  - procedure
+  - outputs
+  - quality_checks
+  - failure_policy
+  - evidence_policy
+  - dependencies
+rules:
+  input: validate type, required fields, tenant scope, freshness and ambiguity before work
+  procedure: deterministic ordered steps; use only approved dependencies/tools
+  output: structured result with status, evidence, confidence/unknowns and next_action
+  quality: verify factuality, completeness, consistency, schema and policy compliance
+  failure: fail closed; bounded retry only when safe; escalate after exhaustion; never fabricate success
+  evidence: preserve source/tool/run references for material claims
+  reuse: prefer approved Raw-Repository/external reusable assets before custom implementation
+  side_effects: skills must not perform external side effects unless explicitly authorized by agent policy
+  versioning: changes require version bump and regression evaluation
+
+# Standard skill execution shape:
+# RECEIVE -> VALIDATE -> PREPARE -> EXECUTE -> QUALITY_CHECK -> VERIFY -> RETURN -> AUDIT

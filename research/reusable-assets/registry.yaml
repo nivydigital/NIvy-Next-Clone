@@ -1,0 +1,21 @@
+version: "1.0"
+status: canonical
+reuse_policy: "discover -> audit -> adapt -> register -> test -> govern -> integrate"
+assets:
+  - {id: RA001, name: AI-SDR / lead-generation agent family, type: agent, status: candidate, source: Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/Agent List.txt, license: verify, adaptation: Odoo+PostgreSQL+Qdrant+n8n, target: A034-A050}
+  - {id: RA002, name: Lead Generation Agent, type: agent, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: Odoo+PostgreSQL, target: A034-A042}
+  - {id: RA003, name: SEO Agent family, type: agent, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: Qdrant+n8n+analytics, target: A011-A015}
+  - {id: RW001, name: Complete AI Sales Department workflow, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+Odoo, target: WF011-WF033}
+  - {id: RW002, name: Leads + Personalized Outreach, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+Odoo, target: WF003/WF017}
+  - {id: RW003, name: B2B Lead Management + AI Outreach, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+Odoo+policy, target: WF003-WF020}
+  - {id: RW004, name: AI SDR Pipeline, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+Odoo+calendar, target: WF011/WF019/WF023}
+  - {id: RW005, name: AI Social Media Engine, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+approval, target: marketing/social}
+  - {id: RW006, name: Multi-Platform Social Factory, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+approval, target: marketing/social}
+  - {id: RW007, name: SEO Content + Approval + Publishing, type: workflow, status: candidate, source: Raw-Repository/Agent List.txt, license: verify, adaptation: n8n+WordPress/approval, target: M09-M11}
+  - {id: RS001, name: Existing AIOS skill/agent catalogs, type: catalog, status: source, source: Raw-Repository/Chats/ChatGPT/Multi Agent AIOS, license: internal, adaptation: registry normalization, target: all}
+
+rules:
+  - Candidate does not mean approved or production-ready.
+  - License/terms must be verified before importing third-party code or assets.
+  - Every adaptation must preserve source provenance and record modifications.
+  - Prefer reusable logic over one-off agent implementations.

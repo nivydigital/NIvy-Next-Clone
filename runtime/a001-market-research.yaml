@@ -1,0 +1,74 @@
+version: "1.1"
+status: testing
+agent_id: A001
+name: Market Research Runtime Contract
+mode: governed_read_only
+entrypoint: backend.app.runtime.engine:RuntimeEngine
+
+input:
+  schema: agents/A001/input.schema.json
+  required: [research_question, target_market]
+  optional: [evidence]
+
+execution:
+  lifecycle: [RECEIVE, VALIDATE, PREPARE, RESEARCH, SYNTHESIZE, QUALITY_CHECK, VERIFY, RETURN, AUDIT]
+  sequence:
+    - validate_input
+    - resolve_A001_skill_prompt_knowledge_tool_chain
+    - build_research_query
+    - execute_firecrawl_search_if_configured
+    - execute_browser_use_research_if_configured
+    - accept_only_approved_supplied_evidence_as_fallback
+    - construct_governed_prompt
+    - execute_local_model
+    - validate_structured_output
+    - verify_evidence_and_postconditions
+    - record_audit_event
+  side_effects: false
+  timeout_seconds: 300
+  retries: 2
+  idempotency_key: "request_id + research_question + target_market"
+
+research_boundary:
+  current_runtime_capability: "live public research through configured Firecrawl and/or Browser Use adapters, followed by local Ollama synthesis"
+  adapters:
+    firecrawl: "FIRECRAWL_URL + FIRECRAWL_API_KEY"
+    browser_use: "BROWSER_USE_URL + BROWSER_USE_API_KEY"
+  fallback: "approved evidence supplied in request; never claim web research when adapters did not execute"
+  rule: "Every material claim must be traceable to returned adapter evidence or explicitly marked unknown."
+  source_policy: "public/approved sources only"
+
+quality:
+  required:
+    - provenance_for_material_claims
+    - explicit_uncertainty
+    - facts_vs_interpretations_separated
+    - unsupported_claims_rejected_or_flagged
+    - output_schema_valid
+
+failure:
+  missing_required_input: reject
+  undeclared_tool: deny
+  unauthorized_source_access: deny
+  no_research_evidence: escalate
+  unsupported_material_claim: escalate
+  schema_failure: reject
+  transient_model_error: retry_then_fail
+
+verification:
+  output_schema: agents/A001/output.schema.json
+  postconditions:
+    - every_material_finding_has_evidence_or_explicit_unknown_label
+    - no_external_side_effect_occurred
+    - audit_event_exists
+    - adapter_execution_status_is_recorded
+
+events:
+  input: market.research.requested
+  success: research.completed
+  failure: research.failed
+
+observability:
+  correlation_id: required
+  audit: required
+  metrics: [latency, success_rate, failure_rate, evidence_coverage, material_claims, cross_checked_claims, adapter_calls]

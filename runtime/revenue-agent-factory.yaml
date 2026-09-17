@@ -1,0 +1,43 @@
+version: "1.0"
+status: canonical
+purpose: governed revenue-agent production contract
+principle: discover-audit-reuse-adapt-integrate-build-missing
+lifecycle:
+  states: [draft, validated, active, paused, deprecated]
+  activation_requires: [registry_binding, policy_pass, evaluation_pass, integration_health]
+  autonomous_activation_requires: [human_approval, evaluation_pass, integration_health, observability_ready]
+agent_template:
+  required: [id, name, version, status, owner, skills, prompts, knowledge, tools, permissions]
+  runtime:
+    entrypoint: backend.app.runtime.engine:RuntimeEngine
+    mode: approval_gated
+seed_agents:
+  - A001
+  - A002
+  - A034
+  - A035
+  - A036
+  - A037
+  - A038
+  - A039
+  - A041
+  - A043
+  - A044
+  - A049
+  - A050
+  - A052
+  - A054
+  - A055
+  - A060
+  - A065
+evaluation:
+  minimum_checks: [declaration, bindings, policy, tool_adapter, failure_path, auditability]
+  production_threshold: 100
+  evidence_required: true
+observability:
+  required_fields: [run_id, agent_id, tool_id, status, duration_ms, error]
+  audit_all_runs: true
+safety:
+  default_deny: true
+  protected_tools_require_approval: true
+  autonomous_mode_default: false

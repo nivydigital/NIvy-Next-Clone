@@ -1,0 +1,115 @@
+{
+  "name": "Nivy Email - Verify and Send",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nivy/send-email",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-email",
+      "name": "Nivy Email API",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-720, 0],
+      "webhookId": "nivy-send-email"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://reacher:8080/v0/check_email",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { to_email: $json.to } }}",
+        "options": { "timeout": 60000 }
+      },
+      "id": "verify-email",
+      "name": "Reacher Verify Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [-480, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "reachable-safe",
+              "leftValue": "={{ $json.is_reachable }}",
+              "rightValue": "safe",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "email-valid",
+      "name": "Email Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [-240, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $('Nivy Email API').item.json.from_email || $env.NIVY_FROM_EMAIL }}",
+        "toEmail": "={{ $('Nivy Email API').item.json.to }}",
+        "subject": "={{ $('Nivy Email API').item.json.subject }}",
+        "emailType": "={{ $('Nivy Email API').item.json.body_type === 'text/plain' ? 'text' : 'html' }}",
+        "message": "={{ $('Nivy Email API').item.json.body }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "send-email",
+      "name": "Send Email SMTP",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [0, -80],
+      "credentials": {
+        "smtp": {
+          "name": "Nivy SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: 'sent', to: $('Nivy Email API').item.json.to, verification: 'safe' } }}",
+        "options": {}
+      },
+      "id": "response-sent",
+      "name": "Return Sent",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [240, -80]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { status: 'rejected', to: $('Nivy Email API').item.json.to, verification: $json.is_reachable || 'unknown', message: 'Email was not considered safe by Reacher' } }}",
+        "options": { "responseCode": 422 }
+      },
+      "id": "response-rejected",
+      "name": "Return Rejected",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [0, 100]
+    }
+  ],
+  "connections": {
+    "Nivy Email API": { "main": [[{ "node": "Reacher Verify Email", "type": "main", "index": 0 }]] },
+    "Reacher Verify Email": { "main": [[{ "node": "Email Valid?", "type": "main", "index": 0 }]] },
+    "Email Valid?": {
+      "main": [
+        [{ "node": "Send Email SMTP", "type": "main", "index": 0 }],
+        [{ "node": "Return Rejected", "type": "main", "index": 0 }]
+      ]
+    },
+    "Send Email SMTP": { "main": [[{ "node": "Return Sent", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "nivy-email-v1"
+}

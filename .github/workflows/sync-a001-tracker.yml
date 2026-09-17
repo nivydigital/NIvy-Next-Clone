@@ -1,0 +1,31 @@
+name: Sync A001 Progress Tracker
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/agent-implementation-plan/A001-COMPLETION-RECORD.md'
+      - 'scripts/sync_a001_tracker.py'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync A001 row
+        run: python scripts/sync_a001_tracker.py
+      - name: Commit tracker if changed
+        run: |
+          if git diff --quiet -- docs/agent-implementation-plan/AGENT-PROGRESS-TRACKER.md; then
+            echo "Tracker already current"
+            exit 0
+          fi
+          git config user.name "Nivy AIOS"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/agent-implementation-plan/AGENT-PROGRESS-TRACKER.md
+          git commit -m "chore(A001): sync progress tracker [skip ci]"
+          git push

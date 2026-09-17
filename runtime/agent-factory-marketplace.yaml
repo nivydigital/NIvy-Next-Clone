@@ -1,0 +1,17 @@
+id: phase-16-agent-factory-marketplace-digital-twin
+version: "1.0"
+status: canonical
+phase: 16
+purpose: Governed agent packaging, discovery, reuse, certification, deployment and digital-twin representations.
+agents: [A116, A117, A118, A119, A120, A121]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [agent.publish, agent.activate, package.install, twin.sync]
+  approval_required: true
+lifecycle: discover -> audit -> package -> validate -> certify -> approve -> publish -> deploy -> monitor -> deprecate
+package_required: [metadata, skills, prompts, knowledge, tools, permissions, provenance, evaluation, observability]
+marketplace_rules: [license_check, provenance_check, security_check, evaluation_check, compatibility_check]
+digital_twin: governed_representation_only
+reuse_priority: reuse -> adapt -> integrate -> build_missing
+evidence_required: true

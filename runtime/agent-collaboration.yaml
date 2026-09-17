@@ -1,0 +1,21 @@
+id: phase-15-agent-collaboration
+version: "1.0"
+status: canonical
+phase: 15
+purpose: Governed agent-to-agent delegation, handoffs, shared context and collaboration.
+agents: [A110, A111, A112, A113, A114, A115]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [delegate, external_side_effect, context_share, workflow_start]
+  approval_required: true
+protocol:
+  message_schema: [message_id, correlation_id, sender, recipient, task, inputs, outputs, provenance, permissions, status]
+  delegation: capability_checked
+  context: least_privilege
+  loops: bounded
+  timeout: required
+  retry: idempotent
+  audit: every_handoff
+failure_modes: [timeout, rejection, invalid_capability, policy_denial, partial_completion]
+evidence_required: true

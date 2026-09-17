@@ -1,0 +1,58 @@
+version: 1
+agents:
+  - id: orchestrator
+    name: Master Orchestrator
+    prompt: prompts/orchestrator.md
+    skills: [task-planning, routing, workflow-control, evidence]
+  - id: research
+    name: Research Agent
+    prompt: prompts/research.md
+    skills: [web-research, source-evaluation, summarization]
+  - id: lead-generation
+    name: Lead Generation Agent
+    prompt: prompts/lead-generation.md
+    skills: [lead-discovery, data-normalization]
+  - id: lead-enrichment
+    name: Lead Enrichment Agent
+    prompt: prompts/lead-enrichment.md
+    skills: [website-analysis, contact-extraction, lead-scoring]
+  - id: email-verification
+    name: Email Verification Agent
+    prompt: prompts/email-verification.md
+    skills: [email-validation, deliverability]
+  - id: email-outreach
+    name: Email Outreach Agent
+    prompt: prompts/email-outreach.md
+    skills: [email-writing, personalization, campaign-control]
+  - id: follow-up
+    name: Follow-up Agent
+    prompt: prompts/follow-up.md
+    skills: [follow-up-writing, reply-awareness, campaign-control]
+  - id: content
+    name: Content Agent
+    prompt: prompts/content.md
+    skills: [content-writing, seo-writing, editing]
+  - id: social
+    name: Social Media Agent
+    prompt: prompts/social.md
+    skills: [social-writing, platform-formatting, approval-control]
+  - id: seo
+    name: SEO Agent
+    prompt: prompts/seo.md
+    skills: [keyword-research, seo-audit, seo-writing]
+  - id: customer-communication
+    name: Customer Communication Agent
+    prompt: prompts/customer-communication.md
+    skills: [email-triage, reply-drafting, escalation]
+  - id: memory-knowledge
+    name: Memory and Knowledge Agent
+    prompt: prompts/memory-knowledge.md
+    skills: [memory-retrieval, rag, knowledge-curation]
+  - id: automation
+    name: Automation Agent
+    prompt: prompts/automation.md
+    skills: [workflow-control, tool-use, error-recovery]
+  - id: evaluation
+    name: Evaluation Agent
+    prompt: prompts/evaluation.md
+    skills: [evaluation, evidence, regression-testing]

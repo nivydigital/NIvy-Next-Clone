@@ -1,0 +1,133 @@
+Haan — aur purani repository dekhne par kuch important cheezein actually mil rahi hain jo hamare naye conceptual structure mein explicitly include honi chahiye.
+
+Purani repo mein already knowledge, memory, policies, prompts, agents, apps, docker, docs jaise components hain.  Aur knowledge ke andar ontology, packs, reconciliation, source-map, agent-bindings, registry bhi hain.
+
+Isliye main structure ko update karunga
+
+NIVY NEXT AIOS
+│
+├── organization/          🏢 Company
+│   ├── departments/
+│   ├── teams/
+│   ├── roles/
+│   ├── responsibilities/
+│   ├── policies/
+│   └── kpis/
+│
+├── business/              💼 Business
+│   ├── products/
+│   ├── services/
+│   ├── pricing/
+│   ├── customers/
+│   ├── offers/
+│   └── business-model/
+│
+├── knowledge/             📚 Company Knowledge
+│   ├── ontology/
+│   ├── packs/
+│   ├── source-map/
+│   ├── reconciliation/
+│   ├── agent-bindings/
+│   └── registry/
+│
+├── memory/                🧠 AI Memory
+│   ├── short-term/
+│   ├── long-term/
+│   ├── episodic/
+│   └── shared/
+│
+├── prompts/               💬 Prompt System
+│   ├── agents/
+│   ├── skills/
+│   ├── workflows/
+│   └── system/
+│
+├── agents/                🤖 AI Workers
+│   ├── sales/
+│   ├── marketing/
+│   ├── research/
+│   ├── operations/
+│   ├── support/
+│   └── intelligence/
+│
+├── skills/                🛠️ Capabilities
+│
+├── tools/                 🔌 Tools
+│
+├── workflows/             🔄 Business Processes
+│
+├── core/                  ⚙️ AIOS Engine
+│   ├── control-plane/
+│   ├── agent-runtime/
+│   ├── orchestration/
+│   ├── permissions/
+│   ├── approvals/
+│   ├── governance/
+│   ├── identity/
+│   └── observability/
+│
+├── integrations/          🔗 External Systems
+│
+├── apps/                  📱 Interfaces
+│   ├── web/
+│   ├── admin/
+│   └── api/
+│
+├── growth/                🚀 Growth Engine
+│   ├── website/
+│   ├── seo/
+│   ├── content/
+│   ├── acquisition/
+│   ├── outbound/
+│   ├── referral/
+│   └── experiments/
+│
+├── research/              🔬 R&D
+│   ├── discovery/
+│   ├── oss/
+│   ├── experiments/
+│   └── evaluations/
+│
+├── security/              🔐 Security
+│   ├── access/
+│   ├── audit/
+│   ├── privacy/
+│   └── compliance/
+│
+├── data/                  🗄️ Data
+│   ├── schemas/
+│   ├── migrations/
+│   └── seeds/
+│
+├── infrastructure/        🏗️ Infrastructure
+│
+├── tests/                 🧪 Testing
+│
+├── docs/                  📖 Documentation
+│
+├── scripts/               🔧 Scripts
+│
+└── .github/               🐙 GitHub/CI/CD
+
+Purani repo se specially kya preserve karna chahiye?
+
+बहुत महत्वपूर्ण 6 चीजें:
+
+knowledge/ontology → company/AI concepts ka common model
+
+knowledge/packs → verified knowledge packages
+
+knowledge/reconciliation → source reconciliation system
+
+knowledge/source-map → provenance/source tracking
+
+knowledge/agent-bindings → kaunsi knowledge kis agent ko milegi
+
+knowledge/registry → knowledge registry
+
+
+Ye cheezein purani repo mein already exist karti hain, isliye inhe dobara invent karna bilkul galat hoga.
+
+Aur agents side par bhi purani repo mein account-intelligence, lead-intelligence, reply-intelligence, e2e-revenue, marketing, operations, outreach, sales jaise specialized components already hain.
+
+Toh mera next step: purani repo ko systematically scan karke ek KEEP / ADAPT / MERGE / ARCHIVE / DON'T COPY inventory banaunga. Uske baad hi new repo mein files move karenge. Isse koi valuable cheez miss bhi nahi hogi aur new repo purani repo ki copy bhi nahi banega.

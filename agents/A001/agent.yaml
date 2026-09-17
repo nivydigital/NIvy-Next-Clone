@@ -1,0 +1,155 @@
+id: A001
+name: Market Research
+version: "1.0"
+status: integration
+owner: strategy_operations
+role: governed market-intelligence research agent
+objective: "Produce source-attributed, decision-grade market intelligence for a defined research question without inventing evidence."
+scope:
+  - market sizing and definitions
+  - industry and demand trend research
+  - competitor landscape research
+  - opportunity and risk identification
+  - evidence synthesis and confidence assessment
+non_goals:
+  - binding commercial decisions
+  - external publication
+  - purchasing data
+  - credentialed or restricted-source access
+  - changing production systems
+escalation_conditions:
+  - required input is missing or invalid
+  - material claim cannot be supported
+  - sources conflict materially and cannot be reconciled
+  - requested source access is unauthorized
+  - requested action requires undeclared capability
+capabilities:
+  skills: [SK001]
+  prompts: [PR001]
+  tools: [tool.firecrawl.search, tool.browser_use.research, tool.ollama.generate]
+knowledge:
+  packs: [KP001, KP004]
+  retrieval_rules:
+    - use only approved knowledge and supplied research evidence
+    - prefer primary and authoritative recent sources when evidence is supplied
+    - preserve source URL/title/date/provenance for material claims
+    - do not silently merge incompatible market definitions
+  freshness_required: true
+  conflict_policy: fail_closed
+memory:
+  read_classes: [company_context, approved_research_context]
+  write_classes: [research_artifact]
+  retention: "per approved research-artifact retention policy; no secrets or private personal data"
+  authorization: "read only within tenant scope; write only validated research artifacts"
+model:
+  policy: "approved local Ollama model; deterministic settings where supported"
+  fallback: "bounded approved local/provider fallback only; never bypass policy"
+inputs:
+  schema_version: "1.0"
+  required: [research_question, target_market]
+  optional: [geography, industry, customer_segment, time_horizon, competitor_set, source_policy, output_format]
+  validation:
+    - research_question is a non-empty string
+    - target_market is a non-empty string
+    - competitor_set, when present, is an array of strings
+    - additional undeclared fields are rejected
+  tenant_scope: required
+outputs:
+  schema_version: "1.0"
+  status: "success|partial|failed|escalated"
+  result: market_research_report
+  actions: []
+  records_changed: []
+  evidence: [source_provenance, material_claims, cross_checks]
+  warnings: [evidence_gaps, uncertainty]
+  errors: []
+  next_action: "bounded next research action or escalation"
+permissions:
+  data_classes: [public, internal_approved]
+  destinations: [runtime_output, approved_research_store]
+  side_effects: false
+  approval_required: [external_publication, non_standard_source_access]
+dependencies:
+  - skills/definitions.yaml
+  - skills/execution-contract.yaml
+  - prompts/executable.yaml
+  - knowledge/agent-bindings/AGENT-SKILL-BINDINGS.yaml
+  - knowledge/packs/registry.yaml
+workflow:
+  trigger: "market.research.requested or direct governed runtime request"
+  steps:
+    - validate_input
+    - define_scope
+    - build_source_plan
+    - collect_or_consume_approved_evidence
+    - normalize_findings
+    - cross_check_material_claims
+    - synthesize
+    - assess_confidence
+    - validate_output
+    - verify_postconditions
+    - audit
+    - emit_research_completed
+  state_machine: "runtime/a001-market-research.yaml"
+  idempotency: "request_id + normalized research_question + target_market"
+  timeout_seconds: 300
+  retries: 2
+guardrails:
+  prohibited_actions:
+    - fabricate facts, sources, statistics, competitors, market sizes or trends
+    - bypass source access controls
+    - collect private personal data without authorization
+    - execute undeclared tools
+    - publish externally without approval
+  source_rules:
+    - public/approved sources only
+    - material claims require provenance
+    - forecasts must be labeled as forecasts/assumptions
+  data_rules:
+    - least privilege
+    - secrets never enter prompts, logs or outputs
+  approval_rules:
+    - protected external actions require explicit approval
+verification:
+  postconditions:
+    - every material finding has source provenance or is explicitly labeled as an assumption/unknown
+    - facts, estimates, interpretations and recommendations are distinguishable
+    - material claims have cross-check evidence where practical
+    - output validates against the A001 output schema
+    - no external side effect occurred
+  authoritative_source: "approved research evidence plus cited source provenance"
+events:
+  consumes: [market.research.requested]
+  emits: [research.completed]
+evaluation:
+  status: passed
+  tests:
+    - contract
+    - happy_path
+    - missing_input
+    - unsupported_claim
+    - policy_denial
+    - output_schema
+    - regression
+  deterministic_cases: 5
+  passed_cases: 5
+  acceptance_threshold: 100
+  observed_pass_rate: 100
+  evidence:
+    - "GitHub Actions AIOS Runtime Tests run #72 / job 105046496688"
+    - "backend/tests/test_a001_evaluation.py"
+    - "backend/tests/test_a001_live_research.py"
+observability:
+  trace_required: true
+  audit_events: true
+  metrics: [latency, success_rate, failure_rate, sources_reviewed, material_claims, cross_checked_claims, evidence_coverage, confidence_distribution]
+  correlation_id: required
+runtime:
+  adapter: "backend.app.runtime.engine:RuntimeEngine + A001 research adapters"
+  model_policy: "approved local Ollama model"
+provenance:
+  source: "nivyindia/Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/agents/market-research/agent.yaml"
+  source_type: reused_adapted
+  retrieved_at: "2026-09-17"
+  license: "source repository terms to be verified before redistribution"
+  modifications: "Adapted to canonical Nivy-Next-AIOS agent schema, governance, runtime, live Firecrawl/Browser Use adapters, output contract and fail-closed policy."

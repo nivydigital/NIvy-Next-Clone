@@ -1,0 +1,16 @@
+id: phase-14-learning-continuous-improvement
+version: "1.0"
+status: canonical
+phase: 14
+purpose: Governed feedback loops, experiment management, prompt/skill improvement and regression prevention.
+agents: [A104, A105, A106, A107, A108, A109]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [prompt.promote, skill.promote, model.change, policy.change]
+  approval_required: true
+loop: observe -> evaluate -> diagnose -> propose -> approve -> test -> promote -> monitor
+promotion_requires: [evaluation_pass, regression_pass, provenance, approval]
+rollback_required: true
+systems: [Qdrant, PostgreSQL, runtime-audit, GitHub]
+evidence_required: true

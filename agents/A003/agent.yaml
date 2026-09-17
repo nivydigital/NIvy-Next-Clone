@@ -1,0 +1,42 @@
+id: A003
+name: Buyer Persona Agent
+version: "1.0"
+status: implementation
+category: revenue_strategy
+purpose: Transform approved ICP and evidence into evidence-backed decision-maker personas for messaging and qualification.
+inputs:
+  required: [icp_definition]
+  optional: [market_research, business_offer, customer_interviews, exclusions]
+outputs:
+  primary: buyer_personas
+  required_fields: [personas, evidence, assumptions, confidence, derived_from]
+  downstream_events: [buyer_persona.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, identify_roles, map_pains, map_motivations, define_objections, define_buying_process, score_confidence, produce_personas, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  sensitive_attribute_inference: forbidden
+  fabricated_persona_evidence: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  persona_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - personas_are_actionable_for_messaging_and_sales
+  - material_assumptions_are_explicit
+  - evidence_and_provenance_are_preserved
+provenance:
+  source: Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/02-agents/registry.yaml
+  source_type: internal

@@ -1,0 +1,48 @@
+version: "1.0"
+name: canonical-agent-spec
+status: canonical
+required:
+  - id
+  - name
+  - version
+  - status
+  - owner
+  - objective
+  - scope
+  - inputs
+  - outputs
+  - capabilities
+  - knowledge
+  - memory
+  - permissions
+  - workflow
+  - guardrails
+  - verification
+  - evaluation
+  - observability
+  - provenance
+fields:
+  identity: {id: stable ID, name: human name, version: semantic version, owner: responsible role/team}
+  objective: measurable job outcome
+  scope: included work
+  non_goals: excluded work
+  escalation: conditions requiring human/another agent
+  inputs: {schema_version: version, required: [], optional: [], validation: [], tenant_scope: required}
+  outputs: {schema_version: version, status: "success|partial|failed|escalated", result: structured, evidence: [], actions: [], records_changed: [], warnings: [], errors: [], next_action: string}
+  capabilities: {skills: approved skill IDs, prompts: approved prompt IDs, tools: approved tool IDs}
+  knowledge: {packs: approved pack IDs, retrieval: rules, freshness: required, conflict_policy: fail_closed}
+  memory: {read: classes, write: classes, retention: policy, authorization: policy}
+  model: {policy: approved model policy, fallback: bounded and approved}
+  permissions: {data_classes: [], destinations: [], side_effects: false, approval_required: []}
+  workflow: {trigger: event/task, steps: [], state_machine: optional, idempotency: required, timeout_seconds: bounded, retries: bounded}
+  guardrails: {prohibited: [], source_rules: [], pii_rules: [], approval_rules: []}
+  verification: {postconditions: [], authoritative_source: required where state changes}
+  evaluation: {status: pending, tests: [], acceptance_threshold: 100, evidence: []}
+  observability: {trace_required: true, audit_events: true, metrics: [], correlation_id: required}
+  provenance: {source: required, source_type: required, retrieved_at: optional, license: required for external reuse, modifications: required}
+runtime_rules:
+  - undeclared agents/capabilities are denied
+  - missing required metadata blocks activation
+  - protected side effects require approval before execution
+  - success cannot be reported without postcondition evidence when verification is possible
+  - secrets never enter prompts, logs or outputs

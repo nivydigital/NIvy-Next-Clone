@@ -1,0 +1,46 @@
+id: phase-9-customer-success-retention
+version: "1.0"
+status: canonical
+purpose: governed customer onboarding, support, success, retention, and feedback contract
+principle: discover-audit-reuse-adapt-integrate-build-missing
+lifecycle:
+  states: [draft, validated, active, paused, deprecated]
+  activation_requires: [registry_binding, policy_pass, evaluation_pass, integration_health]
+customer_lifecycle:
+  states: [onboarding, active, at_risk, renewal_due, renewed, churned]
+  protected_transitions: [active_to_at_risk, renewal_due_to_renewed, renewal_due_to_churned]
+seed_agents:
+  - A072
+  - A073
+  - A074
+  - A075
+  - A076
+  - A077
+capabilities:
+  - onboarding_plan
+  - customer_health_assessment
+  - support_triage
+  - success_plan
+  - renewal_and_churn_risk
+  - feedback_and_nps_analysis
+  - escalation_detection
+  - retention_action_recommendation
+tool_policy:
+  default_deny: true
+  llm_tool: tool.ollama.generate
+  protected_tools_require_approval: true
+  autonomous_mode_default: false
+integrations:
+  workflow_engine: n8n
+  crm_system_of_record: Odoo
+  vector_store: Qdrant
+  customer_events: customer.lifecycle.v1
+  communication_events: communication.event.v1
+observability:
+  required_fields: [run_id, agent_id, customer_id, lifecycle_state, status, duration_ms, error]
+  audit_all_runs: true
+safety:
+  customer_record_updates_require_approval: true
+  outbound_communication_requires_approval: true
+  churn_or_renewal_decisions_are_recommendations: true
+  unknown_tools_fail_closed: true

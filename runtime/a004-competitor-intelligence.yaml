@@ -1,0 +1,8 @@
+id: A004
+name: Competitor Intelligence Agent
+lifecycle: RECEIVE -> VALIDATE -> PREPARE -> ANALYZE -> SYNTHESIZE -> QUALITY_CHECK -> VERIFY -> RETURN -> AUDIT
+side_effects: false
+fail_closed_on: [missing_evidence, missing_provenance, schema_error, policy_error]
+capability: [SK004, PR010, tool.ollama.generate]
+consumes: [market.research.completed]
+emits: [competitor_intelligence.completed]

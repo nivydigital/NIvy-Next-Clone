@@ -1,0 +1,51 @@
+{
+  "name": "A001 Market Research - Live Runtime",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "aios/a001/market-research",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "a001-webhook",
+      "name": "A001 Research Event",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "a001-market-research-runtime"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\nif (!body.research_question || !body.target_market) throw new Error('A001 requires research_question and target_market');\nreturn [{json: {research_question: body.research_question, target_market: body.target_market, geography: body.geography, industry: body.industry, customer_segment: body.customer_segment, time_horizon: body.time_horizon, competitor_set: body.competitor_set, source_policy: body.source_policy ?? {}, output_format: body.output_format, evidence: body.evidence ?? []}}];"
+      },
+      "id": "a001-normalize",
+      "name": "Validate & Normalize A001",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://backend:8000/api/v1/runtime/agents/A001/research",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {"timeout": 300000}
+      },
+      "id": "a001-runtime",
+      "name": "A001 Governed Runtime",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 0]
+    }
+  ],
+  "connections": {
+    "A001 Research Event": {"main": [[{"node": "Validate & Normalize A001", "type": "main", "index": 0}]]},
+    "Validate & Normalize A001": {"main": [[{"node": "A001 Governed Runtime", "type": "main", "index": 0}]]}
+  },
+  "active": false,
+  "settings": {"executionOrder": "v1"},
+  "tags": ["AIOS", "A001", "market-research", "live-runtime"]
+}

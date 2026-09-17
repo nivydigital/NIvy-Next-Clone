@@ -1,0 +1,53 @@
+version: "1.0"
+status: canonical
+purpose: Common implementation metadata contract for governed AIOS assets.
+
+required:
+  - id
+  - name
+  - version
+  - status
+  - owner
+  - provenance
+
+fields:
+  id: stable globally unique identifier
+  name: human-readable name
+  version: semantic or date-based version
+  status: "planned|declared|testing|active|deprecated|retired|blocked"
+  owner: responsible role or team; use unassigned when not assigned
+  description: purpose and boundary
+  compatibility: runtime/model/schema compatibility constraints
+  permissions: allowed agents, tools, destinations, data classes or roles
+  dependencies: IDs of required capabilities/services/assets
+  provenance:
+    source: source repository/document/url identifier
+    source_type: "internal|open-source|commercial|generated"
+    retrieved_at: timestamp when externally sourced
+    license: license/terms when applicable
+    modifications: summary of adaptations
+  evaluation:
+    status: "unknown|pending|passed|failed"
+    evidence: test/evaluation reference
+  cost:
+    class: "free|low|metered|paid|unknown"
+    notes: cost assumptions
+  lifecycle:
+    introduced_at: timestamp
+    deprecated_at: optional timestamp
+    retirement_reason: optional reason
+  security:
+    data_classification: "public|internal|confidential|restricted"
+    secrets_required: boolean
+    external_side_effects: boolean
+  observability:
+    trace_required: boolean
+    audit_events: boolean
+
+rules:
+  - IDs are stable and must not be silently reused.
+  - Missing required metadata blocks runtime activation.
+  - Provenance is mandatory for imported assets.
+  - Evaluation evidence is required before production/autonomous status.
+  - Protected side effects require policy/approval controls.
+  - Documentation presence alone never establishes completion.

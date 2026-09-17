@@ -1,0 +1,91 @@
+version: "1.3"
+status: canonical
+resolution: "Agent -> Approved Skill -> Approved Prompt/Knowledge -> Authorized Tool -> Action"
+fail_closed: true
+bindings:
+  - {agent: A001, skills: [SK001], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.firecrawl.search, tool.browser_use.research, tool.ollama.generate]}
+  - {agent: A002, skills: [SK002, SK003], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A034, skills: [SK034, SK035], prompts: [PR003], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A035, skills: [SK035], prompts: [PR003], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A036, skills: [SK036], prompts: [PR003], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A037, skills: [SK037], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A038, skills: [SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A039, skills: [SK039, SK040], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A041, skills: [SK041, SK042], prompts: [PR003], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A043, skills: [SK043, SK049], prompts: [PR004], knowledge: [KP003, KP004, KP005], tools: [tool.ollama.generate]}
+  - {agent: A044, skills: [SK044, SK050], prompts: [PR004], knowledge: [KP002, KP003, KP005], tools: [tool.ollama.generate, tool.email.send]}
+  - {agent: A049, skills: [SK049], prompts: [PR004], knowledge: [KP002, KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A050, skills: [SK050], prompts: [PR004], knowledge: [KP005], tools: [tool.ollama.generate, tool.email.send]}
+  - {agent: A052, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP005], tools: [tool.ollama.generate]}
+  - {agent: A054, skills: [SK039, SK040], prompts: [PR002], knowledge: [KP004, KP005], tools: [tool.ollama.generate]}
+  - {agent: A055, skills: [SK041, SK046], prompts: [PR003], knowledge: [KP004, KP005], tools: [tool.ollama.generate]}
+  - {agent: A060, skills: [SK006, SK008], prompts: [PR002], knowledge: [KP003, KP005], tools: [tool.ollama.generate, tool.email.send]}
+  - {agent: A065, skills: [SK030], prompts: [PR002], knowledge: [KP003, KP007], tools: [tool.ollama.generate]}
+  - {agent: A066, skills: [SK046, SK047], prompts: [PR005], knowledge: [KP005], tools: [tool.ollama.generate]}
+  - {agent: A067, skills: [SK046], prompts: [PR005], knowledge: [KP005, KP007], tools: [tool.ollama.generate]}
+  - {agent: A068, skills: [SK044, SK046], prompts: [PR004], knowledge: [KP002, KP005], tools: [tool.ollama.generate]}
+  - {agent: A069, skills: [SK046, SK047], prompts: [PR005], knowledge: [KP004, KP005], tools: [tool.ollama.generate]}
+  - {agent: A070, skills: [SK041, SK047], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A071, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP005], tools: [tool.ollama.generate]}
+  - {agent: A072, skills: [SK030, SK046], prompts: [PR002], knowledge: [KP003, KP007], tools: [tool.ollama.generate]}
+  - {agent: A073, skills: [SK039, SK041], prompts: [PR002], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A074, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP005, KP007], tools: [tool.ollama.generate]}
+  - {agent: A075, skills: [SK041, SK046], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A076, skills: [SK039, SK040, SK041], prompts: [PR002], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A077, skills: [SK037, SK039], prompts: [PR005], knowledge: [KP005, KP007], tools: [tool.ollama.generate]}
+  - {agent: A078, skills: [SK018, SK019], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A079, skills: [SK018, SK020], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A080, skills: [SK018, SK020], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A081, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A082, skills: [SK008, SK040], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A083, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A084, skills: [SK001, SK004], prompts: [PR001], knowledge: [KP001, KP003], tools: [tool.ollama.generate]}
+  - {agent: A085, skills: [SK006, SK007], prompts: [PR004], knowledge: [KP002, KP003], tools: [tool.ollama.generate]}
+  - {agent: A086, skills: [SK011, SK012, SK013], prompts: [PR001], knowledge: [KP001, KP002], tools: [tool.ollama.generate]}
+  - {agent: A087, skills: [SK009, SK010], prompts: [PR004], knowledge: [KP002, KP003], tools: [tool.ollama.generate]}
+  - {agent: A088, skills: [SK008, SK020], prompts: [PR002], knowledge: [KP003, KP004], tools: [tool.ollama.generate]}
+  - {agent: A089, skills: [SK019, SK020], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A090, skills: [SK004, SK020], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate]}
+  - {agent: A091, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP002, KP004], tools: [tool.ollama.generate]}
+  - {agent: A092, skills: [SK019, SK020], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A093, skills: [SK004, SK041], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate]}
+  - {agent: A094, skills: [SK037, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A095, skills: [SK038, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A096, skills: [SK001, SK019], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate]}
+  - {agent: A097, skills: [SK004, SK040], prompts: [PR001], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A098, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A099, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A100, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A101, skills: [SK019, SK037], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A102, skills: [SK019, SK020], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A103, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A104, skills: [SK037, SK039], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A105, skills: [SK006, SK037], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A106, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A107, skills: [SK004, SK020], prompts: [PR001], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A108, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A109, skills: [SK038, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A110, skills: [SK041, SK046], prompts: [PR003], knowledge: [KP004, KP005], tools: [tool.ollama.generate]}
+  - {agent: A111, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP005], tools: [tool.ollama.generate]}
+  - {agent: A112, skills: [SK041, SK047], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A113, skills: [SK038, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A114, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A115, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A116, skills: [SK006, SK037], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A117, skills: [SK001, SK041], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate]}
+  - {agent: A118, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A119, skills: [SK037, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A120, skills: [SK001, SK037], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate]}
+  - {agent: A121, skills: [SK041, SK047], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+  - {agent: A122, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A123, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A124, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A125, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A126, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate]}
+  - {agent: A127, skills: [SK041, SK040], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate]}
+
+rules:
+  - Every referenced ID must exist in its registry before activation.
+  - Every agent must resolve through the approved skill/prompt/knowledge/tool chain.
+  - External side-effect bindings require Phase-4 policy and approval checks.
+  - Binding changes are versioned and auditable.

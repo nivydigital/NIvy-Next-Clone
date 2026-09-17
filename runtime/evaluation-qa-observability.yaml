@@ -1,0 +1,17 @@
+id: phase-13-evaluation-qa-observability
+version: "1.0"
+status: canonical
+phase: 13
+purpose: Continuous evaluation, QA, tracing, evidence collection and runtime observability.
+agents: [A098, A099, A100, A101, A102, A103]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [evaluation.publish, baseline.change, alert.route, qa.override]
+  approval_required: true
+required_checks: [schema, binding, policy, tool_adapter, failure_path, auditability, regression]
+required_metrics: [success_rate, latency_ms, error_rate, approval_rate, policy_denials, cost, quality_score]
+required_trace_fields: [run_id, agent_id, tool_id, status, started_at, completed_at, duration_ms, error]
+retention: durable
+systems: [PostgreSQL, runtime-audit, n8n]
+evidence_required: true

@@ -1,0 +1,18 @@
+version: "1.0"
+status: implementation
+mappings:
+  - agent_id: A003
+    skill_ids: [SK003]
+    prompts: [PR009]
+    tools: [tool.ollama.generate]
+    mode: required
+  - agent_id: A004
+    skill_ids: [SK004]
+    prompts: [PR010]
+    tools: [tool.ollama.generate]
+    mode: required
+  - agent_id: A005
+    skill_ids: [SK005]
+    prompts: [PR011]
+    tools: [tool.ollama.generate]
+    mode: required

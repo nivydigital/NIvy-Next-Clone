@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A002/input.schema.json",
+  "title": "A002 ICP Strategist Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["market_research"],
+  "properties": {
+    "market_research": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Approved A001 research output or governed market evidence artifact."
+    },
+    "business_offer": {"type": "object"},
+    "existing_customers": {"type": "array", "items": {"type": "object"}},
+    "exclusions": {"type": "array", "items": {"type": "string"}},
+    "geography": {"type": "string"},
+    "revenue_targets": {"type": "object"},
+    "request_id": {"type": "string", "minLength": 1}
+  }
+}

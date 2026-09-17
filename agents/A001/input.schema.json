@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A001/input.schema.json",
+  "title": "A001 Market Research Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["research_question", "target_market"],
+  "properties": {
+    "research_question": {"type": "string", "minLength": 1},
+    "target_market": {"type": "string", "minLength": 1},
+    "geography": {"type": "string"},
+    "industry": {"type": "string"},
+    "customer_segment": {"type": "string"},
+    "time_horizon": {"type": "string"},
+    "competitor_set": {"type": "array", "items": {"type": "string"}},
+    "source_policy": {"type": "object"},
+    "output_format": {"type": "string"}
+  }
+}

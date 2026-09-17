@@ -1,0 +1,16 @@
+id: phase-12-control-intelligence
+version: "1.0"
+status: canonical
+phase: 12
+purpose: Central control-plane intelligence for company state, KPIs, alerts, planning and decision support.
+agents: [A092, A093, A094, A095, A096, A097]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [policy.change, workflow.pause, workflow.resume, record.write]
+  approval_required: true
+systems: [Odoo, PostgreSQL, Qdrant, n8n, runtime-audit]
+required_capabilities: [kpi, planning, anomaly_detection, risk, executive_intelligence, resource_planning]
+side_effects: approval_gated
+observability: [run_id, agent_id, action, status, duration_ms, error, approval_id, audit_event_id]
+evidence_required: true

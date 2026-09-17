@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A001/output.schema.json",
+  "title": "A001 Market Research Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "research_question", "scope", "findings", "evidence", "implications", "confidence", "researched_at"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "research_question": {"type": "string"},
+    "scope": {"type": "object"},
+    "findings": {"type": "array", "items": {"type": "object"}},
+    "evidence": {"type": "array", "items": {"type": "object"}},
+    "implications": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "researched_at": {"type": "string", "format": "date-time"},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

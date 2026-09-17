@@ -1,0 +1,13 @@
+version: 1
+tools:
+  postgres: {purpose: structured business state and audit records, credential: DATABASE_URL}
+  redis: {purpose: queues locks and transient state, credential: REDIS_URL}
+  qdrant: {purpose: vector knowledge retrieval, credential: QDRANT_URL}
+  minio: {purpose: document and object storage, credential: MINIO_ENDPOINT}
+  ollama: {purpose: local LLM inference, credential: OLLAMA_BASE_URL}
+  n8n: {purpose: workflow execution, credential: N8N_BASE_URL}
+  reacher: {purpose: email verification, credential: REACHER_BASE_URL}
+  email: {purpose: outbound and inbound email, credential: EMAIL_PROVIDER_SECRET}
+  business_search: {purpose: approved business and lead discovery, credential: BUSINESS_SEARCH_SECRET}
+  apify: {purpose: configured scraping and lead workflows, credential: APIFY_API_TOKEN}
+  browser: {purpose: approved browser automation, credential: BROWSER_PROVIDER_SECRET}

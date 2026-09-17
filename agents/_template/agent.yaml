@@ -1,0 +1,93 @@
+# Canonical Agent Factory Contract v2
+id: A000
+name: agent-template
+version: "2.0"
+status: declared
+owner: unassigned
+description: "Reusable governed production-agent specification. Clone, assign a stable ID, and complete every required section before activation."
+role: ""
+objective: ""
+scope: []
+non_goals: []
+escalation_conditions: []
+capabilities:
+  skills: []
+  prompts: []
+  tools: []
+knowledge:
+  packs: []
+  retrieval_rules: []
+  freshness_required: true
+  conflict_policy: fail_closed
+memory:
+  read_classes: []
+  write_classes: []
+  retention: ""
+  authorization: ""
+model:
+  policy: "approved local/provider model policy"
+  fallback: "bounded approved fallback only"
+inputs:
+  schema_version: "1.0"
+  required: []
+  optional: []
+  validation: []
+  tenant_scope: required
+outputs:
+  schema_version: "1.0"
+  status: "success|partial|failed|escalated"
+  result: {}
+  actions: []
+  records_changed: []
+  evidence: []
+  warnings: []
+  errors: []
+  next_action: ""
+permissions:
+  data_classes: [public]
+  destinations: []
+  side_effects: false
+  approval_required: []
+dependencies: []
+workflow:
+  trigger: ""
+  steps: []
+  state_machine: null
+  idempotency: "required"
+  timeout_seconds: 120
+  retries: 0
+guardrails:
+  prohibited_actions: []
+  source_rules: ["never invent facts or sources"]
+  data_rules: ["least privilege", "never expose secrets"]
+  approval_rules: []
+verification:
+  postconditions: []
+  authoritative_source: ""
+events:
+  consumes: []
+  emits: []
+evaluation:
+  status: pending
+  tests: []
+  acceptance_threshold: 100
+  evidence: []
+observability:
+  trace_required: true
+  audit_events: true
+  metrics: [latency, success_rate, failure_rate]
+  correlation_id: required
+runtime:
+  adapter: "backend.app.runtime.engine:RuntimeEngine"
+  model_policy: ""
+provenance:
+  source: internal
+  source_type: internal
+  retrieved_at: null
+  license: null
+  modifications: ""
+
+# Activation gates: every referenced capability must resolve; input/output contracts,
+# workflow, guardrails, verification, tests and evidence must exist. Missing/ambiguous
+# governed data is fail-closed. Production/autonomous activation requires evaluation,
+# integration-health and observability evidence.

@@ -1,0 +1,14 @@
+version: "1.0"
+status: canonical
+packs:
+  - {id: KP001, name: Company Core Knowledge, version: "1.0", status: declared, owner: unassigned, scope: company, source: Raw-Repository Company OS, freshness: unknown, access_policy: internal}
+  - {id: KP002, name: Brand Voice, version: "1.0", status: declared, owner: unassigned, scope: brand, source: Raw-Repository brand/Company OS material, freshness: unknown, access_policy: internal}
+  - {id: KP003, name: Services and Offers, version: "1.0", status: declared, owner: unassigned, scope: business, source: Raw-Repository business material, freshness: unknown, access_policy: internal}
+  - {id: KP004, name: ICP and Buyer Knowledge, version: "1.0", status: declared, owner: unassigned, scope: sales-marketing, source: Raw-Repository research, freshness: unknown, access_policy: internal}
+  - {id: KP005, name: Sales Playbooks, version: "1.0", status: declared, owner: unassigned, scope: sales, source: Raw-Repository sales material, freshness: unknown, access_policy: internal}
+  - {id: KP006, name: Marketing Playbooks, version: "1.0", status: declared, owner: unassigned, scope: marketing, source: Raw-Repository marketing material, freshness: unknown, access_policy: internal}
+  - {id: KP007, name: SOP and Policy Knowledge, version: "1.0", status: declared, owner: unassigned, scope: operations, source: Raw-Repository SOP/policy material, freshness: unknown, access_policy: restricted}
+  - {id: KP008, name: Technical AIOS Knowledge, version: "1.0", status: declared, owner: unassigned, scope: technical, source: Raw-Repository AIOS architecture/runtime material, freshness: 2026-09-16, access_policy: internal}
+notes:
+  - A pack is not runtime-approved until source classification, conflict reconciliation, access policy and freshness are verified.
+  - Raw workspace exports must not be bulk-loaded into retrieval systems.

@@ -1,0 +1,107 @@
+id: A002
+name: ICP Strategist
+version: "1.0"
+status: implementation
+owner: revenue_strategy
+role: governed ideal-customer-profile strategy agent
+objective: "Turn approved market evidence and business context into a narrow, actionable, evidence-backed ICP for downstream revenue agents."
+scope:
+  - target segment definition
+  - firmographic qualification
+  - buyer-role mapping
+  - pain and outcome mapping
+  - buying-signal definition
+  - exclusions and disqualifiers
+  - discovery-ready qualification rules
+non_goals:
+  - sensitive attribute inference
+  - external prospecting or outreach
+  - purchasing data
+  - making binding commercial decisions
+  - modifying CRM or production records
+inputs:
+  schema_version: "1.0"
+  required: [market_research]
+  optional: [business_offer, existing_customers, exclusions, geography, revenue_targets]
+  validation:
+    - market_research is an object containing approved evidence or a governed research artifact
+    - additional undeclared fields are rejected
+  tenant_scope: required
+outputs:
+  schema_version: "1.0"
+  status: "success|partial|failed|escalated"
+  result: icp_definition
+  actions: []
+  records_changed: []
+  evidence: [source_provenance, material_claims]
+  warnings: [evidence_gaps, uncertainty]
+  errors: []
+  next_action: "bounded downstream discovery action or escalation"
+capabilities:
+  skills: [SK002]
+  prompts: [PR002]
+  tools: [tool.ollama.generate]
+  authorization_rule: "Agent -> Skill -> Tool -> Action; default deny"
+workflow:
+  trigger: "market.research.completed or direct governed runtime request"
+  sequence:
+    - validate_input
+    - retrieve_market_context
+    - identify_segments
+    - define_firmographics
+    - define_buyer_roles
+    - define_pain_points
+    - define_buying_signals
+    - define_exclusions
+    - score_confidence
+    - produce_icp
+    - validate_output
+    - audit
+    - emit_icp_completed
+  state_machine: "runtime/a002-icp-strategist.yaml"
+  idempotency: "request_id + normalized market context"
+  timeout_seconds: 180
+  retries: 2
+guardrails:
+  public_data_only: true
+  source_provenance_required: true
+  sensitive_attribute_inference: forbidden
+  fabricated_market_evidence: forbidden
+  external_actions: prohibited
+  prohibited_actions:
+    - infer sensitive personal attributes
+    - fabricate customer, market or buying evidence
+    - access private or unauthorized sources
+    - execute undeclared tools
+    - write to CRM or other production systems
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  recommendation_traceable: true
+  operational_for_downstream_discovery: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+verification:
+  postconditions:
+    - every_material_criterion_has_provenance_or_is_marked_assumption
+    - discovery_rules_are_specific_enough_for_downstream_search
+    - exclusions_are_explicit
+    - output_validates_against_A002_schema
+    - no_external_side_effect_occurred
+events:
+  consumes: [market.research.completed]
+  emits: [icp.completed]
+observability:
+  trace_required: true
+  audit_events: true
+  metrics: [latency, success_rate, failure_rate, evidence_coverage, confidence_distribution, criteria_count]
+runtime:
+  adapter: "backend.app.runtime.a002:run_a002_icp"
+  model_policy: "approved local Ollama model"
+provenance:
+  source: "nivyindia/Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/agents/icp-strategy/agent.yaml"
+  source_type: reused_adapted
+  retrieved_at: "2026-09-17"
+  modifications: "Adapted to canonical Nivy-Next-AIOS governance, runtime, schemas, provenance requirements and fail-closed execution."

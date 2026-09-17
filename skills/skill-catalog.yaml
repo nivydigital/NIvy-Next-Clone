@@ -1,0 +1,39 @@
+version: 1
+skills:
+  task-planning: {purpose: break requests into bounded executable steps}
+  routing: {purpose: choose agents and workflows}
+  workflow-control: {purpose: start, monitor and stop registered workflows}
+  evidence: {purpose: capture source and execution evidence}
+  web-research: {purpose: search and synthesize web information}
+  source-evaluation: {purpose: assess source relevance and reliability}
+  summarization: {purpose: produce structured summaries}
+  lead-discovery: {purpose: discover candidate business leads}
+  data-normalization: {purpose: normalize and deduplicate records}
+  website-analysis: {purpose: inspect public website content}
+  contact-extraction: {purpose: extract supported contact fields}
+  lead-scoring: {purpose: apply configured qualification criteria}
+  email-validation: {purpose: verify email deliverability through configured verifier}
+  deliverability: {purpose: interpret verification and campaign delivery signals}
+  email-writing: {purpose: draft personalized email}
+  personalization: {purpose: personalize from verified context}
+  campaign-control: {purpose: enforce sequence, suppression and approval rules}
+  follow-up-writing: {purpose: draft context-aware follow-ups}
+  reply-awareness: {purpose: detect replies and stop or route sequences}
+  content-writing: {purpose: draft useful marketing content}
+  seo-writing: {purpose: write search-oriented content}
+  editing: {purpose: improve clarity and correctness}
+  social-writing: {purpose: write social content}
+  platform-formatting: {purpose: adapt content to platform requirements}
+  approval-control: {purpose: enforce human approval gates}
+  keyword-research: {purpose: collect and organize keyword evidence}
+  seo-audit: {purpose: analyze technical and content SEO signals}
+  email-triage: {purpose: classify inbound email}
+  reply-drafting: {purpose: draft customer responses}
+  escalation: {purpose: route uncertain or sensitive cases to humans}
+  memory-retrieval: {purpose: retrieve durable business context}
+  rag: {purpose: retrieve relevant semantic knowledge}
+  knowledge-curation: {purpose: store and organize approved knowledge}
+  tool-use: {purpose: call registered tools with validated inputs}
+  error-recovery: {purpose: bounded recovery and retry}
+  evaluation: {purpose: test outputs against acceptance criteria}
+  regression-testing: {purpose: detect regressions across releases}

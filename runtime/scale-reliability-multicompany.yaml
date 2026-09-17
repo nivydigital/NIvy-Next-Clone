@@ -1,0 +1,18 @@
+id: phase-17-scale-reliability-multi-company
+version: "1.0"
+status: canonical
+phase: 17
+purpose: Reliability, scaling, tenancy isolation, disaster recovery and multi-company operation.
+agents: [A122, A123, A124, A125, A126, A127]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [tenant.create, tenant.change, failover, migration, capacity_change]
+  approval_required: true
+reliability: [health_checks, retries, timeouts, circuit_breakers, idempotency, graceful_degradation]
+security: [tenant_isolation, least_privilege, auditability, secret_boundary]
+resilience: [backup, restore, disaster_recovery, recovery_testing]
+scaling: [horizontal_runtime, queue_backpressure, workload_limits, rate_limits]
+company_isolation: [tenant_id_required, data_scope_required, policy_scope_required]
+rollout: [canary, health_gate, rollback]
+evidence_required: true

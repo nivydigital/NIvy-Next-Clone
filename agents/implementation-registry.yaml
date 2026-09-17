@@ -1,0 +1,6 @@
+version: "1.0"
+status: implementation-extension
+agents:
+  - {id: A003, name: Buyer Persona Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a003:run_a003_persona, skills: [SK003], prompts: [PR009], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}}
+  - {id: A004, name: Competitor Intelligence Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a004:run_a004_competitor, skills: [SK004], prompts: [PR010], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}}
+  - {id: A005, name: Channel Strategy Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a005:run_a005_channel, skills: [SK005], prompts: [PR011], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}}

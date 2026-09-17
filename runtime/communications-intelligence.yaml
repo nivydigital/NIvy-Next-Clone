@@ -1,0 +1,42 @@
+id: phase-8-communications-intelligence
+version: "1.0"
+status: canonical
+purpose: governed communications, conversation intelligence, and knowledge extraction contract
+principle: discover-audit-reuse-adapt-integrate-build-missing
+lifecycle:
+  states: [draft, validated, active, paused, deprecated]
+  activation_requires: [registry_binding, policy_pass, evaluation_pass, integration_health]
+capabilities:
+  - inbound_message_triage
+  - conversation_summarization
+  - intent_and_sentiment_classification
+  - response_drafting
+  - meeting_intelligence
+  - communication_knowledge_extraction
+  - escalation_detection
+  - communication_quality_review
+seed_agents:
+  - A066
+  - A067
+  - A068
+  - A069
+  - A070
+  - A071
+tool_policy:
+  default_deny: true
+  llm_tool: tool.ollama.generate
+  protected_tools_require_approval: true
+  autonomous_mode_default: false
+integrations:
+  workflow_engine: n8n
+  crm_system_of_record: Odoo
+  vector_store: Qdrant
+  email_adapter: tool.email.send
+  event_contract: communication.event.v1
+observability:
+  required_fields: [run_id, agent_id, input_type, intent, status, duration_ms, error]
+  audit_all_runs: true
+safety:
+  external_message_send_requires_approval: true
+  customer_record_updates_require_approval: true
+  unknown_tools_fail_closed: true

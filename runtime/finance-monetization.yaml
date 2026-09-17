@@ -1,0 +1,22 @@
+id: phase-10-finance-monetization
+version: "1.0"
+status: canonical
+phase: 10
+purpose: Governed finance, billing, pricing, cashflow and monetization automation.
+principle: discover-audit-reuse-adapt-integrate-build-missing
+states: [draft, active, review, approved, posted, reconciled, closed]
+agents: [A078, A079, A080, A081, A082, A083]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [invoice.post, payment.post, journal.post, refund.issue, price.change, finance_record.write]
+  approval_required: true
+system_of_record: Odoo
+workflow_engine: n8n
+knowledge_store: Qdrant
+llm: Ollama
+required_capabilities: [billing, accounts_receivable, accounts_payable, cashflow, pricing, revenue_analytics]
+side_effects: approval_gated
+idempotency: entity_id:event
+observability: [run_id, agent_id, action, status, duration_ms, error, approval_id, audit_event_id]
+evidence_required: true

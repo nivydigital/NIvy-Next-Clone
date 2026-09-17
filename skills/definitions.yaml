@@ -1,0 +1,56 @@
+version: "1.0"
+status: canonical
+contract: skills/execution-contract.yaml
+# Implementation definitions for the 50 canonical skills. Each skill follows the common lifecycle:
+# RECEIVE -> VALIDATE -> PREPARE -> EXECUTE -> QUALITY_CHECK -> VERIFY -> RETURN -> AUDIT
+skills:
+  SK001: {name: Market Research, objective: "answer a defined market question with sourced evidence", inputs: [objective, market, geography, constraints], outputs: [findings, sources, gaps, next_actions]}
+  SK002: {name: ICP Definition, objective: "define repeatable ideal-customer criteria", inputs: [service, market, constraints], outputs: [criteria, exclusions, qualification_signals]}
+  SK003: {name: Buyer Persona Development, objective: "model buyer roles and needs from evidence", inputs: [icp, market, evidence], outputs: [personas, pains, triggers, objections]}
+  SK004: {name: Competitor Intelligence, objective: "compare competitors using verifiable evidence", inputs: [market, competitors, criteria], outputs: [competitor_profiles, gaps, evidence]}
+  SK005: {name: Channel Strategy, objective: "select and sequence acquisition channels", inputs: [icp, offer, market, constraints], outputs: [channel_plan, rationale, tests]}
+  SK006: {name: Offer Design, objective: "design a clear deliverable-backed offer", inputs: [icp, service, value, constraints], outputs: [offer, scope, exclusions, proof_requirements]}
+  SK007: {name: Brand Strategy, objective: "define positioning and brand operating rules", inputs: [market, audience, company_context], outputs: [positioning, pillars, voice_rules]}
+  SK008: {name: Messaging, objective: "produce evidence-backed messages for a defined audience", inputs: [audience, offer, channel, voice], outputs: [message, claims, cta]}
+  SK009: {name: Content Strategy, objective: "plan content against business and audience objectives", inputs: [goals, audience, channels], outputs: [content_strategy, themes, metrics]}
+  SK010: {name: Editorial Planning, objective: "turn strategy into an executable content calendar", inputs: [strategy, cadence, channels], outputs: [calendar, briefs, dependencies]}
+  SK011: {name: Keyword Research, objective: "identify and cluster relevant search demand", inputs: [site, market, seed_terms], outputs: [keywords, clusters, intent, evidence]}
+  SK012: {name: On-Page SEO, objective: "diagnose and improve page-level SEO", inputs: [pages, keywords, content], outputs: [issues, recommendations, priority]}
+  SK013: {name: Technical SEO, objective: "diagnose technical search accessibility and quality", inputs: [site, crawl_evidence], outputs: [technical_findings, fixes, validation]}
+  SK014: {name: Authority Building, objective: "plan evidence-backed authority acquisition", inputs: [site, niche, competitors], outputs: [authority_plan, targets, risks]}
+  SK015: {name: Content Gap Analysis, objective: "identify high-value content gaps", inputs: [site, competitors, keywords], outputs: [gaps, opportunities, priorities]}
+  SK016: {name: Long-Form Writing, objective: "produce accurate long-form content from an approved brief", inputs: [brief, evidence, voice], outputs: [draft, citations, fact_flags]}
+  SK017: {name: Content Research, objective: "collect reliable evidence for content", inputs: [topic, audience, sources], outputs: [research_notes, sources, uncertainties]}
+  SK018: {name: Content Editing, objective: "improve content without changing supported meaning", inputs: [draft, brief, style], outputs: [edited_draft, changes, flags]}
+  SK019: {name: Fact Checking, objective: "validate material factual claims", inputs: [content, sources], outputs: [claim_results, citations, unresolved_claims]}
+  SK020: {name: Content Repurposing, objective: "adapt approved content into channel-specific assets", inputs: [source_content, channels, voice], outputs: [assets, mapping, approval_flags]}
+  SK021: {name: Video Scriptwriting, objective: "create structured scripts from approved briefs", inputs: [topic, audience, format], outputs: [script, scenes, claims]}
+  SK022: {name: YouTube SEO, objective: "optimize video discoverability from evidence", inputs: [topic, keywords, video_context], outputs: [title, description, tags, chapters]}
+  SK023: {name: Social Content Creation, objective: "create channel-appropriate social content", inputs: [brief, platform, voice], outputs: [post, creative_brief, cta]}
+  SK024: {name: Content Analytics, objective: "interpret content performance data", inputs: [metrics, period, goals], outputs: [analysis, anomalies, recommendations]}
+  SK025: {name: Email Nurturing, objective: "design context-aware nurture sequences", inputs: [segment, lifecycle, offer], outputs: [sequence, timing, stop_rules]}
+  SK026: {name: Email Optimization, objective: "improve email performance using measured evidence", inputs: [campaign_metrics, copy, segment], outputs: [tests, revised_copy, hypotheses]}
+  SK027: {name: Growth Experimentation, objective: "design bounded measurable growth experiments", inputs: [goal, baseline, constraints], outputs: [hypothesis, experiment, metrics, stop_rules]}
+  SK028: {name: Community Growth, objective: "plan ethical community acquisition and engagement", inputs: [community, audience, goals], outputs: [growth_plan, activities, metrics]}
+  SK029: {name: Partner Discovery, objective: "identify qualified partnership candidates", inputs: [criteria, market], outputs: [partners, evidence, fit]}
+  SK030: {name: Partnership Management, objective: "manage partner lifecycle and obligations", inputs: [partner, agreement, goals], outputs: [plan, tasks, risks, status]}
+  SK031: {name: PR Research, objective: "research relevant media and PR opportunities", inputs: [company, topic, geography], outputs: [targets, angles, evidence]}
+  SK032: {name: Marketing Analytics, objective: "analyze marketing performance against goals", inputs: [metrics, goals, period], outputs: [dashboard_data, findings, recommendations]}
+  SK033: {name: Attribution Analysis, objective: "analyze contribution across acquisition touchpoints", inputs: [touchpoints, conversions, model], outputs: [attribution_view, limitations, actions]}
+  SK034: {name: Lead Discovery, objective: "discover candidate businesses matching explicit criteria", inputs: [icp, geography, source_rules], outputs: [leads, sources, dedupe_keys]}
+  SK035: {name: Contact Discovery, objective: "find supported contact information for known accounts", inputs: [account, target_role], outputs: [contacts, evidence, unknowns]}
+  SK036: {name: Lead Enrichment, objective: "add verified account/contact attributes", inputs: [lead, allowed_sources], outputs: [enriched_lead, evidence, confidence]}
+  SK037: {name: Data Quality, objective: "detect and classify record-quality problems", inputs: [records, rules], outputs: [quality_report, corrections, blockers]}
+  SK038: {name: Data Verification, objective: "verify material record claims against sources", inputs: [records, sources], outputs: [verification_results, evidence]}
+  SK039: {name: Lead Scoring, objective: "apply configured qualification criteria consistently", inputs: [lead, scoring_model], outputs: [score, factors, confidence]}
+  SK040: {name: Lead Segmentation, objective: "assign leads to deterministic useful segments", inputs: [lead, segment_rules], outputs: [segment, rationale]}
+  SK041: {name: Account Research, objective: "produce an evidence-backed account brief", inputs: [company, website, context], outputs: [account_brief, signals, sources]}
+  SK042: {name: Signal Detection, objective: "identify supported buying or lifecycle signals", inputs: [account, events, sources], outputs: [signals, timestamps, evidence]}
+  SK043: {name: Outreach Strategy, objective: "choose an appropriate bounded outreach approach", inputs: [icp, account, offer, channel], outputs: [sequence_strategy, channel, stop_rules]}
+  SK044: {name: Email Outreach, objective: "draft truthful personalized email outreach", inputs: [lead, account_context, offer], outputs: [subject, body, personalization_evidence, approval_state]}
+  SK045: {name: LinkedIn Outreach, objective: "draft policy-compliant LinkedIn outreach", inputs: [lead, account_context, offer], outputs: [message_sequence, evidence, approval_state]}
+  SK046: {name: Call Preparation, objective: "prepare evidence-backed call briefs and questions", inputs: [account, meeting_context], outputs: [brief, agenda, questions, risks]}
+  SK047: {name: WhatsApp Outreach, objective: "draft consent-aware WhatsApp outreach", inputs: [contact, context, offer], outputs: [message, stop_rules, approval_state]}
+  SK048: {name: SMS Outreach, objective: "draft compliant SMS outreach", inputs: [contact, context, offer], outputs: [message, stop_rules, approval_state]}
+  SK049: {name: Personalization, objective: "derive relevant personalization only from verified context", inputs: [account_context, offer, channel], outputs: [personalization, evidence, confidence]}
+  SK050: {name: Follow-Up, objective: "determine and draft the next permitted follow-up", inputs: [campaign_state, prior_messages, reply_state], outputs: [next_action, draft, stop_reason]}

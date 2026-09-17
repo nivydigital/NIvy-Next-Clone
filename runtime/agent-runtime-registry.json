@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "policy": {"default_deny": true, "autonomous": false},
+  "agents": [
+    {"id":"A034","name":"Lead Discovery","status":"runtime-ready","model":"","tools":["tool.n8n.lead_discovery"],"side_effects":false},
+    {"id":"A039","name":"Lead Scoring","status":"runtime-ready","model":"","tools":["tool.n8n.lead_scoring"],"side_effects":false},
+    {"id":"A043","name":"Outreach Strategy","status":"runtime-ready","model":"","tools":["tool.n8n.outreach_prepare"],"side_effects":false},
+    {"id":"A044","name":"Email Outreach","status":"runtime-ready","model":"","tools":["tool.email.send"],"side_effects":true},
+    {"id":"A049","name":"Personalization","status":"runtime-ready","model":"","tools":["tool.n8n.personalize"],"side_effects":false},
+    {"id":"A050","name":"Follow-Up","status":"runtime-ready","model":"","tools":["tool.email.send"],"side_effects":true},
+    {"id":"A054","name":"Qualification","status":"runtime-ready","model":"","tools":["tool.n8n.qualification"],"side_effects":false},
+    {"id":"A060","name":"Proposal Agent","status":"runtime-ready","model":"","tools":["tool.odoo.crm_update","tool.email.send"],"side_effects":true}
+  ],
+  "tools": [
+    {"id":"tool.n8n.lead_discovery","kind":"n8n_webhook","path":"/webhook/nivy/lead-discovery","protected":false},
+    {"id":"tool.n8n.lead_scoring","kind":"n8n_webhook","path":"/webhook/nivy/lead-scoring","protected":false},
+    {"id":"tool.n8n.outreach_prepare","kind":"n8n_webhook","path":"/webhook/nivy/outreach-prepare","protected":false},
+    {"id":"tool.n8n.personalize","kind":"n8n_webhook","path":"/webhook/nivy/personalize","protected":false},
+    {"id":"tool.n8n.qualification","kind":"n8n_webhook","path":"/webhook/nivy/qualification","protected":false},
+    {"id":"tool.email.send","kind":"email_webhook","path":"/webhook/nivy/send-email","protected":true},
+    {"id":"tool.odoo.crm_update","kind":"odoo_jsonrpc","path":"/jsonrpc","protected":true}
+  ]
+}

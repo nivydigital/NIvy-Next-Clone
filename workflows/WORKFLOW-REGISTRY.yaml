@@ -1,0 +1,23 @@
+version: 1
+workflows:
+  - id: lead-generation-to-outreach
+    trigger: manual_or_schedule
+    stages: [discover, normalize, enrich, verify, approve, send, monitor]
+  - id: inbound-email-triage
+    trigger: email_received
+    stages: [fetch, classify, retrieve_context, draft, approve_or_route]
+  - id: outreach-follow-up
+    trigger: schedule
+    stages: [check_status, detect_reply, generate_followup, approve, send]
+  - id: social-content-pipeline
+    trigger: form_or_schedule
+    stages: [brief, generate, platform_adapt, approve, publish_or_export]
+  - id: seo-audit
+    trigger: manual
+    stages: [crawl, analyze, prioritize, report]
+  - id: knowledge-ingestion
+    trigger: document_uploaded
+    stages: [extract, chunk, embed, store, index]
+  - id: agent-evaluation
+    trigger: test_run
+    stages: [discover, execute, assert, evidence, report]

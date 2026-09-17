@@ -1,0 +1,14 @@
+version: "1.0"
+status: canonical
+memory_classes:
+  - {id: MEM001, name: short-term-execution, retention: run-scoped, privacy: internal, provenance_required: true, deletion_supported: true}
+  - {id: MEM002, name: conversation, retention: policy-defined, privacy: internal, provenance_required: true, deletion_supported: true}
+  - {id: MEM003, name: customer-account, retention: contract/policy-defined, privacy: restricted, provenance_required: true, deletion_supported: true}
+  - {id: MEM004, name: agent, retention: version-scoped, privacy: internal, provenance_required: true, deletion_supported: true}
+  - {id: MEM005, name: organizational, retention: long-lived, privacy: internal, provenance_required: true, deletion_supported: true}
+  - {id: MEM006, name: procedural, retention: version-scoped, privacy: internal, provenance_required: true, deletion_supported: true}
+
+rules:
+  - Memory must declare scope, retention, provenance and access policy before runtime use.
+  - Restricted customer memory requires authorized access.
+  - Deletion requests must be representable and auditable.

@@ -1,0 +1,22 @@
+id: phase-11-marketing-growth
+version: "1.0"
+status: canonical
+phase: 11
+purpose: Governed marketing strategy, content, SEO, campaigns, social, analytics and growth automation.
+principle: discover-audit-reuse-adapt-integrate-build-missing
+states: [research, planned, drafted, reviewed, approved, scheduled, published, measured]
+agents: [A084, A085, A086, A087, A088, A089, A090, A091]
+controls:
+  default_deny: true
+  autonomous_mode: false
+  protected_actions: [content.publish, campaign.launch, ad.change, social.publish, website.publish]
+  approval_required: true
+system_of_record: Odoo
+workflow_engine: n8n
+knowledge_store: Qdrant
+llm: Ollama
+required_capabilities: [market_strategy, content, seo, social, paid_media, analytics, growth_experiments]
+side_effects: approval_gated
+idempotency: asset_id:event
+observability: [run_id, agent_id, action, status, duration_ms, error, approval_id, audit_event_id]
+evidence_required: true

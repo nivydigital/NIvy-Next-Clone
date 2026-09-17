@@ -1,0 +1,14 @@
+version: "1.0"
+status: canonical
+prompts:
+  - {id: PR001, name: Market Research System, version: "1.0", status: declared, owner: unassigned, category: system, model_compatibility: [general], variables: [objective, market, geography], provenance: {source: Raw-Repository research catalog, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR002, name: ICP Strategy, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [service, market, customer_constraints], provenance: {source: Raw-Repository research catalog, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR003, name: Lead Research, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [company, website, role], provenance: {source: Raw-Repository Agent List, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR004, name: Lead Personalization, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [account_context, offer, channel], provenance: {source: Raw-Repository Agent List, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR005, name: Reply Triage, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [message, lead_context, policy], provenance: {source: Raw-Repository Agent List, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR006, name: Content Creation, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [topic, audience, channel, brand_voice], provenance: {source: Raw-Repository marketing catalog, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR007, name: SEO Analysis, version: "1.0", status: declared, owner: unassigned, category: task, model_compatibility: [general], variables: [site, keywords, competitors], provenance: {source: Raw-Repository marketing catalog, source_type: internal}, evaluation: {status: pending, evidence: null}}
+  - {id: PR008, name: Policy-Safe Action Check, version: "1.0", status: declared, owner: unassigned, category: safety, model_compatibility: [general], variables: [action, data_classification, destination], provenance: {source: AIOS v3.1 plan, source_type: internal}, evaluation: {status: pending, evidence: null}}
+notes:
+  - Prompt IDs are stable references; executable prompt bodies may live under prompts/agents, prompts/skills or prompts/system.
+  - No prompt is production-approved solely because it is registered.

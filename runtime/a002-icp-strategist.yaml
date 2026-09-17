@@ -1,0 +1,71 @@
+version: "1.0"
+status: implementation
+agent_id: A002
+name: ICP Strategist Runtime Contract
+mode: governed_read_only
+entrypoint: backend.app.runtime.a002:run_a002_icp
+
+input:
+  schema: agents/A002/input.schema.json
+  required: [market_research]
+  optional: [business_offer, existing_customers, exclusions, geography, revenue_targets, request_id]
+
+execution:
+  lifecycle: [RECEIVE, VALIDATE, PREPARE, ANALYZE, SYNTHESIZE, QUALITY_CHECK, VERIFY, RETURN, AUDIT]
+  sequence:
+    - validate_input
+    - resolve_A002_skill_prompt_knowledge_tool_chain
+    - verify_market_evidence_provenance
+    - normalize_market_context
+    - construct_governed_prompt
+    - execute_local_model
+    - validate_structured_output
+    - verify_evidence_and_postconditions
+    - record_audit_event
+  side_effects: false
+  timeout_seconds: 180
+  retries: 2
+  idempotency_key: "request_id + normalized market context"
+
+research_boundary:
+  current_runtime_capability: "ICP synthesis from approved market evidence and business context"
+  optional_tools: [tool.postgres.query.readonly, tool.qdrant.search, tool.firecrawl.extract]
+  fallback: "supplied approved market research; never claim additional research was performed"
+  rule: "Every material criterion must be traceable to supplied evidence or explicitly labeled as an assumption."
+  source_policy: "public/approved sources only"
+
+quality:
+  required:
+    - provenance_for_material_criteria
+    - explicit_uncertainty
+    - operational_discovery_rules
+    - unsupported_claims_rejected_or_flagged
+    - output_schema_valid
+
+failure:
+  missing_required_input: reject
+  undeclared_tool: deny
+  unauthorized_source_access: deny
+  no_research_evidence: escalate
+  unsupported_material_claim: escalate
+  schema_failure: reject
+  transient_model_error: retry_then_fail
+
+verification:
+  output_schema: agents/A002/output.schema.json
+  postconditions:
+    - every_material_criterion_has_evidence_or_explicit_assumption
+    - sensitive_attributes_are_not_inferred
+    - discovery_rules_are_searchable_and_specific
+    - no_external_side_effect_occurred
+    - audit_event_exists
+
+events:
+  input: market.research.completed
+  success: icp.completed
+  failure: icp.failed
+
+observability:
+  correlation_id: required
+  audit: required
+  metrics: [latency, success_rate, failure_rate, evidence_coverage, criteria_count, confidence_distribution]

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A002/output.schema.json",
+  "title": "A002 ICP Strategist Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "icp_definition", "evidence", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "icp_definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_segments", "firmographics", "buyer_roles", "pain_points", "buying_signals", "exclusions", "confidence", "assumptions", "derived_from", "discovery_rules"],
+      "properties": {
+        "target_segments": {"type": "array", "items": {"type": "object"}},
+        "firmographics": {"type": "object"},
+        "buyer_roles": {"type": "array", "items": {"type": "object"}},
+        "pain_points": {"type": "array", "items": {"type": "object"}},
+        "buying_signals": {"type": "array", "items": {"type": "object"}},
+        "exclusions": {"type": "array", "items": {"type": "string"}},
+        "confidence": {"enum": ["high", "medium", "low"]},
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "derived_from": {"type": "array", "items": {"type": "object"}},
+        "discovery_rules": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "actions": {"type": "array"},
+    "records_changed": {"type": "array"},
+    "evidence": {"type": "array", "items": {"type": "object"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

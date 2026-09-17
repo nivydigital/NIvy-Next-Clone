@@ -1,0 +1,42 @@
+id: A005
+name: Channel Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Select and prioritize acquisition and communication channels from approved market, ICP and competitor evidence.
+inputs:
+  required: [market_research, icp_definition]
+  optional: [competitor_intelligence, business_offer, channel_constraints, historical_performance]
+outputs:
+  primary: channel_strategy
+  required_fields: [channels, prioritization, channel_fit, experiments, constraints, confidence, assumptions, derived_from]
+  downstream_events: [channel_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, map_audience_to_channels, assess_fit, prioritize, define_experiments, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  unsupported_channel_performance_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  prioritization_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - channel_choices_are_traceable_to_evidence
+  - experiments_have_clear_hypotheses_and_measurement
+  - uncertainty_and_constraints_are_explicit
+provenance:
+  source: Raw-Repository/Chats/ChatGPT/Multi Agent AIOS/02-agents/registry.yaml
+  source_type: internal

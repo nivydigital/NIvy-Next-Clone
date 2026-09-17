@@ -1,0 +1,54 @@
+name: Nivy Next AIOS v1 Smoke Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Run deterministic revenue engine tests
+        run: python -m unittest backend.app.test_revenue -v
+
+      - name: Validate Compose file
+        run: docker compose config
+
+      - name: Build and start stack
+        run: docker compose up -d --build
+
+      - name: Wait for backend
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://localhost:8000/health; then exit 0; fi
+            sleep 5
+          done
+          docker compose ps
+          docker compose logs --no-color backend
+          exit 1
+
+      - name: Smoke test HTTP services
+        run: |
+          set -e
+          curl -fsS http://localhost:8000/health
+          curl -fsS http://localhost:8000/api/v1/system
+          curl -fsS http://localhost:8000/api/v1/revenue/summary
+          curl -fsS http://localhost:3000
+          curl -fsS http://localhost:5678
+          curl -fsS http://localhost:6333
+          curl -fsS http://localhost:11434/api/tags
+
+      - name: Show service state on failure
+        if: failure()
+        run: docker compose ps && docker compose logs --no-color --tail=200
+
+      - name: Shutdown
+        if: always()
+        run: docker compose down -v
