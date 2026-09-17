@@ -1,0 +1,65 @@
+id: social-content-pipeline
+version: "1.0"
+status: implementation
+trigger: form_or_schedule
+dry_run_default: true
+idempotency_key_fields: [campaign_id, platform, period]
+
+states:
+  - pending
+  - strategy
+  - generate
+  - platform_adapt
+  - qa
+  - await_approval
+  - completed
+  - failed
+
+transitions:
+  - {from: pending, to: strategy, on: start}
+  - {from: strategy, to: generate, on: strategy_done}
+  - {from: generate, to: platform_adapt, on: generated}
+  - {from: platform_adapt, to: qa, on: adapted}
+  - {from: qa, to: await_approval, on: qa_pass}
+  - {from: await_approval, to: completed, on: approved}
+  - {from: "*", to: failed, on: error}
+
+stages:
+  - id: social_strategy
+    agent: A087
+    skill_hint: [SK009, SK010, SK023]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      content_strategy: $.input.content_strategy
+      audience_insights: $.input.audience_insights
+      social_constraints: $.input.social_constraints
+    output_key: social_strategy
+  - id: content_brief
+    agent: A085
+    skill_hint: [SK009, SK023]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      social_strategy: $.outputs.social_strategy
+      content_strategy: $.input.content_strategy
+    output_key: brief
+  - id: campaign_qa
+    agent: A091
+    skill_hint: [SK037, SK038]
+    input_map:
+      draft_plan: $.outputs.brief
+      social_strategy: $.outputs.social_strategy
+      policy: $.input.policy
+    output_key: qa
+  - id: approval_gate
+    type: gate
+    policy: human_approval_before_publish
+    detail: No auto-publish to social platforms
+
+stop_rules:
+  - policy_violation
+  - platform_policy_block
+
+side_effects: none
+
+audit:
+  required: true
