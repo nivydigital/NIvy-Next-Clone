@@ -1,0 +1,43 @@
+id: A096
+name: Executive Intelligence Analyst
+version: "1.0"
+status: implementation
+category: control
+purpose: Synthesize cross-domain signals into executive briefings with decisions and asks.
+inputs:
+  required: [signal_pack]
+  optional: [kpi_intelligence, risk_assessment, briefing_constraints]
+outputs:
+  primary: executive_brief
+  required_fields: [summary, key_decisions, asks, risks_opportunities, confidence, assumptions, derived_from]
+  downstream_events: [executive_brief.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, synthesize_summary, list_decisions, list_asks, map_risks_opportunities, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - brief_is_decision_oriented
+  - asks_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A096 Executive Intelligence Analyst)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
