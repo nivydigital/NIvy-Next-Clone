@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A031 Demand Generation Strategy Output",
+  "type": "object",
+  "required": ["status", "programs", "funnel_stages", "content_campaign_map", "measurement", "volume_goals", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "programs": {"type": "array", "items": {"type": "object"}},
+    "funnel_stages": {"type": "array", "items": {"type": "object"}},
+    "content_campaign_map": {"type": "array", "items": {"type": "object"}},
+    "measurement": {"type": "object"},
+    "volume_goals": {"type": "object"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
