@@ -7,9 +7,10 @@ from .runtime.a002 import A002ICPError, run_a002_icp
 from .runtime.a003 import A003BuyerPersonaError, run_a003_persona
 from .runtime.a004 import A004CompetitorError, run_a004_competitor
 from .runtime.a005 import A005ChannelStrategyError, run_a005_channel
+from .runtime.discovery import execute_agent, get_agent, list_agents
 from .runtime.engine import RuntimeDenied, runtime_engine
 
-app = FastAPI(title="Nivy Next AIOS API", version="0.6.0")
+app = FastAPI(title="Nivy Next AIOS API", version="0.7.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class SendEmailRequest(BaseModel):
@@ -18,6 +19,12 @@ class LeadCreateRequest(BaseModel):
     name: str; email: EmailStr; company: str | None = None; source: str = "unknown"; request_id: str | None = None; actor: str = "system"
 class LeadQualifyRequest(BaseModel): score: int
 class AgentRunRequest(BaseModel): prompt: str | None = None; prompt_id: str | None = None; context: dict = Field(default_factory=dict)
+class AgentExecuteRequest(BaseModel):
+    """Unified structured execute (P0.4). Body is agent input fields + optional control keys."""
+    prompt_id: str | None = None
+    allow_llm_fallback: bool = True
+    request_id: str | None = None
+    payload: dict = Field(default_factory=dict)
 class A001ResearchRequest(BaseModel): research_question: str; target_market: str; geography: str | None = None; industry: str | None = None; customer_segment: str | None = None; time_horizon: str | None = None; competitor_set: list[str] | None = None; source_policy: dict = Field(default_factory=dict); output_format: str | None = None; evidence: list[dict] = Field(default_factory=list)
 class A002ICPRequest(BaseModel): market_research: dict; business_offer: dict = Field(default_factory=dict); existing_customers: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); geography: str | None = None; revenue_targets: dict = Field(default_factory=dict); request_id: str | None = None
 class A003PersonaRequest(BaseModel): icp_definition: dict; market_research: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); customer_interviews: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); request_id: str | None = None
@@ -27,11 +34,52 @@ class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); ap
 class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.6.0", "runtime": runtime_engine.health()}
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.7.0", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite"}
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.7.0"}
 @app.get("/api/v1/runtime/health")
 def runtime_health(): return runtime_engine.health()
+
+# --- P0.3 Discovery ---
+@app.get("/api/v1/runtime/agents")
+def runtime_list_agents():
+    """List registry + disk agents with runtime module / entrypoint / route flags."""
+    return list_agents()
+
+@app.get("/api/v1/runtime/agents/{agent_id}")
+def runtime_get_agent(agent_id: str):
+    try:
+        return get_agent(agent_id.upper() if agent_id[0].lower() == "a" else agent_id)
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+# --- P0.4 Unified structured execute ---
+@app.post("/api/v1/runtime/agents/{agent_id}/execute")
+async def runtime_execute_agent(agent_id: str, request: AgentExecuteRequest):
+    """Validate input schema → structured entrypoint (or LLM fallback) → audit."""
+    aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
+    body = dict(request.payload or {})
+    if request.request_id and "request_id" not in body:
+        body["request_id"] = request.request_id
+    try:
+        result = await execute_agent(
+            aid,
+            body,
+            prompt_id=request.prompt_id,
+            allow_llm_fallback=request.allow_llm_fallback,
+        )
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
+    except Exception as exc:
+        # Structured agent validation errors (e.g. missing fields)
+        msg = str(exc)
+        if "requires" in msg or "missing" in msg.lower():
+            raise HTTPException(status_code=422, detail=msg) from exc
+        raise HTTPException(status_code=500, detail=msg) from exc
+    if getattr(result, "status", None) == "failed":
+        raise HTTPException(status_code=502, detail=result.error or f"{aid} runtime failed")
+    return result.__dict__ if hasattr(result, "__dict__") else result
+
 @app.post("/api/v1/runtime/agents/{agent_id}/run")
 async def run_agent(agent_id: str, request: AgentRunRequest):
     try: result = await runtime_engine.run_llm(agent_id, request.prompt or "", request.prompt_id, dict(request.context))
@@ -116,5 +164,15 @@ def revenue_summary():
     return {"total_leads": len(leads), "by_status": counts}
 @app.get("/api/v1/evaluation/runtime")
 def runtime_evaluation():
-    checks = {"registry_loaded": len(runtime_engine.registry.get("agents", [])) > 0, "default_deny": runtime_engine.registry.get("policy", {}).get("default_deny", True) is True, "approval_store": isinstance(runtime_engine.approvals, dict), "audit_store": isinstance(runtime_engine.audit, list), "health": runtime_engine.health().get("status") == "ok", "executable_prompt_library": len(runtime_engine.prompt_library.get("prompts", {})) >= 8}
-    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks}
+    discovery = list_agents()
+    checks = {
+        "registry_loaded": len(runtime_engine.registry.get("agents", [])) > 0,
+        "default_deny": runtime_engine.registry.get("policy", {}).get("default_deny", True) is True,
+        "approval_store": isinstance(runtime_engine.approvals, dict),
+        "audit_store": isinstance(runtime_engine.audit, list),
+        "health": runtime_engine.health().get("status") == "ok",
+        "executable_prompt_library": len(runtime_engine.prompt_library.get("prompts", {})) >= 8,
+        "agent_discovery": discovery.get("count", 0) > 0,
+        "structured_entrypoints": discovery.get("structured_entrypoint_count", 0) > 0,
+    }
+    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks, "discovery_summary": {"count": discovery.get("count"), "structured_entrypoint_count": discovery.get("structured_entrypoint_count")}}
