@@ -1,0 +1,43 @@
+id: A037
+name: Data Quality
+version: "1.0"
+status: implementation
+category: lead_ops
+purpose: Assess completeness, consistency and usability of lead and contact records; flag issues and recommend remediation.
+inputs:
+  required: [enriched_leads]
+  optional: [quality_rules, quality_constraints]
+outputs:
+  primary: data_quality_report
+  required_fields: [quality_score, issues, remediation, pass_fail, confidence, assumptions, derived_from]
+  downstream_events: [data_quality.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, apply_rules, score_quality, list_issues, recommend_remediation, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - quality_assessment_is_rule_based
+  - issues_and_remediation_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A037 Data Quality)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
