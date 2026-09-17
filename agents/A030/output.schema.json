@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A030 Product Marketing Strategy Output",
+  "type": "object",
+  "required": ["status", "product_narrative", "launch_messaging", "differentiation", "enablement_needs", "proof_points", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "product_narrative": {"type": "string"},
+    "launch_messaging": {"type": "object"},
+    "differentiation": {"type": "array", "items": {"type": "object"}},
+    "enablement_needs": {"type": "array", "items": {"type": "object"}},
+    "proof_points": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
