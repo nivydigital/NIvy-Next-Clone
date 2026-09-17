@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A050 Follow-Up Output",
+  "type": "object",
+  "required": ["status", "drafts", "trigger_reason", "timing_guidance", "compliance_checks", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "drafts": {"type": "array", "items": {"type": "object"}},
+    "trigger_reason": {"type": "string"},
+    "timing_guidance": {"type": "object"},
+    "compliance_checks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
