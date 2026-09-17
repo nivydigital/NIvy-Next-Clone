@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A032 Competitive Response Strategy Output",
+  "type": "object",
+  "required": ["status", "monitoring_triggers", "response_playbooks", "messaging_counters", "escalation_rules", "review_cadence", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "monitoring_triggers": {"type": "array", "items": {"type": "object"}},
+    "response_playbooks": {"type": "array", "items": {"type": "object"}},
+    "messaging_counters": {"type": "array", "items": {"type": "object"}},
+    "escalation_rules": {"type": "array", "items": {"type": "object"}},
+    "review_cadence": {"type": "object"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
