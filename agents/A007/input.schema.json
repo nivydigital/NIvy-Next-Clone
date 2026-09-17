@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A007 Content Strategy Input",
+  "type": "object",
+  "required": ["icp_definition", "messaging_positioning"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "business_offer": {"type": "object"},
+    "content_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
