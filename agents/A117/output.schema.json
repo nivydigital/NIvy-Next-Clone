@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A117/output.schema.json",
+  "title": "A117 Agent Discovery Agent Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["candidates", "ranked_matches", "gaps", "provenance_summary", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "candidates": {"type": "array", "items": {"type": "object"}},
+    "ranked_matches": {"type": "array", "items": {"type": "object"}},
+    "gaps": {"type": "array", "items": {"type": "object"}},
+    "provenance_summary": {"type": "object"},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

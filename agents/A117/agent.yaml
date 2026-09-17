@@ -1,0 +1,50 @@
+id: A117
+name: Agent Discovery Agent
+version: "1.0"
+status: implementation
+category: agent_factory
+purpose: Discover and inventory candidate agents, skills and capabilities from internal registry, Raw-Repository and approved external sources — produce ranked discovery reports without registering or activating agents.
+inputs:
+  required: [discovery_scope]
+  optional: [source_preferences, capability_filters, existing_inventory, license_constraints, prior_discovery]
+outputs:
+  primary: a117_result
+  required_fields: [candidates, ranked_matches, gaps, provenance_summary, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+  downstream_events: [a117_result.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+skills: [SK001, SK041]
+prompts: [PR001]
+knowledge: [KP001, KP004]
+workflow:
+  sequence: [validate_input, validate_provenance, execute, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+  side_effects: false
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - required_output_fields_present
+  - confidence_explicit
+  - no_unauthorized_side_effects
+provenance:
+  source: Phase-16 Factory Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy (TESTING-PLAN-DEFERRED.md)."
+runtime:
+  adapter: backend.app.runtime.a117
+  entrypoint: run_a117_agent_discovery
