@@ -2,40 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Nivy Next AIOS - Email</title>
+  <title>Nivy Next AIOS</title>
   <style>
-    body{font-family:system-ui,sans-serif;max-width:900px;margin:40px auto;padding:24px;background:#f7f7f8;color:#222}
-    .card{background:white;border:1px solid #ddd;border-radius:14px;padding:24px;box-shadow:0 4px 18px #0000000d}
-    label{display:block;margin:14px 0 6px;font-weight:600} input,textarea{box-sizing:border-box;width:100%;padding:11px;border:1px solid #bbb;border-radius:8px;font:inherit} textarea{min-height:180px}
-    button{margin-top:18px;padding:11px 18px;border:0;border-radius:8px;background:#111;color:#fff;font-weight:600;cursor:pointer}
-    .status{margin-top:16px;padding:12px;border-radius:8px;white-space:pre-wrap}.ok{background:#eaf7ed}.err{background:#fdecec}
+    body{font-family:system-ui,sans-serif;max-width:640px;margin:48px auto;padding:24px;background:#0f1419;color:#e7ecf3}
+    a{color:#3b82f6}
+    .card{background:#1a2332;border:1px solid #2d3a4f;border-radius:14px;padding:24px}
+    code{background:#0d121a;padding:2px 6px;border-radius:4px}
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>Nivy Email Agent</h1>
-    <p>Compose → Reacher verification → n8n → SMTP.</p>
-    <form id="emailForm">
-      <label>To</label><input id="to" type="email" required placeholder="recipient@example.com">
-      <label>From (optional)</label><input id="from" type="email" placeholder="sender@example.com">
-      <label>Subject</label><input id="subject" required placeholder="Your subject">
-      <label>Message</label><textarea id="body" required placeholder="Write your email..."></textarea>
-      <label><input id="verify" type="checkbox" checked style="width:auto"> Verify recipient with Reacher before sending</label>
-      <button type="submit">Send email</button>
-    </form>
-    <div id="status"></div>
+    <h1>Nivy Next AIOS</h1>
+    <p>Owner Console is the primary UI.</p>
+    <p><strong>Dev:</strong> <code>cd frontend/owner-console && npm install && npm run dev</code> → <a href="http://localhost:5173">http://localhost:5173</a></p>
+    <p>Legacy email form removed from this entry; use <strong>Approvals</strong> in the Owner Console for gated send.</p>
+    <p>Docs: <code>docs/owner-console/</code></p>
   </div>
-  <script>
-    const form=document.getElementById('emailForm'), status=document.getElementById('status');
-    form.addEventListener('submit',async e=>{
-      e.preventDefault(); status.className='status'; status.textContent='Sending...';
-      const payload={to:to.value,from_email:from.value||null,subject:subject.value,body:body.value,body_type:'text/html',verify_email:verify.checked,send_after_verification:true};
-      try{
-        const r=await fetch('http://localhost:8000/api/v1/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        const data=await r.json(); if(!r.ok) throw new Error(data.detail||JSON.stringify(data));
-        status.className='status ok'; status.textContent=JSON.stringify(data,null,2);
-      }catch(err){status.className='status err';status.textContent=err.message}
-    });
-  </script>
 </body>
 </html>
