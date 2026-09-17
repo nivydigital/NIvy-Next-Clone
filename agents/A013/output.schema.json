@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A013 Lead Generation Strategy Output",
+  "type": "object",
+  "required": ["status", "sources", "targeting_rules", "volume_goals", "qualification_handoff", "prioritization", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "targeting_rules": {"type": "array", "items": {"type": "object"}},
+    "volume_goals": {"type": "object"},
+    "qualification_handoff": {"type": "object"},
+    "prioritization": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
