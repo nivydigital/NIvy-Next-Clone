@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A012 Experiment & Growth Planning Output",
+  "type": "object",
+  "required": ["status", "experiments", "hypotheses", "metrics", "prioritization", "decision_rules", "learning_agenda", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "experiments": {"type": "array", "items": {"type": "object"}},
+    "hypotheses": {"type": "array", "items": {"type": "object"}},
+    "metrics": {"type": "array", "items": {"type": "object"}},
+    "prioritization": {"type": "array", "items": {"type": "object"}},
+    "decision_rules": {"type": "array", "items": {"type": "object"}},
+    "learning_agenda": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
