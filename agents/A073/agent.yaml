@@ -1,0 +1,43 @@
+id: A073
+name: Customer Health Analyst
+version: "1.0"
+status: implementation
+category: customer_success
+purpose: Assess customer health from usage, support and engagement signals; flag risk and expansion opportunity.
+inputs:
+  required: [customer_signals]
+  optional: [health_strategy, account_context, health_constraints]
+outputs:
+  primary: health_assessment
+  required_fields: [health_score, risk_flags, expansion_signals, recommended_actions, confidence, assumptions, derived_from]
+  downstream_events: [health_assessment.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, score_health, flag_risks, detect_expansion, recommend_actions, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - health_score_is_justified
+  - actions_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A073 Customer Health Analyst)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
