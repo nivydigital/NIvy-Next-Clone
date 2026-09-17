@@ -1,0 +1,43 @@
+id: A093
+name: Planning Analyst
+version: "1.0"
+status: implementation
+category: control
+purpose: Turn goals and constraints into prioritized plans with owners and checkpoints.
+inputs:
+  required: [goals]
+  optional: [kpi_intelligence, resource_constraints, planning_constraints]
+outputs:
+  primary: operational_plan
+  required_fields: [priorities, workstreams, owners, checkpoints, confidence, assumptions, derived_from]
+  downstream_events: [operational_plan.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, prioritize, define_workstreams, assign_owners, set_checkpoints, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - plan_is_actionable
+  - owners_and_checkpoints_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A093 Planning Analyst)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
