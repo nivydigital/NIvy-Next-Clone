@@ -1,0 +1,43 @@
+id: A009
+name: Go-to-Market Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Synthesize prior strategy artifacts into a coherent go-to-market plan covering segments, channels, messaging, offers, launch sequence and success metrics.
+inputs:
+  required: [icp_definition, channel_strategy, messaging_positioning]
+  optional: [buyer_personas, content_strategy, offer_pricing_strategy, competitor_intelligence, business_offer, launch_constraints]
+outputs:
+  primary: gtm_strategy
+  required_fields: [target_segments, channel_mix, messaging_summary, offer_summary, launch_sequence, success_metrics, risks, confidence, assumptions, derived_from]
+  downstream_events: [gtm_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, synthesize_segments, finalize_channel_mix, consolidate_messaging, consolidate_offers, define_launch_sequence, define_metrics, identify_risks, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - gtm_plan_is_internally_consistent_with_prior_strategy_artifacts
+  - launch_sequence_and_metrics_are_actionable
+  - risks_and_assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A008
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
