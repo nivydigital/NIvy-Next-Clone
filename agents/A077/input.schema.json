@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A077 Feedback & NPS Analyst Input",
+  "type": "object",
+  "required": ["feedback_corpus"],
+  "properties": {
+    "feedback_corpus": {"type": "object"},
+    "nps_scores": {"type": "object"},
+    "account_context": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
