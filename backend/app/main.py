@@ -11,8 +11,9 @@ from .runtime.discovery import execute_agent, get_agent, list_agents
 from .runtime.engine import RuntimeDenied, runtime_engine
 from .runtime.skills import resolve_agent_skills, skill_coverage_report
 from .runtime.workflows import list_workflow_defs, load_workflow, run_workflow
+from .runtime.audit import audit_log
 
-app = FastAPI(title="Nivy Next AIOS API", version="0.9.1")
+app = FastAPI(title="Nivy Next AIOS API", version="0.9.2")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class SendEmailRequest(BaseModel):
@@ -39,9 +40,9 @@ class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); ap
 class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.1", "runtime": runtime_engine.health()}
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.2", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.1"}
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.2"}
 @app.get("/api/v1/runtime/health")
 def runtime_health(): return runtime_engine.health()
 
@@ -169,6 +170,57 @@ def request_approval(request: ApprovalRequest):
 def approve(approval_id: str):
     try: return runtime_engine.approve(approval_id)
     except RuntimeDenied as exc: raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+# --- Owner Console Phase 4 ---
+@app.get("/api/v1/runtime/audit")
+def list_audit(limit: int = 100):
+    """Run history / audit browser for Owner Console."""
+    engine_events = list(getattr(runtime_engine, "audit", []) or [])
+    log_events = audit_log.list()
+    by_id = {}
+    for e in log_events + engine_events:
+        if isinstance(e, dict):
+            eid = e.get("event_id") or e.get("request_id") or str(id(e))
+            by_id[eid] = e
+    items = list(by_id.values())
+    items.sort(key=lambda x: x.get("timestamp") or "", reverse=True)
+    if limit and limit > 0:
+        items = items[:limit]
+    return {"items": items, "count": len(items)}
+
+@app.get("/api/v1/runtime/observability/summary")
+def observability_summary():
+    """Lightweight ops cards (Grafana optional)."""
+    engine_events = list(getattr(runtime_engine, "audit", []) or [])
+    log_events = audit_log.list()
+    events = engine_events if engine_events else log_events
+    total = len(events)
+    by_status: dict[str, int] = {}
+    by_type: dict[str, int] = {}
+    errors = 0
+    for e in events:
+        if not isinstance(e, dict):
+            continue
+        st = str(e.get("status") or "unknown")
+        et = str(e.get("event_type") or e.get("action") or "unknown")
+        by_status[st] = by_status.get(st, 0) + 1
+        by_type[et] = by_type.get(et, 0) + 1
+        if st in ("error", "failed", "denied"):
+            errors += 1
+    health = runtime_engine.health()
+    approvals = getattr(runtime_engine, "approvals", {}) or {}
+    pending = sum(1 for v in approvals.values() if isinstance(v, dict) and v.get("status") == "pending")
+    return {
+        "audit_events": total,
+        "errors": errors,
+        "by_status": by_status,
+        "by_event_type": by_type,
+        "pending_approvals": pending,
+        "runtime_health": health,
+        "panels_spec": "ops/observability/dashboard-spec.yaml",
+        "note": "Full Grafana embed is optional; these cards are the MVP ops surface.",
+    }
+
 @app.post("/api/v1/runtime/agents/{agent_id}/tools/{tool_id}/execute")
 async def execute_tool(agent_id: str, tool_id: str, request: ToolRunRequest):
     result = await runtime_engine.execute(agent_id, tool_id, dict(request.payload), request.approval_id)

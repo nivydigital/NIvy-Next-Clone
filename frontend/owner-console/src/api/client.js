@@ -76,4 +76,6 @@ export const api = {
   approve: (id) => request(`/api/v1/runtime/approvals/${id}/approve`, { method: "POST" }),
   sendEmail: (body) =>
     request("/api/v1/email/send", { method: "POST", body: JSON.stringify(body) }),
+  listAudit: (limit = 100) => request(`/api/v1/runtime/audit?limit=${limit}`),
+  observabilitySummary: () => request("/api/v1/runtime/observability/summary"),
 };

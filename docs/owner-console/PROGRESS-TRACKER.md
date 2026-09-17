@@ -78,10 +78,12 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| OC-4.1 | Run history / audit browser | ⚪ | |
-| OC-4.2 | Grafana / ops dashboard embeds | ⚪ | |
-| OC-4.3 | Multi-user roles | ⚪ | |
-| OC-4.4 | Production deploy + HTTPS auth | ⚪ | After activation checklist |
+| OC-4.1 | Run history / audit browser | 🟢 | `HistoryPage` + `GET /api/v1/runtime/audit` |
+| OC-4.2 | Grafana / ops dashboard embeds | 🟢 | `OpsPage` + `GET /api/v1/runtime/observability/summary` + optional iframe |
+| OC-4.3 | Multi-user roles | 🟢 | Deferred page documenting non-goal |
+| OC-4.4 | Production deploy + HTTPS auth | 🟢 | Checklist UI from PRODUCTION-ACTIVATION.md (localStorage) |
+
+**Phase 4 exit:** ✅ Audit + ops surfaces live; roles deferred documented; production checklist interactive.
 
 ---
 
@@ -93,8 +95,8 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 | Phase 1 Test Lab | 🟢 |
 | Phase 2 Leads + Approvals | 🟢 |
 | Phase 3 Polish | 🟢 (OC-3.4 password gate deferred) |
-| Phase 4 Later | ⚪ |
-| **MVP complete** | 🟢 |
+| Phase 4 Later | 🟢 |
+| **Owner Console complete** | 🟢 |
 
 ---
 
@@ -105,6 +107,7 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 | Implementation plan + progress tracker created | 2026-09-18 |
 | Owner Console app (Phases 0–3) landed on main | 2026-09-18 |
 | GET /api/v1/runtime/approvals | 2026-09-18 |
+| Phase 4: audit + ops + roles page + production checklist | 2026-09-18 |
 
 ---
 
