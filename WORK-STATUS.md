@@ -2,21 +2,11 @@
 
 - Last updated: 2026-09-17
 - Role: Main executable Nivy Next AIOS implementation repository.
-- Current canonical plan: `docs/plans/AIOS-FINAL-IMPLEMENTATION-PLAN-v3.1.md`.
-- Progress tracker: `docs/plans/AIOS-PROGRESS-TRACKER.md` + `docs/agent-implementation-plan/AGENT-PROGRESS-TRACKER.md`.
-- Agent testing policy: **DEFERRED** — see `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`. Full G16/G17/testing will be executed at the end for all agents.
-- Last completed (agent implementation track): A001–A018 strategy chain (implementation level).
-- Exact macro completion %: **Not yet calculated**. Phase completion is tracked separately from component runtime completion.
-- Start here: read this file → `docs/execution-system/MASTER-EXECUTION-SYSTEM.md` → canonical plan → progress tracker → highest-priority incomplete + unclaimed task.
-- Next task (agent track): Continue sequential agent implementation (A019+) under deferred-testing policy. Next task (phase track): Phase 4 — Policy, Approval, Safety & Trust.
+- Agent testing policy: **DEFERRED** — see `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`.
+- Last completed (agent implementation track): **A001–A023** strategy chain (implementation level).
+- Next task (agent track): Continue sequential agent implementation (A024+) under deferred-testing policy.
 
-## Canonical implementation plan
-- `docs/plans/AIOS-FINAL-IMPLEMENTATION-PLAN-v3.1.md` — canonical v3.1 sequencing restored from Raw-Repository.
-- `docs/plans/AIOS-PROGRESS-TRACKER.md` — phase-level verified evidence tracker.
-- `docs/plans/AIOS-SOURCE-MAP.md` — Phase 0 source/provenance reconciliation.
-- `docs/plans/AIOS-CONFLICT-REGISTER.md` — Phase 0 architecture/source conflict decisions.
-
-## Agent implementation track (revenue strategy chain)
+## Agent implementation track (A001–A023)
 
 | ID | Name | Status |
 |----|------|--------|
@@ -38,34 +28,17 @@
 | A016 | Pipeline & Deal Strategy | implementation |
 | A017 | Proposal Strategy | implementation |
 | A018 | Customer Onboarding Strategy | implementation |
+| A019 | Retention & Expansion Strategy | implementation |
+| A020 | Customer Health Strategy | implementation |
+| A021 | Support Strategy | implementation |
+| A022 | Feedback & Insights Strategy | implementation |
+| A023 | Revenue Operations Strategy | implementation |
 
-Testing for all of the above is deferred per `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`.
-
-## Phase 0–3 implementation evidence
-
-### Phase 0 — VERIFIED
-- Canonical v3.1 plan restored.
-- Source map and conflict register created.
-- Raw-Repository AIOS plan and supporting architecture sources identified.
-- Existing repository implementation preserved; no existing files deleted.
-
-### Phase 1 — VERIFIED
-- `schemas/governance/metadata-contract.yaml` created.
-- `docs/governance/METADATA-RULES.md` created.
-
-### Phase 2 — VERIFIED
-- Skills, prompts, knowledge, memory and reusable-asset registries created.
-
-### Phase 3 — VERIFIED
-- Agent factory, Tier-1 declarations and capability bindings created.
-
-## Resume Rule
-`CHECK → READ CANONICAL STATE → RESOLVE INSTRUCTIONS → RESOLVE PLAN/TASK → INSPECT → CLAIM → IN_PROGRESS → WORK → VERIFY → RECORD EVIDENCE + STATUS → COMMIT → RELEASE → KNOWLEDGE LOOP → RECHECK → CONTINUE`
+Testing deferred for all agents per `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`.
 
 ## Status Log
-| Date | Work Completed | Next Task |
+| Date | Work Completed | Next |
 |---|---|---|
-| 2026-09-16 | Phases 0–3 verified | Phase 4 / Agent implementation |
-| 2026-09-17 | Deferred testing policy + A006–A018 strategy agents implemented | A019+ under deferred testing |
+| 2026-09-17 | Deferred testing policy + A006–A023 strategy agents implemented | A024+ |
 
 Update this file after every meaningful work session/commit.
