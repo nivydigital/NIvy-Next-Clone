@@ -1,42 +1,54 @@
-import React from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
+import Dashboard from "./pages/Dashboard.jsx";
+import AgentLab from "./pages/AgentLab.jsx";
+import WorkflowLab from "./pages/WorkflowLab.jsx";
+import Leads from "./pages/Leads.jsx";
+import Approvals from "./pages/Approvals.jsx";
+import Settings from "./pages/Settings.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";
 import OpsPage from "./pages/OpsPage.jsx";
 import RolesPage from "./pages/RolesPage.jsx";
 import ProductionPage from "./pages/ProductionPage.jsx";
-import PlaceholderPage from "./pages/PlaceholderPage.jsx";
+
+const links = [
+  { to: "/", label: "Dashboard", end: true },
+  { to: "/test/agents", label: "Agent Lab" },
+  { to: "/test/workflows", label: "Workflow Lab" },
+  { to: "/leads", label: "Leads" },
+  { to: "/approvals", label: "Approvals" },
+  { to: "/history", label: "Run history" },
+  { to: "/ops", label: "Ops" },
+  { to: "/roles", label: "Roles" },
+  { to: "/production", label: "Production" },
+  { to: "/settings", label: "Settings" },
+];
 
 export default function App() {
   return (
     <div className="layout">
       <aside className="sidebar">
         <h1>Nivy Owner Console</h1>
-        <div className="tag">Phase 4 first · single owner</div>
+        <div className="tag">Company owner · dry-run default</div>
         <nav className="nav">
-          <NavLink to="/" end>Dashboard</NavLink>
-          <NavLink to="/test/agents">Agent Test Lab</NavLink>
-          <NavLink to="/test/workflows">Workflow Test Lab</NavLink>
-          <NavLink to="/leads">Leads</NavLink>
-          <NavLink to="/approvals">Approvals</NavLink>
-          <NavLink to="/history">Run history</NavLink>
-          <NavLink to="/ops">Ops / Grafana</NavLink>
-          <NavLink to="/roles">Roles</NavLink>
-          <NavLink to="/production">Production</NavLink>
-          <NavLink to="/settings">Settings</NavLink>
+          {links.map((l) => (
+            <NavLink key={l.to} to={l.to} end={l.end} className={({ isActive }) => (isActive ? "active" : undefined)}>
+              {l.label}
+            </NavLink>
+          ))}
         </nav>
       </aside>
       <main className="main">
         <Routes>
-          <Route path="/" element={<PlaceholderPage title="Dashboard" note="Phase 0/3" />} />
-          <Route path="/test/agents" element={<PlaceholderPage title="Agent Test Lab" note="Phase 1" />} />
-          <Route path="/test/workflows" element={<PlaceholderPage title="Workflow Test Lab" note="Phase 1" />} />
-          <Route path="/leads" element={<PlaceholderPage title="Leads" note="Phase 2" />} />
-          <Route path="/approvals" element={<PlaceholderPage title="Approvals" note="Phase 2" />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/test/agents" element={<AgentLab />} />
+          <Route path="/test/workflows" element={<WorkflowLab />} />
+          <Route path="/leads" element={<Leads />} />
+          <Route path="/approvals" element={<Approvals />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/ops" element={<OpsPage />} />
           <Route path="/roles" element={<RolesPage />} />
           <Route path="/production" element={<ProductionPage />} />
-          <Route path="/settings" element={<PlaceholderPage title="Settings" note="Phase 0" />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>
     </div>
