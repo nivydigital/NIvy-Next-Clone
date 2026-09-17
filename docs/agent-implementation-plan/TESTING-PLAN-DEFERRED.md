@@ -1,99 +1,43 @@
 # Deferred Testing Plan for All Agents
 
 **Status:** Active policy override (user direction 2026-09-17)  
-**Rule:** Full automated testing, evaluation suites, live integration evidence and G16/G17 gates are **deferred** until the final testing phase for the entire agent set.
+**Rule:** Full testing deferred until final phase. No agent marked COMPLETE until then.
 
-## Policy
+## How (final phase)
+Contract → unit happy-path → negative/policy → schema/golden → eval → integration → regression (same pyramid for every agent).
 
-- Implementation of agents continues without requiring passing unit/integration/evaluation tests for each agent.
-- Every agent still receives:
-  - Complete `agent.yaml` specification
-  - Input / output JSON schemas
-  - Runtime adapter (`backend/app/runtime/a0XX.py`)
-  - Registry / binding updates as needed
-- **No agent is marked COMPLETE or ACTIVE** until the final testing phase is executed.
-- The final testing phase will apply the full G0–G20 gates, the AGENT-BUILD-MASTER-PROMPT testing pyramid, and live evidence requirements.
+## Coverage inventory
 
----
+### Strategy / Lead / Sales / Comms / CS
+A001–A033 strategy track; A034–A060 lead/sales; A065–A071 comms; A072–A077 CS — as previously documented.
 
-## How testing will be performed (final phase)
-
-For **every** agent the final testing phase will execute the same pyramid:
-
-1. **Contract / registry tests**
-2. **Unit / happy-path tests**
-3. **Negative / policy tests**
-4. **Output & schema tests**
-5. **Evaluation suite**
-6. **Integration / live proof**
-7. **Regression**
-
-(Details unchanged from prior version — same 7-step pyramid applies to all agents.)
-
----
-
-## Agent coverage inventory (what must be tested)
-
-### Strategy track
-| ID range | Focus |
-|----------|--------|
-| A001–A002 | Market Research, ICP Strategist |
-| A003–A033 | Strategy chain (extension implementations) |
-
-### Lead & sales ops
+### Finance (complete through A083)
 | ID | Name | Extra asserts |
 |----|------|---------------|
-| A034–A038 | Discovery → Verification | provenance; no fabricated entities |
-| A039 | Lead Scoring | scores, breakdown, priority_order |
-| A041 | Account Research | signals, talking_points, sources |
-| A043–A044 | Outreach plan + Email | draft-only default; compliance_checks |
-| A049–A050 | Personalization + Follow-Up | do_not_use; timing_guidance |
-| A052–A055 | Triage → Meeting Prep | classification; handoff; agenda |
-| A060 | Proposal | sections, pricing_block; draft-only |
+| A078 | Billing Analyst | anomalies, dispute_candidates |
+| A079 | AR Analyst | priority_accounts, aging_summary, collection_actions |
+| **A080** | **AP Analyst** | **due_summary, payment_priorities, risk_flags** |
+| **A081** | **Cashflow Analyst** | **projection, shortfall_flags, surplus_opportunities** |
+| **A082** | **Pricing Analyst** | **performance_summary, recommended_changes, experiments** |
+| **A083** | **Revenue Analytics** | **trend_summary, cohort_insights, drivers** |
 
-### Onboarding & communications
+### Marketing (started)
 | ID | Name | Extra asserts |
 |----|------|---------------|
-| A065 | Onboarding Agent | steps, milestones, owners |
-| A066–A071 | Comms suite | intent/route; objections; pass_fail/score |
+| **A084** | **Marketing Strategist** | **pillars, channel_priorities, messaging_themes, success_metrics** |
 
-### Customer success
-| ID | Name | Extra asserts |
-|----|------|---------------|
-| A072 | Customer Onboarding Planner | tasks, timeline, checkpoints |
-| A073 | Customer Health Analyst | health_score, risk_flags, expansion_signals |
-| A074 | Support Triage | severity, category, playbook |
-| **A075** | **Customer Success Planner** | **motions, timeline, owners, success_metrics** |
-| **A076** | **Renewal Risk Analyst** | **risk_score, risk_drivers, save_plays, urgency** |
-| **A077** | **Feedback & NPS Analyst** | **themes, nps_summary, promoter/detractor_actions** |
-
-### Finance (started)
-| ID | Name | Extra asserts |
-|----|------|---------------|
-| **A078** | **Billing Analyst** | **anomalies, dispute_candidates, process_recommendations** |
-| **A079** | **Accounts Receivable Analyst** | **priority_accounts, aging_summary, collection_actions** |
-
-### Higher IDs already on disk
-| ID range | Notes |
-|----------|--------|
-| A117–A127 | Existing folders; full pyramid deferred |
+### Higher IDs
+A117–A127 existing folders — deferred.
 
 ### Not yet implemented
-A080–A083 (AP, cashflow, pricing, revenue analytics), A084+ marketing, A092+ control/eval/learning — append rows when built.
+A085 Content Strategist, A086 SEO, A087 Social, A088 Paid Media, A089 Marketing Analytics, A090 Growth Experiment Planner, A091 Campaign QA, then A092+ control/eval/learning.
 
----
+## Chain tests (final phase)
+1. Lead: A034→A039→A041→A043→A044  
+2. Comms: A066→A068→A071  
+3. CS: A065→A072→A073→A075→A076  
+4. Finance: A078→A079→A080→A081 (+ A082/A083)  
+5. Marketing smoke: A084→A085 (when built)  
 
-## Suggested chain tests (final phase)
-
-1. Lead: A034 → A036 → A039 → A041 → A043 → A044  
-2. Comms: A066 → A068 → A071  
-3. CS: A065 → A072 → A073 → A075 → A076  
-4. Finance smoke: A078 → A079  
-5. Live Ollama one-shot per agent or per chain  
-6. Mark COMPLETE only after pyramid passes
-
----
-
-## Maintenance rule
-
-Update this file on every new agent batch with IDs, extra asserts, and chain notes. Do **not** mark agents COMPLETE until final testing phase.
+## Maintenance
+Update this file on every new batch. Do not mark COMPLETE until final testing phase.
