@@ -1,0 +1,43 @@
+id: A014
+name: Outreach Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_strategy
+purpose: Design multi-channel outreach strategy including sequences, personalization rules, cadence and compliance boundaries from messaging, campaign and lead-generation strategy.
+inputs:
+  required: [messaging_positioning, campaign_strategy]
+  optional: [lead_generation_strategy, sales_enablement_strategy, channel_strategy, outreach_constraints]
+outputs:
+  primary: outreach_strategy
+  required_fields: [sequences, personalization_rules, cadence, channel_mix, compliance_rules, success_metrics, confidence, assumptions, derived_from]
+  downstream_events: [outreach_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, design_sequences, define_personalization, set_cadence, map_channels, define_compliance, define_metrics, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - sequences_align_with_messaging_and_campaign_goals
+  - compliance_and_cadence_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: sequential strategy chain after A013
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
