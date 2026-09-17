@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A036 Lead Enrichment Input",
+  "type": "object",
+  "required": ["discovered_leads"],
+  "properties": {
+    "discovered_leads": {"type": "object"},
+    "discovered_contacts": {"type": "object"},
+    "enrichment_fields": {"type": "array", "items": {"type": "string"}},
+    "enrichment_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
