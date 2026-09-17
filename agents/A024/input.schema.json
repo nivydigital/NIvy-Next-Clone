@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A024 Analytics & Reporting Strategy Input",
+  "type": "object",
+  "required": ["revenue_operations_strategy", "gtm_strategy"],
+  "properties": {
+    "revenue_operations_strategy": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "pipeline_deal_strategy": {"type": "object"},
+    "campaign_strategy": {"type": "object"},
+    "analytics_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
