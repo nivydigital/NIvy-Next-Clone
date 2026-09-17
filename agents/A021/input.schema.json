@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A021 Support Strategy Input",
+  "type": "object",
+  "required": ["onboarding_strategy", "customer_health_strategy"],
+  "properties": {
+    "onboarding_strategy": {"type": "object"},
+    "customer_health_strategy": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "support_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
