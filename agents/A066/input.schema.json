@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A066 Inbound Communication Triage Input",
+  "type": "object",
+  "required": ["inbound_message"],
+  "properties": {
+    "inbound_message": {"type": "object"},
+    "channel_metadata": {"type": "object"},
+    "triage_rules": {"type": "array", "items": {"type": "object"}},
+    "triage_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
