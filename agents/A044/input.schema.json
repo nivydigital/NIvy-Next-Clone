@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A044 Email Outreach Input",
+  "type": "object",
+  "required": ["outreach_plan", "account_research"],
+  "properties": {
+    "outreach_plan": {"type": "object"},
+    "account_research": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "personalization_context": {"type": "object"},
+    "email_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
