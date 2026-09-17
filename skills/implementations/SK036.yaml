@@ -1,22 +1,64 @@
 id: SK036
 name: Lead Enrichment
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: Add verified account and contact attributes from allowed sources.
-inputs: [lead, allowed_sources]
-outputs: [enriched_lead, evidence, confidence]
+category: sales
+standard: STD-01/v2
+objective: Add verified account and contact attributes from allowed sources only; never invent attributes without evidence.
+non_goals:
+  - Inventing firmographics, contacts, or technographics not present in allowed sources
+  - Using sources outside allowed_sources
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: lead, type: object, constraints: "must include identity (name or domain)"}
+    - {name: allowed_sources, type: object, constraints: "allowlist of enrichment sources and fields"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: enriched_lead, type: object}
+    - {name: evidence, type: array}
+    - {name: confidence, type: string}
+  common: [status, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - step: 1
-    action: validate_lead
-  - step: 2
-    action: enrich_from_allowed_sources
-  - step: 3
-    action: score_confidence
-  - step: 4
-    action: attach_evidence
-quality_checks: [no_attributes_without_evidence, confidence_in_high_medium_low]
-failure_policy: fail_closed_on_disallowed_sources
-evidence_policy: attribute-level provenance
-dependencies: [SK034, SK035]
-tools: [tool.ollama.generate]
-acceptance: [enriched_lead is object, evidence is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require lead with identity (name or domain) and non-empty allowed_sources. Fail closed if lead missing or sources empty.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Restrict enrichment to fields and sources in allowed_sources. Record which attributes are in-scope (e.g. employee_count, industry, website, linkedin_url).", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "For each in-scope attribute: query only allowed sources; attach value only when source evidence is present. Build attribute-level provenance (source URL/id + field path). Leave attribute null/unknown when not evidenced; never invent.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure no attribute without evidence entry. Score confidence: high if core identity + >=2 firmographics evidenced; medium if identity + 1; low otherwise. Attach warnings for skipped fields.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm enriched_lead is object, evidence is array, confidence in {high, medium, low}.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return enriched_lead, evidence, confidence, status, assumptions, next_action.", on_failure: fail_closed}
+preconditions:
+  - Lead identity present
+  - allowed_sources non-empty
+postconditions:
+  - Every non-null enriched attribute has evidence
+  - confidence is high|medium|low
+quality_checks:
+  - no_attributes_without_evidence
+  - confidence_in_high_medium_low
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing lead or disallowed sources; partial when some attributes enriched and gaps listed
+evidence_policy: attribute-level provenance; never invent citations
+dependencies:
+  skills: [SK034, SK035]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns enriched_lead object, evidence array, confidence tier", verify: schema}
+  - {id: AC2, statement: "Rejects missing lead or empty allowed_sources", verify: test}
+  - {id: AC3, statement: "No attribute present without evidence entry", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_lead, disallowed_source, partial_enrichment, all_unknown]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
