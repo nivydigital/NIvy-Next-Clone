@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A069 Meeting Intelligence Input",
+  "type": "object",
+  "required": ["meeting_notes"],
+  "properties": {
+    "meeting_notes": {"type": "object"},
+    "meeting_brief": {"type": "object"},
+    "account_context": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
