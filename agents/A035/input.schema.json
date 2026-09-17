@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A035 Contact Discovery Input",
+  "type": "object",
+  "required": ["discovered_leads", "buyer_personas"],
+  "properties": {
+    "discovered_leads": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "contact_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
