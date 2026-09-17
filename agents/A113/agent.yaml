@@ -1,0 +1,27 @@
+id: A113
+name: Collaboration Policy Agent
+version: "1.0"
+status: implementation
+category: collaboration
+purpose: Define and evaluate collaboration policies for multi-agent runs — who may share what, escalation paths and approval gates — without enforcing policy in production systems.
+inputs:
+  required: [policy_scope, participant_roles]
+  optional: [existing_policies, risk_appetite, regulatory_constraints, prior_policy_report]
+outputs:
+  primary: a113_result
+  required_fields: [policy_set, escalation_paths, approval_gates, exceptions, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK038, SK040]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-15 Collaboration Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy; pushed to GitHub."
+runtime:
+  adapter: backend.app.runtime.a113
+  entrypoint: run_a113_collaboration_policy

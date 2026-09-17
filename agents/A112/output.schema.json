@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A112/output.schema.json",
+  "title": "A112 Shared Context Manager Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["context_plan", "visibility_map", "retention_rules", "handoff_rules", "risks", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "context_plan": {"type": "object"},
+    "visibility_map": {"type": "object"},
+    "retention_rules": {"type": "array", "items": {"type": "object"}},
+    "handoff_rules": {"type": "array", "items": {"type": "object"}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}
