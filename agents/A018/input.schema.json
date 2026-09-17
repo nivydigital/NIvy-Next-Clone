@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A018 Customer Onboarding Strategy Input",
+  "type": "object",
+  "required": ["offer_pricing_strategy", "gtm_strategy"],
+  "properties": {
+    "offer_pricing_strategy": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "sales_enablement_strategy": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "onboarding_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
