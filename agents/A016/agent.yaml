@@ -1,0 +1,43 @@
+id: A016
+name: Pipeline & Deal Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_strategy
+purpose: Define pipeline stages, deal qualification, progression rules and forecast guidance from ICP, qualification scoring and sales enablement strategy.
+inputs:
+  required: [icp_definition, qualification_scoring_strategy]
+  optional: [sales_enablement_strategy, gtm_strategy, historical_pipeline, pipeline_constraints]
+outputs:
+  primary: pipeline_deal_strategy
+  required_fields: [stages, progression_rules, deal_qualification, forecast_guidance, exit_criteria, confidence, assumptions, derived_from]
+  downstream_events: [pipeline_deal_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_stages, set_progression, define_deal_qualification, set_forecast, define_exit_criteria, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - stages_and_rules_align_with_qualification_and_ICP
+  - forecast_and_exit_criteria_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A015
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
