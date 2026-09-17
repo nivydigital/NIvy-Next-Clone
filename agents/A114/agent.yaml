@@ -1,0 +1,27 @@
+id: A114
+name: Collaboration Failure Handler
+version: "1.0"
+status: implementation
+category: collaboration
+purpose: Diagnose multi-agent collaboration failures and propose recovery sequences — isolation, retry, rollback and human escalation — without executing recovery actions itself.
+inputs:
+  required: [failure_event, collaboration_trace]
+  optional: [agent_health, prior_incidents, sla_targets, recovery_constraints]
+outputs:
+  primary: a114_result
+  required_fields: [failure_diagnosis, impact_assessment, recovery_options, recommended_sequence, escalation, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-15 Collaboration Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy; pushed to GitHub."
+runtime:
+  adapter: backend.app.runtime.a114
+  entrypoint: run_a114_collaboration_failure

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A115/input.schema.json",
+  "title": "A115 Collaboration Auditor Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["collaboration_trace", "policy_baseline"],
+  "properties": {
+    "collaboration_trace": {"type": "object"},
+    "policy_baseline": {"type": "object"},
+    "context_snapshots": {"type": "object"},
+    "known_exceptions": {"type": "array", "items": {"type": "object"}},
+    "prior_audit": {"type": "object"},
+    "quality_targets": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}
