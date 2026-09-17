@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A108/input.schema.json",
+  "title": "A108 Regression Guard Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["change_summary", "evaluation_snapshot"],
+  "properties": {
+    "change_summary": {"type": "object"},
+    "evaluation_snapshot": {"type": "object"},
+    "baseline_metrics": {"type": "object"},
+    "regression_thresholds": {"type": "object"},
+    "prior_guard_report": {"type": "object"},
+    "affected_agents": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

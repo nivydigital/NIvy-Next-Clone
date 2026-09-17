@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A107/input.schema.json",
+  "title": "A107 Experiment Manager Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["experiment_goal", "candidate_change"],
+  "properties": {
+    "experiment_goal": {"type": "object"},
+    "candidate_change": {"type": "object"},
+    "baseline_config": {"type": "object"},
+    "success_metrics": {"type": "object"},
+    "risk_constraints": {"type": "object"},
+    "prior_experiments": {"type": "object"},
+    "sample_plan": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}
