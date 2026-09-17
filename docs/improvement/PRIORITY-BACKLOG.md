@@ -1,6 +1,6 @@
 # Priority Backlog
 
-**Last updated:** 2026-09-17
+**Last updated:** 2026-09-17 (P0 A1/A3/B1 in progress on branch)
 
 Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 
@@ -8,9 +8,9 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| A1 | All 50 skills on main + validate green | 🟡 | Generator on main; commit files |
-| A3 | Skill resolver runtime | ⚪ | Fail-closed |
-| B1 | Prompt body loader | ⚪ | Single path for LLM calls |
+| A1 | All 50 skills on main + validate green | 🟢 | generate_std01_skills + validate |
+| A3 | Skill resolver runtime | 🟢 | `backend/app/runtime/skill_resolver.py` |
+| B1 | Prompt body loader | 🟢 | `prompt_loader.py` + engine wire |
 
 ## P1 — Lead-path depth
 
@@ -38,11 +38,3 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 | C5 | Later agent waves | ⚪ | After revenue path |
 | D2–D3 | Inbound + marketing workflows | ⚪ | |
 | F4 | Production activation sign-off | ⚪ | Last |
-
-## Completed (reference)
-
-| Item | Date |
-|------|------|
-| Standards STD-01…08 | 2026-09-17 |
-| Master Plan v2 | 2026-09-17 |
-| Phase scaffolds (tools, prompts, workflow, knowledge, ops) | 2026-09-17 |
