@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A013 Lead Generation Strategy Input",
+  "type": "object",
+  "required": ["icp_definition", "gtm_strategy"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "campaign_strategy": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "historical_performance": {"type": "object"},
+    "lead_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
