@@ -1,0 +1,85 @@
+version: "1.0"
+status: canonical
+description: Agent → knowledge pack bindings (Phase 7)
+fail_closed: true
+bindings:
+  - {agent: A001, name: Market Research, knowledge: [KP001, KP004]}
+  - {agent: A002, name: ICP Strategist, knowledge: [KP004]}
+  - {agent: A034, name: Lead Discovery, knowledge: [KP004]}
+  - {agent: A035, name: Contact Discovery, knowledge: [KP004]}
+  - {agent: A036, name: Lead Enrichment, knowledge: [KP004]}
+  - {agent: A037, name: Data Quality, knowledge: [KP004]}
+  - {agent: A038, name: Verification, knowledge: [KP004]}
+  - {agent: A039, name: Lead Scoring, knowledge: [KP004]}
+  - {agent: A041, name: Account Research, knowledge: [KP004]}
+  - {agent: A043, name: Outreach Strategy, knowledge: [KP003, KP004, KP005]}
+  - {agent: A044, name: Email Outreach, knowledge: [KP002, KP003, KP005]}
+  - {agent: A049, name: Personalization, knowledge: [KP002, KP003, KP004]}
+  - {agent: A050, name: Follow-Up, knowledge: [KP005]}
+  - {agent: A052, name: Reply Triage, knowledge: [KP005]}
+  - {agent: A054, name: Qualification, knowledge: [KP004, KP005]}
+  - {agent: A055, name: Meeting Prep, knowledge: [KP004, KP005]}
+  - {agent: A060, name: Proposal Agent, knowledge: [KP003, KP005]}
+  - {agent: A065, name: Onboarding Agent, knowledge: [KP003, KP007]}
+  - {agent: A066, name: Inbound Communication Triage, knowledge: [KP005]}
+  - {agent: A067, name: Conversation Intelligence, knowledge: [KP005, KP007]}
+  - {agent: A068, name: Response Drafting, knowledge: [KP002, KP005]}
+  - {agent: A069, name: Meeting Intelligence, knowledge: [KP004, KP005]}
+  - {agent: A070, name: Communication Knowledge Extractor, knowledge: [KP004, KP007]}
+  - {agent: A071, name: Communication Quality Reviewer, knowledge: [KP005]}
+  - {agent: A072, name: Customer Onboarding Planner, knowledge: [KP003, KP007]}
+  - {agent: A073, name: Customer Health Analyst, knowledge: [KP004, KP007]}
+  - {agent: A074, name: Support Triage, knowledge: [KP005, KP007]}
+  - {agent: A075, name: Customer Success Planner, knowledge: [KP004, KP007]}
+  - {agent: A076, name: Renewal Risk Analyst, knowledge: [KP004, KP007]}
+  - {agent: A077, name: Feedback & NPS Analyst, knowledge: [KP005, KP007]}
+  - {agent: A078, name: Billing Analyst, knowledge: [KP003, KP004]}
+  - {agent: A079, name: Accounts Receivable Analyst, knowledge: [KP003, KP004]}
+  - {agent: A080, name: Accounts Payable Analyst, knowledge: [KP003, KP004]}
+  - {agent: A081, name: Cashflow Analyst, knowledge: [KP003, KP004]}
+  - {agent: A082, name: Pricing Analyst, knowledge: [KP003, KP004]}
+  - {agent: A083, name: Revenue Analytics, knowledge: [KP003, KP004]}
+  - {agent: A084, name: Marketing Strategist, knowledge: [KP001, KP003]}
+  - {agent: A085, name: Content Strategist, knowledge: [KP002, KP003]}
+  - {agent: A086, name: SEO Strategist, knowledge: [KP001, KP002]}
+  - {agent: A087, name: Social Media Strategist, knowledge: [KP002, KP003]}
+  - {agent: A088, name: Paid Media Analyst, knowledge: [KP003, KP004]}
+  - {agent: A089, name: Marketing Analytics, knowledge: [KP004]}
+  - {agent: A090, name: Growth Experiment Planner, knowledge: [KP001, KP004]}
+  - {agent: A091, name: Campaign QA Reviewer, knowledge: [KP002, KP004]}
+  - {agent: A092, name: KPI Intelligence Analyst, knowledge: [KP004]}
+  - {agent: A093, name: Planning Analyst, knowledge: [KP001, KP004]}
+  - {agent: A094, name: Anomaly Detection Analyst, knowledge: [KP004]}
+  - {agent: A095, name: Risk Analyst, knowledge: [KP004]}
+  - {agent: A096, name: Executive Intelligence Analyst, knowledge: [KP001, KP004]}
+  - {agent: A097, name: Resource Planning Analyst, knowledge: [KP004]}
+  - {agent: A098, name: Evaluation Analyst, knowledge: [KP004]}
+  - {agent: A099, name: Regression QA Agent, knowledge: [KP004]}
+  - {agent: A100, name: Trace Auditor, knowledge: [KP004]}
+  - {agent: A101, name: Runtime Quality Monitor, knowledge: [KP004]}
+  - {agent: A102, name: Cost Observability Analyst, knowledge: [KP004]}
+  - {agent: A103, name: Evidence Collector, knowledge: [KP004]}
+  - {agent: A104, name: Feedback Analyst, knowledge: [KP004]}
+  - {agent: A105, name: Prompt Improvement Agent, knowledge: [KP004]}
+  - {agent: A106, name: Skill Improvement Agent, knowledge: [KP004]}
+  - {agent: A107, name: Experiment Manager, knowledge: [KP004]}
+  - {agent: A108, name: Regression Guard, knowledge: [KP004]}
+  - {agent: A109, name: Improvement Promotion Reviewer, knowledge: [KP004]}
+  - {agent: A110, name: Delegation Coordinator, knowledge: [KP004, KP007]}
+  - {agent: A111, name: Agent Handoff Manager, knowledge: [KP004]}
+  - {agent: A112, name: Shared Context Manager, knowledge: [KP004, KP007]}
+  - {agent: A113, name: Collaboration Policy Agent, knowledge: [KP004]}
+  - {agent: A114, name: Collaboration Failure Handler, knowledge: [KP004]}
+  - {agent: A115, name: Collaboration Auditor, knowledge: [KP004]}
+  - {agent: A116, name: Agent Package Builder, knowledge: [KP004]}
+  - {agent: A117, name: Agent Discovery Agent, knowledge: [KP001, KP004]}
+  - {agent: A118, name: Agent Certification Agent, knowledge: [KP004]}
+  - {agent: A119, name: Agent Compatibility Analyst, knowledge: [KP004]}
+  - {agent: A120, name: Agent Marketplace Curator, knowledge: [KP001, KP004]}
+  - {agent: A121, name: Digital Twin Analyst, knowledge: [KP004, KP007]}
+  - {agent: A122, name: Reliability Monitor, knowledge: [KP004]}
+  - {agent: A123, name: Capacity Planner, knowledge: [KP004]}
+  - {agent: A124, name: Tenant Isolation Auditor, knowledge: [KP004]}
+  - {agent: A125, name: Disaster Recovery Planner, knowledge: [KP004]}
+  - {agent: A126, name: Deployment Rollout Agent, knowledge: [KP004]}
+  - {agent: A127, name: Multi-Company Operations Analyst, knowledge: [KP004, KP007]}
