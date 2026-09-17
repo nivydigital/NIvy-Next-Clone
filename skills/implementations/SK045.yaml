@@ -1,0 +1,18 @@
+id: SK045
+name: LinkedIn Outreach
+version: "1.0"
+status: implementation
+objective: draft policy-compliant LinkedIn outreach
+inputs: [lead, account_context, offer]
+outputs: [message_sequence, evidence, approval_state]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: draft_sequence}
+  - {step: 3, action: attach_evidence}
+  - {step: 4, action: set_approval_pending}
+quality_checks: [approval_state_set, evidence_present]
+failure_policy: fail_closed_on_missing_lead
+evidence_policy: personalization evidence required
+dependencies: [SK043, SK049]
+tools: [tool.ollama.generate]
+acceptance: [message_sequence present, approval_state present]
