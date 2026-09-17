@@ -1,0 +1,43 @@
+id: A007
+name: Content Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Turn approved ICP, personas, messaging and channel strategy into an evidence-backed content strategy covering themes, formats, distribution and measurement.
+inputs:
+  required: [icp_definition, messaging_positioning]
+  optional: [buyer_personas, channel_strategy, competitor_intelligence, business_offer, content_constraints]
+outputs:
+  primary: content_strategy
+  required_fields: [content_pillars, themes, formats, distribution_plan, measurement, content_calendar_outline, confidence, assumptions, derived_from]
+  downstream_events: [content_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_pillars, map_themes, select_formats, plan_distribution, define_measurement, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - content_choices_are_traceable_to_messaging_and_channel_strategy
+  - formats_and_distribution_match_audience_and_channels
+  - measurement_is_explicit
+provenance:
+  source: sequential strategy chain after A006
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
