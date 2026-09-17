@@ -1,0 +1,64 @@
+id: content-calendar
+version: "1.0"
+status: implementation
+trigger: form_or_schedule
+dry_run_default: true
+idempotency_key_fields: [campaign_id, period]
+
+states:
+  - pending
+  - strategy
+  - editorial_plan
+  - qa_review
+  - await_approval
+  - completed
+  - failed
+
+transitions:
+  - {from: pending, to: strategy, on: start}
+  - {from: strategy, to: editorial_plan, on: strategy_done}
+  - {from: editorial_plan, to: qa_review, on: plan_done}
+  - {from: qa_review, to: await_approval, on: qa_pass}
+  - {from: await_approval, to: completed, on: approved}
+  - {from: "*", to: failed, on: error}
+
+stages:
+  - id: content_strategy
+    agent: A085
+    skill_hint: [SK009, SK010]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      messaging_positioning: $.input.messaging_positioning
+      audience_insights: $.input.audience_insights
+      content_constraints: $.input.content_constraints
+    output_key: content_strategy
+  - id: demand_context
+    agent: A084
+    skill_hint: [SK001, SK004]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      content_strategy: $.outputs.content_strategy
+    output_key: marketing_context
+  - id: campaign_qa
+    agent: A091
+    skill_hint: [SK037, SK038]
+    input_map:
+      draft_plan: $.outputs.content_strategy
+      marketing_strategy: $.input.marketing_strategy
+      policy: $.input.policy
+    output_key: qa
+  - id: approval_gate
+    type: gate
+    policy: human_approval_before_publish
+    detail: Calendar is advisory until approved; no auto-publish
+
+stop_rules:
+  - policy_violation
+  - missing_marketing_strategy
+
+side_effects: none
+# Publish requires separate approved publish workflow
+
+audit:
+  required: true
+  events: [workflow.started, stage.completed, approval.requested, workflow.completed, workflow.failed]
