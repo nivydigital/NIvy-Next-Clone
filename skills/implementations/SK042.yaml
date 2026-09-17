@@ -1,0 +1,18 @@
+id: SK042
+name: Signal Detection
+version: "1.0"
+status: implementation
+objective: identify supported buying or lifecycle signals
+inputs: [account, events, sources]
+outputs: [signals, timestamps, evidence]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: scan_events}
+  - {step: 3, action: classify_signals}
+  - {step: 4, action: attach_evidence}
+quality_checks: [signal_has_evidence]
+failure_policy: empty_signals_ok
+evidence_policy: per-signal source refs
+dependencies: [SK041]
+tools: [tool.ollama.generate]
+acceptance: [signals is array]
