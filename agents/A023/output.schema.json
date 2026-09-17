@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A023 Revenue Operations Strategy Output",
+  "type": "object",
+  "required": ["status", "operating_model", "process_ownership", "systems_guidance", "kpi_hierarchy", "handoff_map", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "operating_model": {"type": "object"},
+    "process_ownership": {"type": "array", "items": {"type": "object"}},
+    "systems_guidance": {"type": "object"},
+    "kpi_hierarchy": {"type": "array", "items": {"type": "object"}},
+    "handoff_map": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
