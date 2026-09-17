@@ -2,7 +2,6 @@
 
 **Last updated:** 2026-09-17  
 **Owner:** unassigned  
-Update checkboxes and dates after every meaningful session.
 
 Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
@@ -12,16 +11,16 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P0.1 | Agent folder vs registry diff | ⚪ | |
-| P0.2 | Skill/prompt/tool coverage matrix | ⚪ | |
-| P0.3 | Runtime API registration for all a0XX | ⚪ | |
-| P0.4 | Unified run path documented + coded | ⚪ | |
+| P0.1 | Agent folder vs registry diff | 🟢 | `phase-0/P0.1-AGENT-INVENTORY.md` |
+| P0.2 | Skill/prompt/tool coverage matrix | 🟢 | `phase-0/P0.2-COVERAGE-MATRIX.md` |
+| P0.3 | Runtime API registration for all a0XX | 🟡 | Documented in P0.3; discovery endpoint + dynamic dispatch **not coded yet** |
+| P0.4 | Unified run path documented + coded | 🟡 | Documented in P0.4; `/execute` unified endpoint **not coded yet** |
 
 ## Phase 1 — Tools
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P1.1 | Tool registry schemas complete | ⚪ | |
+| P1.1 | Tool registry schemas complete | ⚪ | ID mismatch tool.ollama.generate vs ollama |
 | P1.2 | Ollama generate hardened | ⚪ | |
 | P1.3 | Email send + mock | ⚪ | |
 | P1.4 | Web fetch/crawl + mock | ⚪ | |
@@ -50,76 +49,20 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P4.1 | workflow.yaml registered | ⚪ | |
-| P4.2 | State machine | ⚪ | |
-| P4.3 | Idempotency | ⚪ | |
-| P4.4 | Dry-run mode | ⚪ | |
-| P4.5 | E2E with mocks | ⚪ | |
+| P4.1–P4.5 | workflow + state + dry-run + E2E | ⚪ | stages in WORKFLOW-REGISTRY only |
 
-## Phase 5 — Inbound / comms workflows
+## Phase 5–10
 
-| ID | Item | Status |
-|----|------|--------|
-| P5.1 | Inbound triage workflow | ⚪ |
-| P5.2 | Response + QA workflow | ⚪ |
-| P5.3 | Conversation/meeting intel hooks | ⚪ |
-
-## Phase 6 — Remaining agents
-
-| ID | Item | Status | Notes |
-|----|------|--------|-------|
-| P6.1 | A100–A103 | ⚪ | eval/ops |
-| P6.2 | A104–A108 | ⚪ | learning |
-| P6.3 | Status promotion rules applied | ⚪ | after skills/prompts |
+Unchanged — see MASTER-IMPLEMENTATION-PLAN.md (all ⚪).
 
 ### Agent scaffold progress (contracts only)
 
 | Range | Scaffold | Testing | Active |
 |-------|----------|---------|--------|
 | A001–A033 strategy | 🟡 | ⚪ deferred | ⚪ |
-| A034–A060 lead/sales | 🟡 | ⚪ deferred | ⚪ |
-| A065–A077 CS/comms | 🟡 | ⚪ deferred | ⚪ |
-| A078–A083 finance | 🟡 | ⚪ deferred | ⚪ |
-| A084–A091 marketing | 🟡 | ⚪ deferred | ⚪ |
-| A092–A099 control/eval | 🟡 | ⚪ deferred | ⚪ |
-| A100–A108 | ⚪ | ⚪ | ⚪ |
+| A034–A099 registry ops | 🟡 | ⚪ deferred | ⚪ |
+| A100–A108 | 🟡 partial (some implementation in registry) | ⚪ | ⚪ |
 | A117+ | 🟡 partial | ⚪ | ⚪ |
-
-## Phase 7 — Knowledge / memory / RAG
-
-| ID | Item | Status |
-|----|------|--------|
-| P7.1 | KP packs complete | ⚪ |
-| P7.2 | Agent-bindings complete | ⚪ |
-| P7.3 | Ingest pipeline operational | ⚪ |
-| P7.4 | Memory policy defaults | ⚪ |
-
-## Phase 8 — Marketing / SEO / Social workflows
-
-| ID | Item | Status |
-|----|------|--------|
-| P8.1 | Content workflow | ⚪ |
-| P8.2 | SEO workflow | ⚪ |
-| P8.3 | Social/paid (publish gated) | ⚪ |
-
-## Phase 9 — Evaluation
-
-| ID | Item | Status | Notes |
-|----|------|--------|-------|
-| P9.1 | Golden fixtures | ⚪ | |
-| P9.2 | Full pyramid | ⚪ | see TESTING-PLAN-DEFERRED |
-| P9.3 | Chain tests | ⚪ | |
-| P9.4 | CI regression | ⚪ | |
-| P9.5 | Mark agents COMPLETE | ⚪ | only after P9.2 |
-
-## Phase 10 — Hardening
-
-| ID | Item | Status |
-|----|------|--------|
-| P10.1 | Secrets hygiene | ⚪ |
-| P10.2 | Backup/restore drill | ⚪ |
-| P10.3 | Observability | ⚪ |
-| P10.4 | Prod activation checklist | ⚪ |
 
 ---
 
@@ -127,4 +70,5 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | Date | What changed |
 |------|----------------|
-| 2026-09-17 | Created complete-automation-plan; gap analysis; all phases ⚪ except agent scaffolds 🟡 |
+| 2026-09-17 | Created complete-automation-plan |
+| 2026-09-17 | **Phase 0 started:** P0.1 inventory, P0.2 coverage matrix, P0.3 discovery notes, P0.4 run path doc |
