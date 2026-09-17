@@ -1,7 +1,8 @@
 # Progress Tracker — Complete Automation
 
-**Last updated:** 2026-09-17  
-**Owner:** unassigned  
+**Last updated:** 2026-09-17 (Phase 1 tools complete)
+**Owner:** unassigned
+Update checkboxes and dates after every meaningful session.
 
 Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
@@ -11,21 +12,21 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P0.1 | Agent folder vs registry diff | 🟢 | `phase-0/P0.1-AGENT-INVENTORY.md` |
-| P0.2 | Skill/prompt/tool coverage matrix | 🟢 | `phase-0/P0.2-COVERAGE-MATRIX.md` |
-| P0.3 | Runtime API registration for all a0XX | 🟡 | Documented in P0.3; discovery endpoint + dynamic dispatch **not coded yet** |
-| P0.4 | Unified run path documented + coded | 🟡 | Documented in P0.4; `/execute` unified endpoint **not coded yet** |
+| P0.1 | Agent folder vs registry diff | ⚪ | |
+| P0.2 | Skill/prompt/tool coverage matrix | ⚪ | |
+| P0.3 | Runtime API registration for all a0XX | ⚪ | |
+| P0.4 | Unified run path documented + coded | ⚪ | |
 
 ## Phase 1 — Tools
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P1.1 | Tool registry schemas complete | ⚪ | ID mismatch tool.ollama.generate vs ollama |
-| P1.2 | Ollama generate hardened | ⚪ | |
-| P1.3 | Email send + mock | ⚪ | |
-| P1.4 | Web fetch/crawl + mock | ⚪ | |
-| P1.5 | Verification tool mock | ⚪ | |
-| P1.6 | Tool audit wrapper | ⚪ | |
+| P1.1 | Tool registry schemas complete | 🟢 | TOOL-REGISTRY.yaml v2.0 with arg schemas + side_effects |
+| P1.2 | Ollama generate hardened | 🟢 | timeouts, JSON format, mock mode |
+| P1.3 | Email send + mock | 🟢 | EMAIL_MOCK default; approval-gated |
+| P1.4 | Web fetch/crawl + mock | 🟢 | public-data mocks; live opt-in |
+| P1.5 | Verification tool mock | 🟢 | tool.email.verify mock + Reacher path |
+| P1.6 | Tool audit wrapper | 🟢 | run_id, redacted args, status events |
 
 ## Phase 2 — Prompts
 
@@ -49,26 +50,24 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P4.1–P4.5 | workflow + state + dry-run + E2E | ⚪ | stages in WORKFLOW-REGISTRY only |
+| P4.1 | workflow.yaml registered | ⚪ | |
+| P4.2 | State machine | ⚪ | |
+| P4.3 | Idempotency | ⚪ | |
+| P4.4 | Dry-run mode | ⚪ | |
+| P4.5 | E2E with mocks | ⚪ | |
 
-## Phase 5–10
+## Phase 5 — Inbound / comms workflows
 
-Unchanged — see MASTER-IMPLEMENTATION-PLAN.md (all ⚪).
+| ID | Item | Status |
+|----|------|--------|
+| P5.1 | Inbound triage workflow | ⚪ |
+| P5.2 | Response + QA workflow | ⚪ |
+| P5.3 | Conversation/meeting intel hooks | ⚪ |
 
-### Agent scaffold progress (contracts only)
+## Phase 6 — Remaining agents
 
-| Range | Scaffold | Testing | Active |
-|-------|----------|---------|--------|
-| A001–A033 strategy | 🟡 | ⚪ deferred | ⚪ |
-| A034–A099 registry ops | 🟡 | ⚪ deferred | ⚪ |
-| A100–A108 | 🟡 partial (some implementation in registry) | ⚪ | ⚪ |
-| A117+ | 🟡 partial | ⚪ | ⚪ |
-
----
-
-## Session log
-
-| Date | What changed |
-|------|----------------|
-| 2026-09-17 | Created complete-automation-plan |
-| 2026-09-17 | **Phase 0 started:** P0.1 inventory, P0.2 coverage matrix, P0.3 discovery notes, P0.4 run path doc |
+| ID | Item | Status | Notes |
+|----|------|--------|-------|
+| P6.1 | A100–A103 | 🟡 | scaffolds present |
+| P6.2 | A104–A108 | 🟡 | scaffolds present |
+| P6.3 | Status promotion rules applied | ⚪ | after skills/prompts |
