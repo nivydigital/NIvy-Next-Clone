@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A065 Onboarding Agent Input",
+  "type": "object",
+  "required": ["onboarding_strategy", "qualification_result"],
+  "properties": {
+    "onboarding_strategy": {"type": "object"},
+    "qualification_result": {"type": "object"},
+    "proposal_draft": {"type": "object"},
+    "account_research": {"type": "object"},
+    "onboarding_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
