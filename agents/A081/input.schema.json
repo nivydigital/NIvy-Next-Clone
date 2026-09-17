@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A081 Cashflow Analyst Input",
+  "type": "object",
+  "required": ["ar_analysis", "ap_analysis"],
+  "properties": {
+    "ar_analysis": {"type": "object"},
+    "ap_analysis": {"type": "object"},
+    "operating_forecast": {"type": "object"},
+    "cashflow_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
