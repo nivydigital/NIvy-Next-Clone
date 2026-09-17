@@ -1,16 +1,15 @@
 # WORK STATUS — SINGLE RESUME POINT
 
 - Last updated: 2026-09-17
-- Phase 6: 🟢 A100–A108 + promotion
-- **Phase 8: 🟢** marketing workflows (content-calendar, seo-audit, social-content-pipeline)
+- Phase 8: 🟢 marketing workflows
+- **Phase 9: 🟡** evaluation harness (fixtures, chains, CI); agents not auto-COMPLETE
 
-## Phase 8 run
+## Phase 9
+```bash
+python scripts/generate_golden_fixtures.py
+PYTHONPATH=. pytest backend/app/test_evaluation.py -q
 ```
-POST /api/v1/runtime/workflows/content-calendar/run
-POST /api/v1/runtime/workflows/seo-audit/run
-POST /api/v1/runtime/workflows/social-content-pipeline/run
-```
-(dry_run default true)
+CI: `.github/workflows/evaluation-regression.yml`
 
 ## Next
-Phase 7 knowledge/RAG, Phase 9 memory, or Phase 10 E2E evaluation.
+Phase 7 knowledge/RAG, Phase 10 hardening, or live evaluation runs against Ollama.
