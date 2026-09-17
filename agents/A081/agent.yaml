@@ -1,0 +1,43 @@
+id: A081
+name: Cashflow Analyst
+version: "1.0"
+status: implementation
+category: finance
+purpose: Project cashflow from AR/AP and operating inputs; flag shortfalls and surplus opportunities.
+inputs:
+  required: [ar_analysis, ap_analysis]
+  optional: [operating_forecast, cashflow_constraints]
+outputs:
+  primary: cashflow_projection
+  required_fields: [projection, shortfall_flags, surplus_opportunities, recommendations, confidence, assumptions, derived_from]
+  downstream_events: [cashflow_projection.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, build_projection, flag_shortfalls, list_surplus, recommend, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - projection_is_traceable
+  - recommendations_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A081 Cashflow Analyst)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
