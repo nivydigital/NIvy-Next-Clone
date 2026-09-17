@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A121/input.schema.json",
+  "title": "A121 Digital Twin Analyst Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["twin_scope", "source_system_map"],
+  "properties": {
+    "twin_scope": {"type": "object"},
+    "source_system_map": {"type": "object"},
+    "process_models": {"type": "object"},
+    "agent_inventory": {"type": "object"},
+    "simulation_goals": {"type": "array", "items": {"type": "string"}},
+    "prior_twin_analysis": {"type": "object"},
+    "data_availability": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

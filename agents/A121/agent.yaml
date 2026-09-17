@@ -1,0 +1,27 @@
+id: A121
+name: Digital Twin Analyst
+version: "1.0"
+status: implementation
+category: agent_factory
+purpose: Analyze and recommend digital-twin representations of business processes, agents and systems for simulation and what-if analysis — without executing live simulations against production.
+inputs:
+  required: [twin_scope, source_system_map]
+  optional: [process_models, agent_inventory, simulation_goals, prior_twin_analysis, data_availability]
+outputs:
+  primary: a121_result
+  required_fields: [twin_scope_summary, twin_components, fidelity_assessment, simulation_use_cases, gaps, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK041, SK047]
+prompts: [PR003]
+knowledge: [KP004, KP007]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-16 Factory Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a121
+  entrypoint: run_a121_digital_twin_analyst

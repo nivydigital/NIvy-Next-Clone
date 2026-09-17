@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A121/output.schema.json",
+  "title": "A121 Digital Twin Analyst Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["twin_scope_summary", "twin_components", "fidelity_assessment", "simulation_use_cases", "gaps", "recommendations", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "twin_scope_summary": {"type": "object"},
+    "twin_components": {"type": "array", "items": {"type": "object"}},
+    "fidelity_assessment": {"type": "object"},
+    "simulation_use_cases": {"type": "array", "items": {"type": "object"}},
+    "gaps": {"type": "array", "items": {"type": "object"}},
+    "recommendations": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A120/input.schema.json",
+  "title": "A120 Agent Marketplace Curator Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["certified_agent_package"],
+  "properties": {
+    "certified_agent_package": {"type": "object"},
+    "marketplace_taxonomy": {"type": "object"},
+    "quality_labels": {"type": "array", "items": {"type": "string"}},
+    "dependency_notes": {"type": "array", "items": {"type": "object"}},
+    "prior_listing": {"type": "object"},
+    "publish_constraints": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

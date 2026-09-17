@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A120/output.schema.json",
+  "title": "A120 Agent Marketplace Curator Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["listing_metadata", "quality_labels", "dependency_notes", "publish_readiness", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "listing_metadata": {"type": "object"},
+    "quality_labels": {"type": "array", "items": {"type": "string"}},
+    "dependency_notes": {"type": "array", "items": {"type": "object"}},
+    "publish_readiness": {"type": "object"},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

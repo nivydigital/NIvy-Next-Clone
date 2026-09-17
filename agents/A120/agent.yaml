@@ -1,0 +1,27 @@
+id: A120
+name: Agent Marketplace Curator
+version: "1.0"
+status: implementation
+category: agent_factory
+purpose: Curate marketplace listings for certified agents — packaging metadata, quality labels, dependency notes and publish readiness — without publishing or installing agents.
+inputs:
+  required: [certified_agent_package]
+  optional: [marketplace_taxonomy, quality_labels, dependency_notes, prior_listing, publish_constraints]
+outputs:
+  primary: a120_result
+  required_fields: [listing_metadata, quality_labels, dependency_notes, publish_readiness, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK001, SK037]
+prompts: [PR001]
+knowledge: [KP001, KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-16 Factory Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a120
+  entrypoint: run_a120_marketplace_curator
