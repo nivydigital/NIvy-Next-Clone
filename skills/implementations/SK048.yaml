@@ -1,0 +1,17 @@
+id: SK048
+name: SMS Outreach
+version: "1.0"
+status: implementation
+objective: draft compliant SMS outreach
+inputs: [contact, context, offer]
+outputs: [message, stop_rules, approval_state]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: draft_short_message}
+  - {step: 3, action: set_stop_rules_and_approval}
+quality_checks: [message_length_bounded, approval_state_set]
+failure_policy: fail_closed_on_missing_contact
+evidence_policy: cite context fields used
+dependencies: [SK043, SK049]
+tools: [tool.ollama.generate]
+acceptance: [message present, stop_rules present]
