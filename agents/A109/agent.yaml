@@ -1,0 +1,26 @@
+id: A109
+name: Improvement Promotion Reviewer
+version: "1.0"
+status: implementation
+category: learning
+purpose: Review proposed prompt/skill/agent improvements against evidence, regression guards and policy before promotion — decide promote/hold/reject without applying changes.
+inputs:
+  required: [improvement_proposal, evidence_pack]
+  optional: [regression_guard_report, policy_baseline, prior_promotions, risk_appetite]
+outputs:
+  primary: a109_result
+  required_fields: [verdict, evidence_assessment, risks, conditions, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK038, SK040]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-14 Learning Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a109
+  entrypoint: run_a109_improvement_promotion

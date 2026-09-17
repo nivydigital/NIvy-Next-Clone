@@ -1,0 +1,26 @@
+id: A111
+name: Agent Handoff Manager
+version: "1.0"
+status: implementation
+category: collaboration
+purpose: Structure handoffs between agents — payload, acceptance criteria, residual risk and audit trail — without mutating systems of record.
+inputs:
+  required: [handoff_from, handoff_to, work_payload]
+  optional: [acceptance_criteria, prior_handoffs, risk_notes, context_refs]
+outputs:
+  primary: a111_result
+  required_fields: [handoff_package, acceptance_checklist, residual_risks, audit_notes, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-15 Collaboration Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a111
+  entrypoint: run_a111_agent_handoff

@@ -1,0 +1,26 @@
+id: A107
+name: Experiment Manager
+version: "1.0"
+status: implementation
+category: learning
+purpose: Plan and track controlled experiments for prompts, skills and agent configs — design, metrics and stop rules — without applying live config changes.
+inputs:
+  required: [experiment_goal, candidate_change]
+  optional: [baseline_config, success_metrics, risk_constraints, prior_experiments, sample_plan]
+outputs:
+  primary: a107_result
+  required_fields: [experiment_design, metrics, stop_rules, risks, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK004, SK020]
+prompts: [PR001]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-14 Learning Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a107
+  entrypoint: run_a107_experiment_manager
