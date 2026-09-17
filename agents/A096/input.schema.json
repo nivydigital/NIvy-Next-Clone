@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A096 Executive Intelligence Analyst Input",
+  "type": "object",
+  "required": ["signal_pack"],
+  "properties": {
+    "signal_pack": {"type": "object"},
+    "kpi_intelligence": {"type": "object"},
+    "risk_assessment": {"type": "object"},
+    "briefing_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
