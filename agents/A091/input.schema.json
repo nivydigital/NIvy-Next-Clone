@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A091 Campaign QA Reviewer Input",
+  "type": "object",
+  "required": ["campaign_package"],
+  "properties": {
+    "campaign_package": {"type": "object"},
+    "marketing_strategy": {"type": "object"},
+    "qa_rules": {"type": "array", "items": {"type": "object"}},
+    "review_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
