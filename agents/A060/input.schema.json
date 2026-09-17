@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A060 Proposal Agent Input",
+  "type": "object",
+  "required": ["proposal_strategy", "offer_pricing_strategy"],
+  "properties": {
+    "proposal_strategy": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "account_research": {"type": "object"},
+    "qualification_result": {"type": "object"},
+    "meeting_brief": {"type": "object"},
+    "proposal_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
