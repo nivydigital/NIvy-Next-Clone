@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A102/input.schema.json",
+  "title": "A102 Cost Observability Analyst Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cost_snapshot", "workload_context"],
+  "properties": {
+    "cost_snapshot": {"type": "object"},
+    "workload_context": {"type": "object"},
+    "budget_targets": {"type": "object"},
+    "historical_spend": {"type": "object"},
+    "pricing_model": {"type": "object"},
+    "prior_cost_report": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

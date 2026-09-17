@@ -1,0 +1,26 @@
+id: A105
+name: Prompt Improvement Agent
+version: "1.0"
+status: implementation
+category: learning
+purpose: Propose prompt improvements from feedback and evaluation evidence — diffs, rationale and risk notes — without promoting prompts to production.
+inputs:
+  required: [current_prompt, improvement_signals]
+  optional: [evaluation_evidence, style_constraints, prior_prompt_versions, risk_appetite]
+outputs:
+  primary: a105_result
+  required_fields: [proposed_prompt, change_summary, rationale, risks, validation_plan, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK006, SK037]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-14 Learning Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a105
+  entrypoint: run_a105_prompt_improvement

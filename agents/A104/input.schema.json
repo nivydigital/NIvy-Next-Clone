@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A104/input.schema.json",
+  "title": "A104 Feedback Analyst Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["feedback_corpus", "analysis_scope"],
+  "properties": {
+    "feedback_corpus": {"type": "object"},
+    "analysis_scope": {"type": "object"},
+    "agent_filter": {"type": "object"},
+    "prior_themes": {"type": "object"},
+    "severity_rubric": {"type": "object"},
+    "product_context": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

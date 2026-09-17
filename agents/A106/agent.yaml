@@ -1,0 +1,26 @@
+id: A106
+name: Skill Improvement Agent
+version: "1.0"
+status: implementation
+category: learning
+purpose: Propose skill contract and implementation improvements from evaluation and feedback — gaps, patches and validation steps — without deploying skills.
+inputs:
+  required: [skill_spec, improvement_signals]
+  optional: [evaluation_evidence, dependency_map, prior_skill_versions, policy_constraints]
+outputs:
+  primary: a106_result
+  required_fields: [proposed_skill_changes, gap_analysis, rationale, risks, validation_plan, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-14 Learning Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a106
+  entrypoint: run_a106_skill_improvement
