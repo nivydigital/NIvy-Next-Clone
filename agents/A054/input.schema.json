@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A054 Qualification Input",
+  "type": "object",
+  "required": ["scored_leads", "qualification_scoring_strategy"],
+  "properties": {
+    "scored_leads": {"type": "object"},
+    "qualification_scoring_strategy": {"type": "object"},
+    "triage_result": {"type": "object"},
+    "conversation_context": {"type": "object"},
+    "qualification_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
