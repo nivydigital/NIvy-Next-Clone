@@ -1,0 +1,44 @@
+version: "1.0"
+status: canonical
+description: Memory policy defaults (Phase 7 / P7.4)
+
+defaults:
+  read:
+    require_declared_class: true
+    require_provenance: true
+    deny_unknown_class: true
+  write:
+    require_declared_class: true
+    require_provenance: true
+    require_access_policy: true
+    auto_promote_to_organizational: false
+  retention:
+    short-term-execution: run-scoped
+    conversation: 90d
+    customer-account: contract-or-policy
+    agent: version-scoped
+    organizational: long-lived
+    procedural: version-scoped
+  deletion:
+    supported: true
+    auditable: true
+    hard_delete_restricted_requires_approval: true
+
+access:
+  internal: [runtime, operator]
+  restricted: [authorized_operator, compliance]
+
+qdrant:
+  collection_prefix: nivy_kp_
+  mock_when_unset: true
+minio:
+  bucket: nivy-knowledge
+  mock_when_unset: true
+postgres:
+  table: knowledge_chunks
+  mock_when_unset: true
+
+rules:
+  - Never store secrets in memory or knowledge packs.
+  - Restricted packs require authorized access.
+  - Ingest records provenance (pack_id, section, source_path, ingested_at).
