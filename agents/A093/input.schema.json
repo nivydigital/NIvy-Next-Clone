@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A093 Planning Analyst Input",
+  "type": "object",
+  "required": ["goals"],
+  "properties": {
+    "goals": {"type": "object"},
+    "kpi_intelligence": {"type": "object"},
+    "resource_constraints": {"type": "array", "items": {"type": "string"}},
+    "planning_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
