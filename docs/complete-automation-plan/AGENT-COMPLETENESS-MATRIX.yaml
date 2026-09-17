@@ -1,0 +1,7 @@
+version: "1.0"
+standard: STD-02/v2
+note: Regenerate with python3 scripts/generate_agent_completeness_matrix.py after agent/skill changes.
+generation: run locally to refresh full 80-agent matrix
+summary:
+  principle: scaffold_is_not_active
+  tracks: [A-skills, B-agent-depth, C-workflows, D-knowledge-eval-ops]

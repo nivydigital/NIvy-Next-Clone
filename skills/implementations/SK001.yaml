@@ -1,0 +1,50 @@
+id: SK001
+name: Market Research
+version: "1.1"
+status: implementation
+category: research
+standard: STD-01/v2
+objective: Research markets using only approved evidence without fabricating sources.
+non_goals:
+  - Inventing facts, contacts, metrics, or tool results not in inputs
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: context, type: object, constraints: "approved working context"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+outputs:
+  required:
+    - {name: result, type: object}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
+procedure:
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Validate required inputs; fail closed if missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load only approved knowledge/tools; record provenance.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Perform objective without inventing evidence.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Run quality_checks; attach warnings.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Ensure required outputs present.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return structured result with evidence refs.", on_failure: fail_closed}
+preconditions: ["Required inputs present"]
+postconditions: ["Outputs include status and confidence"]
+quality_checks: [schema_valid, no_fabricated_evidence, policy_compliant]
+failure_policy: fail_closed on missing required inputs; partial only when status=partial and gaps listed
+evidence_policy: preserve source/tool/run references; never invent citations
+dependencies:
+  skills: []
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns object with status and confidence", verify: schema}
+  - {id: AC2, statement: "Rejects empty required context", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_input, policy_safe]
+  regression_required: true
+provenance:
+  source: skills/registry.yaml + STD-01/v2
+  last_reviewed: "2026-09-17"
+  owner: unassigned
