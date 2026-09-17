@@ -1,0 +1,18 @@
+id: SK043
+name: Outreach Strategy
+version: "1.0"
+status: implementation
+objective: choose an appropriate bounded outreach approach
+inputs: [icp, account, offer, channel]
+outputs: [sequence_strategy, channel, stop_rules]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: select_channel}
+  - {step: 3, action: design_sequence}
+  - {step: 4, action: define_stop_rules}
+quality_checks: [stop_rules_present]
+failure_policy: fail_closed_on_missing_offer
+evidence_policy: strategy cites account signals
+dependencies: [SK039, SK040, SK041]
+tools: [tool.ollama.generate]
+acceptance: [sequence_strategy present, stop_rules present]
