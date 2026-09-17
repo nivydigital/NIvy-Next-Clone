@@ -43,5 +43,7 @@ def test_pr009_plus_bodies_resolvable():
 
 
 def test_revenue_prompt_map_file():
-    text = (ROOT / "prompts" / "agent-prompt-map.yaml").read_text()
-    assert "revenue_path:" in text or "A044" in text
+    a = ROOT / "prompts" / "agent-prompt-map.yaml"
+    b = ROOT / "prompts" / "revenue-path-prompts.yaml"
+    text = (a.read_text() if a.exists() else "") + (b.read_text() if b.exists() else "")
+    assert "A044" in text and ("PR004" in text or "revenue_path" in text)
