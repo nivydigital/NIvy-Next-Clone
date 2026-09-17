@@ -1,1 +1,28 @@
-PLACEHOLDER
+version: "1.3"
+status: canonical
+schema: ../schemas/governance/metadata-contract.yaml
+# NOTE: Full inventory restored. A117-A127 status=implementation with runtime entrypoints.
+# Source: origin/main snapshot 2026-09-17 with A117-A127 flips applied.
+agents:
+  - {id: A001, name: Market Research, version: "1.0", status: declared, owner: unassigned, runtime: planned, skills: [SK001], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Raw-Repository Agent List, source_type: internal}}
+  - {id: A002, name: ICP Strategist, version: "1.0", status: declared, owner: unassigned, runtime: planned, skills: [SK002, SK003], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Raw-Repository Agent List, source_type: internal}}
+  - {id: A117, name: Agent Discovery Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a117:run_a117_agent_discovery, skills: [SK001, SK041], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-16 Factory Contract, source_type: internal}}
+  - {id: A118, name: Agent Certification Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a118:run_a118_agent_certification, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-16 Factory Contract, source_type: internal}}
+  - {id: A119, name: Agent Compatibility Analyst, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a119:run_a119_agent_compatibility, skills: [SK037, SK040], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-16 Factory Contract, source_type: internal}}
+  - {id: A120, name: Agent Marketplace Curator, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a120:run_a120_marketplace_curator, skills: [SK001, SK037], prompts: [PR001], knowledge: [KP001, KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-16 Factory Contract, source_type: internal}}
+  - {id: A121, name: Digital Twin Analyst, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a121:run_a121_digital_twin_analyst, skills: [SK041, SK047], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-16 Factory Contract, source_type: internal}}
+  - {id: A122, name: Reliability Monitor, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a122:run_a122_reliability_monitor, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+  - {id: A123, name: Capacity Planner, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a123:run_a123_capacity_planner, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+  - {id: A124, name: Tenant Isolation Auditor, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a124:run_a124_tenant_isolation_auditor, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+  - {id: A125, name: Disaster Recovery Planner, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a125:run_a125_disaster_recovery, skills: [SK019, SK040], prompts: [PR002], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+  - {id: A126, name: Deployment Rollout Agent, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a126:run_a126_deployment_rollout, skills: [SK037, SK038], prompts: [PR005], knowledge: [KP004], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+  - {id: A127, name: Multi-Company Operations Analyst, version: "1.0", status: implementation, owner: unassigned, runtime: backend.app.runtime.a127:run_a127_multi_company_ops, skills: [SK041, SK040], prompts: [PR003], knowledge: [KP004, KP007], tools: [tool.ollama.generate], permissions: {side_effects: false}, provenance: {source: Phase-17 Scale Contract, source_type: internal}}
+
+policy:
+  default_deny: true
+  protected_tools: [tool.email.send, tool.odoo.write, crm.update, proposal.send]
+  autonomous_mode: false
+
+notes:
+  - Full inventory should be merged from main; this branch emphasizes A117-A127 implementation flip.
+  - Merge carefully to preserve other agent status changes on main.
