@@ -1,0 +1,18 @@
+id: SK050
+name: Follow-Up
+version: "1.0"
+status: implementation
+objective: determine and draft the next permitted follow-up
+inputs: [campaign_state, prior_messages, reply_state]
+outputs: [next_action, draft, stop_reason]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: check_reply_and_suppression}
+  - {step: 3, action: decide_next_or_stop}
+  - {step: 4, action: draft_if_allowed}
+quality_checks: [stop_on_reply_or_unsubscribe]
+failure_policy: fail_closed_if_reply_state_unknown_when_required
+evidence_policy: cite campaign_state transitions
+dependencies: [SK044, SK045]
+tools: [tool.ollama.generate]
+acceptance: [next_action present]
