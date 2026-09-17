@@ -1,0 +1,43 @@
+id: A031
+name: Demand Generation Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Define demand gen programs, funnel stages, content-to-campaign mapping and measurement from campaign, content and lead-generation strategy.
+inputs:
+  required: [campaign_strategy, content_strategy]
+  optional: [lead_generation_strategy, channel_strategy, demand_constraints]
+outputs:
+  primary: demand_generation_strategy
+  required_fields: [programs, funnel_stages, content_campaign_map, measurement, volume_goals, confidence, assumptions, derived_from]
+  downstream_events: [demand_generation_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_programs, set_funnel, map_content, define_measurement, set_volume_goals, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - programs_align_with_campaign_and_content_strategy
+  - measurement_and_goals_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A030
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
