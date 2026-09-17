@@ -1,0 +1,18 @@
+id: SK044
+name: Email Outreach
+version: "1.0"
+status: implementation
+objective: draft truthful personalized email outreach
+inputs: [lead, account_context, offer]
+outputs: [subject, body, personalization_evidence, approval_state]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: personalize_from_verified_context}
+  - {step: 3, action: draft_email}
+  - {step: 4, action: set_approval_state_pending}
+quality_checks: [no_unverifiable_claims, approval_state_set]
+failure_policy: fail_closed_on_missing_lead; side_effects require agent tool auth
+evidence_policy: personalization_evidence required
+dependencies: [SK043, SK049]
+tools: [tool.ollama.generate]
+acceptance: [subject present, body present, approval_state present]
