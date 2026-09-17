@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A041 Account Research Input",
+  "type": "object",
+  "required": ["scored_leads"],
+  "properties": {
+    "scored_leads": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "research_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
