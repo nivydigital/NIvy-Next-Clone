@@ -1,0 +1,53 @@
+id: conversation-intel
+version: "1.0"
+status: implementation
+trigger: manual_or_transcript_uploaded
+dry_run_default: true
+idempotency_key_fields: [conversation_id, transcript_hash]
+
+states:
+  - pending
+  - analyzing_conversation
+  - meeting_intel
+  - knowledge_extract
+  - completed
+  - failed
+
+transitions:
+  - {from: pending, to: analyzing_conversation, on: start}
+  - {from: analyzing_conversation, to: meeting_intel, on: conversation_done}
+  - {from: meeting_intel, to: knowledge_extract, on: meeting_done}
+  - {from: knowledge_extract, to: completed, on: done}
+  - {from: "*", to: failed, on: error}
+
+stages:
+  - id: conversation_intelligence
+    agent: A067
+    skill_hint: [SK046]
+    input_map:
+      transcript: $.input.transcript
+      participants: $.input.participants
+      context: $.input.context
+    output_key: conversation
+  - id: meeting_intelligence
+    agent: A069
+    skill_hint: [SK046, SK047]
+    input_map:
+      transcript: $.input.transcript
+      conversation: $.outputs.conversation
+      meeting_meta: $.input.meeting_meta
+    output_key: meeting
+  - id: knowledge_extract
+    agent: A070
+    skill_hint: [SK041, SK047]
+    input_map:
+      conversation: $.outputs.conversation
+      meeting: $.outputs.meeting
+      transcript: $.input.transcript
+    output_key: knowledge
+
+side_effects: none
+# Knowledge write requires separate approved knowledge-ingestion workflow
+
+audit:
+  required: true
