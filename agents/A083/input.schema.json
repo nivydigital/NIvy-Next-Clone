@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A083 Revenue Analytics Input",
+  "type": "object",
+  "required": ["revenue_records"],
+  "properties": {
+    "revenue_records": {"type": "object"},
+    "cohort_definitions": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}

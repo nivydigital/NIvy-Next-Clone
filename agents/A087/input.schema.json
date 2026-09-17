@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A087 Social Media Strategist Input",
+  "type": "object",
+  "required": ["marketing_strategy"],
+  "properties": {
+    "marketing_strategy": {"type": "object"},
+    "content_strategy": {"type": "object"},
+    "audience_insights": {"type": "object"},
+    "social_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
