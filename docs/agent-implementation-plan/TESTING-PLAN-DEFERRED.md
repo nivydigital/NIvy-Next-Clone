@@ -20,55 +20,25 @@
 For **every** agent (A001 onward) the final testing phase will execute:
 
 1. **Contract / registry tests**
-   - All referenced skill, prompt, knowledge, tool IDs resolve.
-   - Input and output schemas validate.
-   - Agent appears correctly in `agents/registry.yaml` and `implementation-registry.yaml`.
-
 2. **Unit / happy-path tests**
-   - Deterministic cases with controlled LLM mocks or local Ollama.
-   - Valid input produces schema-compliant output.
-   - Required fields and confidence values are present.
-
 3. **Negative / policy tests**
-   - Missing required inputs → fail closed.
-   - Invalid / malformed input → rejected.
-   - Missing provenance / evidence → rejected.
-   - Unauthorized tool or side-effect → denied.
-   - Prompt-injection style payloads → blocked or sanitized.
-
 4. **Output & schema tests**
-   - Strict JSON schema validation.
-   - Required fields, types, confidence enum, evidence arrays.
-
 5. **Evaluation suite**
-   - Golden / representative cases (minimum 3–5 per agent).
-   - Metrics: schema pass rate, evidence coverage, confidence calibration, policy compliance.
-   - Acceptance threshold recorded (default 100% critical gates).
-
-6. **Integration / live proof (where applicable)**
-   - Runtime endpoint callable.
-   - n8n workflow (if present) can trigger the agent.
-   - Local Ollama + any declared research adapters produce real runs.
-   - Audit / correlation IDs emitted.
-
+6. **Integration / live proof**
 7. **Regression**
-   - Full suite re-run after any shared runtime, engine, or skill change.
 
-## Evidence location (final phase)
+---
 
-- Test files: `backend/tests/test_a0XX_*.py`
-- Evaluation results: recorded in each agent’s completion record and in `docs/agent-implementation-plan/AGENT-PROGRESS-TRACKER.md`
-- CI: `.github/workflows/runtime-tests.yml` (and any agent-specific workflows)
-- Live evidence: screenshots / logs / n8n execution IDs stored under `docs/verification/` or agent completion records
+## Agent-specific deferred tests — A117–A127 (pushed 2026-09-17)
 
-## Current agent implementation order (continuing)
+Full G16–G20 deferred until final testing phase.
 
-A001 → A002 → A003 → A004 → A005 → **A006 (next)** → …
+For each of A117–A127:
+1. Contract/registry: skill/prompt/knowledge IDs resolve; input/output schemas validate.
+2. Unit happy-path: valid required inputs → schema-compliant JSON with confidence in {high,medium,low}.
+3. Negative: missing required inputs → agent-specific Error; non-JSON model output → fail closed.
+4. Policy: only tool.ollama.generate; side_effects false; no activation/publish/deploy/cross-tenant writes.
+5. Golden cases: minimum 3 representative scenarios per agent.
+6. Integration: runtime entrypoint callable with local Ollama when credentials available.
 
-Testing remains deferred for all of the above until the explicit final testing phase is started.
-
-## Change log
-
-| Date       | Change                                      | By          |
-|------------|---------------------------------------------|-------------|
-| 2026-09-17 | Created deferred testing policy             | User + Grok |
+Do not mark COMPLETE until final testing phase.
