@@ -11,6 +11,7 @@ import yaml
 
 from .audit import audit_log
 from .policy import PolicyDenied, decide
+from .prompt_loader import PromptLoadError, resolve_prompt
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -69,11 +70,14 @@ class RuntimeEngine:
         selected = prompt_id or ((self._bound_prompts(agent) or [None])[0])
         if selected:
             if selected not in self._bound_prompts(agent): raise PolicyDenied(f"prompt {selected} is not bound to agent {agent_id}")
-            spec = self.prompt_library.get("prompts", {}).get(selected)
-            if not spec or not spec.get("body"): raise PolicyDenied(f"executable prompt is missing: {selected}")
+            try:
+                resolved = resolve_prompt(selected, require_body=True)
+            except PromptLoadError as exc:
+                raise PolicyDenied(str(exc)) from exc
             variable_text = json.dumps(context or {}, ensure_ascii=False, default=str)
-            common = self.prompt_library.get("common", {})
-            return f"{common.get('system','')}\n\nAGENT: {agent.get('name')} ({agent_id})\nPROMPT_ID: {selected}\nTASK CONTEXT:\n{variable_text}\n\nTASK INSTRUCTIONS:\n{spec['body']}\n\n{common.get('output','')}"
+            common = resolved.get("common") or self.prompt_library.get("common", {})
+            body = resolved.get("body") or ""
+            return f"{common.get('system','')}\n\nAGENT: {agent.get('name')} ({agent_id})\nPROMPT_ID: {selected}\nTASK CONTEXT:\n{variable_text}\n\nTASK INSTRUCTIONS:\n{body}\n\n{common.get('output','')}"
         if raw_prompt: return str(raw_prompt)
         raise PolicyDenied(f"agent {agent_id} has no executable prompt")
 
