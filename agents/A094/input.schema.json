@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A094 Anomaly Detection Analyst Input",
+  "type": "object",
+  "required": ["metric_series"],
+  "properties": {
+    "metric_series": {"type": "object"},
+    "baselines": {"type": "object"},
+    "detection_rules": {"type": "array", "items": {"type": "object"}},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
