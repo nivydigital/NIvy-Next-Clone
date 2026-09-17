@@ -1,0 +1,43 @@
+id: A099
+name: Regression QA Agent
+version: "1.0"
+status: implementation
+category: evaluation
+purpose: Compare current outputs to golden baselines and flag regressions.
+inputs:
+  required: [current_output, baseline_output]
+  optional: [tolerance_rules, regression_constraints]
+outputs:
+  primary: regression_report
+  required_fields: [regressions, severity, pass_fail, recommended_fixes, confidence, assumptions, derived_from]
+  downstream_events: [regression_report.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, diff_outputs, classify_regressions, score_severity, recommend_fixes, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - regressions_are_explicit
+  - fixes_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A099 Regression QA Agent)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
