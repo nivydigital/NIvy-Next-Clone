@@ -1,0 +1,43 @@
+id: A023
+name: Revenue Operations Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_ops
+purpose: Define RevOps operating model, process ownership, systems guidance and KPI hierarchy spanning acquisition through expansion.
+inputs:
+  required: [gtm_strategy, pipeline_deal_strategy]
+  optional: [lead_generation_strategy, retention_expansion_strategy, campaign_strategy, revops_constraints]
+outputs:
+  primary: revenue_operations_strategy
+  required_fields: [operating_model, process_ownership, systems_guidance, kpi_hierarchy, handoff_map, confidence, assumptions, derived_from]
+  downstream_events: [revenue_operations_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_operating_model, assign_ownership, set_systems_guidance, build_kpi_hierarchy, map_handoffs, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - operating_model_covers_full_revenue_lifecycle
+  - ownership_and_KPIs_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: sequential strategy chain after A022
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
