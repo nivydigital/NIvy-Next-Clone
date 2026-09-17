@@ -1,0 +1,26 @@
+id: A102
+name: Cost Observability Analyst
+version: "1.0"
+status: implementation
+category: evaluation
+purpose: Analyze runtime cost signals for agents and tools — spend, unit cost, anomalies and optimization opportunities — without changing billing or infrastructure.
+inputs:
+  required: [cost_snapshot, workload_context]
+  optional: [budget_targets, historical_spend, pricing_model, prior_cost_report]
+outputs:
+  primary: a102_result
+  required_fields: [cost_summary, unit_costs, anomalies, optimization_opportunities, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK019, SK020]
+prompts: [PR002]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-13 Evaluation Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a102
+  entrypoint: run_a102_cost_observability

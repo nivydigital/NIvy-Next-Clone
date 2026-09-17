@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A102/output.schema.json",
+  "title": "A102 Cost Observability Analyst Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cost_summary", "unit_costs", "anomalies", "optimization_opportunities", "recommendations", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "cost_summary": {"type": "object"},
+    "unit_costs": {"type": "array", "items": {"type": "object"}},
+    "anomalies": {"type": "array", "items": {"type": "object"}},
+    "optimization_opportunities": {"type": "array", "items": {"type": "object"}},
+    "recommendations": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

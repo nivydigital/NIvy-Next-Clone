@@ -1,0 +1,26 @@
+id: A103
+name: Evidence Collector
+version: "1.0"
+status: implementation
+category: evaluation
+purpose: Assemble evaluation and audit evidence packs for agent runs — traces, scores, artifacts and gaps — without mutating production evidence stores.
+inputs:
+  required: [run_refs, evidence_scope]
+  optional: [trace_snippets, score_cards, artifact_index, prior_evidence_pack, retention_policy]
+outputs:
+  primary: a103_result
+  required_fields: [evidence_pack, coverage, gaps, integrity_notes, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-13 Evaluation Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a103
+  entrypoint: run_a103_evidence_collector
