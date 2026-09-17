@@ -1,0 +1,67 @@
+id: seo-audit
+version: "1.0"
+status: implementation
+trigger: manual
+dry_run_default: true
+idempotency_key_fields: [site_id, audit_date]
+
+states:
+  - pending
+  - strategy
+  - technical_review
+  - prioritize
+  - report
+  - completed
+  - failed
+
+transitions:
+  - {from: pending, to: strategy, on: start}
+  - {from: strategy, to: technical_review, on: strategy_done}
+  - {from: technical_review, to: prioritize, on: review_done}
+  - {from: prioritize, to: report, on: prioritized}
+  - {from: report, to: completed, on: done}
+  - {from: "*", to: failed, on: error}
+
+stages:
+  - id: seo_strategy
+    agent: A086
+    skill_hint: [SK011, SK012, SK013]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      content_strategy: $.input.content_strategy
+      keyword_seeds: $.input.keyword_seeds
+      seo_constraints: $.input.seo_constraints
+    output_key: seo_strategy
+  - id: content_alignment
+    agent: A085
+    skill_hint: [SK009, SK015]
+    input_map:
+      marketing_strategy: $.input.marketing_strategy
+      content_strategy: $.input.content_strategy
+      seo_strategy: $.outputs.seo_strategy
+    output_key: content_alignment
+  - id: analytics_context
+    agent: A089
+    skill_hint: [SK019, SK020]
+    input_map:
+      seo_strategy: $.outputs.seo_strategy
+      metrics: $.input.metrics
+      period: $.input.period
+    output_key: analytics
+  - id: prioritize_and_report
+    agent: A086
+    skill_hint: [SK012, SK013]
+    input_map:
+      seo_strategy: $.outputs.seo_strategy
+      content_alignment: $.outputs.content_alignment
+      analytics: $.outputs.analytics
+      crawl_evidence: $.input.crawl_evidence
+    output_key: audit_report
+
+stop_rules:
+  - missing_marketing_strategy
+
+side_effects: none
+
+audit:
+  required: true
