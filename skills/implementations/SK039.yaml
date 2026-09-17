@@ -1,18 +1,64 @@
 id: SK039
 name: Lead Scoring
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: apply configured qualification criteria consistently
-inputs: [lead, scoring_model]
-outputs: [score, factors, confidence]
+category: sales
+standard: STD-01/v2
+objective: Apply configured qualification criteria consistently to produce an explainable score without inventing factor values.
+non_goals:
+  - Inventing lead attributes or factor scores not derived from inputs
+  - Using an ad-hoc model when scoring_model is provided
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: lead, type: object, constraints: "lead or enriched_lead with identity and attributes"}
+    - {name: scoring_model, type: object, constraints: "factors, weights or tiers, and rules"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: score, type: object}
+    - {name: factors, type: array}
+    - {name: confidence, type: string}
+  common: [status, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs, detail: "Validate lead and scoring_model"}
-  - {step: 2, action: apply_model, detail: "Score lead against configured factors"}
-  - {step: 3, action: explain_factors, detail: "List factor contributions"}
-  - {step: 4, action: set_confidence, detail: "high/medium/low from data completeness"}
-quality_checks: [score_numeric_or_tier, factors_non_empty]
-failure_policy: fail_closed_on_missing_scoring_model
-evidence_policy: factors reference input fields
-dependencies: [SK037, SK038]
-tools: [tool.ollama.generate]
-acceptance: [score present, factors is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require lead and scoring_model. Fail closed if scoring_model missing or has no factors. Lead must have at least identity.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load factor definitions from scoring_model (name, weight/tier rule, required vs optional). Map lead attributes to factor input fields; mark missing attributes as null.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "For each factor: evaluate rule against available lead attribute; record contribution (points or tier) and whether data was present. Aggregate to overall score (numeric and/or tier) per model. List factor contributions with source attribute paths.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure score is numeric or tier as model specifies; factors non-empty. Set confidence: high if all required factors present; medium if >= half required; low otherwise. Warn on missing required factors.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm score present, factors is non-empty array, confidence in {high, medium, low}.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return score, factors, confidence, status, assumptions, next_action.", on_failure: fail_closed}
+preconditions:
+  - lead and scoring_model present
+  - scoring_model defines at least one factor
+postconditions:
+  - score and factors present
+  - factors reference input field paths
+quality_checks:
+  - score_numeric_or_tier
+  - factors_non_empty
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing scoring_model; partial when required factors missing and status=partial with gaps listed
+evidence_policy: factors reference input fields; never invent attribute values
+dependencies:
+  skills: [SK037, SK038]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns score, factors array, confidence", verify: schema}
+  - {id: AC2, statement: "Rejects missing scoring_model", verify: test}
+  - {id: AC3, statement: "Factors list contributions tied to lead fields", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_model, missing_required_factors, all_factors_present]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
