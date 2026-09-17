@@ -10,8 +10,9 @@ from .runtime.a005 import A005ChannelStrategyError, run_a005_channel
 from .runtime.discovery import execute_agent, get_agent, list_agents
 from .runtime.engine import RuntimeDenied, runtime_engine
 from .runtime.skills import resolve_agent_skills, skill_coverage_report
+from .runtime.workflows import list_workflow_defs, load_workflow, run_workflow
 
-app = FastAPI(title="Nivy Next AIOS API", version="0.8.0")
+app = FastAPI(title="Nivy Next AIOS API", version="0.9.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class SendEmailRequest(BaseModel):
@@ -25,6 +26,10 @@ class AgentExecuteRequest(BaseModel):
     allow_llm_fallback: bool = True
     request_id: str | None = None
     payload: dict = Field(default_factory=dict)
+class WorkflowRunRequest(BaseModel):
+    payload: dict = Field(default_factory=dict)
+    dry_run: bool | None = None
+    stop_after_stage: str | None = None
 class A001ResearchRequest(BaseModel): research_question: str; target_market: str; geography: str | None = None; industry: str | None = None; customer_segment: str | None = None; time_horizon: str | None = None; competitor_set: list[str] | None = None; source_policy: dict = Field(default_factory=dict); output_format: str | None = None; evidence: list[dict] = Field(default_factory=list)
 class A002ICPRequest(BaseModel): market_research: dict; business_offer: dict = Field(default_factory=dict); existing_customers: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); geography: str | None = None; revenue_targets: dict = Field(default_factory=dict); request_id: str | None = None
 class A003PersonaRequest(BaseModel): icp_definition: dict; market_research: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); customer_interviews: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); request_id: str | None = None
@@ -34,9 +39,9 @@ class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); ap
 class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.8.0", "runtime": runtime_engine.health()}
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.0", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.8.0"}
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.0"}
 @app.get("/api/v1/runtime/health")
 def runtime_health(): return runtime_engine.health()
 
@@ -70,20 +75,41 @@ async def runtime_execute_agent(agent_id: str, request: AgentExecuteRequest):
         raise HTTPException(status_code=502, detail=result.error or f"{aid} runtime failed")
     return result.__dict__ if hasattr(result, "__dict__") else result
 
-# --- Phase 3 Skills ---
 @app.get("/api/v1/runtime/skills/coverage")
 def skills_coverage():
-    """Registry vs implementation files."""
     return skill_coverage_report()
 
 @app.get("/api/v1/runtime/agents/{agent_id}/skills/resolve")
 def skills_resolve(agent_id: str):
-    """Agent → Skill → Tool resolution; fail closed if skill implementation missing."""
     aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
     try:
         return resolve_agent_skills(aid)
     except RuntimeDenied as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
+
+# --- Phase 5 Workflows ---
+@app.get("/api/v1/runtime/workflows")
+def runtime_list_workflows():
+    return {"items": list_workflow_defs()}
+
+@app.get("/api/v1/runtime/workflows/{workflow_id}")
+def runtime_get_workflow(workflow_id: str):
+    try:
+        return load_workflow(workflow_id)
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+@app.post("/api/v1/runtime/workflows/{workflow_id}/run")
+async def runtime_run_workflow(workflow_id: str, request: WorkflowRunRequest):
+    try:
+        return await run_workflow(
+            workflow_id,
+            dict(request.payload or {}),
+            dry_run=request.dry_run,
+            stop_after_stage=request.stop_after_stage,
+        )
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 @app.post("/api/v1/runtime/agents/{agent_id}/run")
 async def run_agent(agent_id: str, request: AgentRunRequest):
@@ -171,6 +197,7 @@ def revenue_summary():
 def runtime_evaluation():
     discovery = list_agents()
     coverage = skill_coverage_report()
+    wfs = list_workflow_defs()
     checks = {
         "registry_loaded": len(runtime_engine.registry.get("agents", [])) > 0,
         "default_deny": runtime_engine.registry.get("policy", {}).get("default_deny", True) is True,
@@ -181,5 +208,6 @@ def runtime_evaluation():
         "agent_discovery": discovery.get("count", 0) > 0,
         "structured_entrypoints": discovery.get("structured_entrypoint_count", 0) > 0,
         "lead_skills_sk034_sk050": all(f"SK{i:03d}" not in coverage.get("missing_implementations", []) for i in range(34, 51)),
+        "phase5_workflows": len([w for w in wfs if w.get("id") in {"inbound-email-triage", "response-qa", "conversation-intel"}]) >= 3,
     }
-    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks, "skill_coverage": coverage, "discovery_summary": {"count": discovery.get("count"), "structured_entrypoint_count": discovery.get("structured_entrypoint_count")}}
+    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks, "skill_coverage": coverage, "workflows": wfs}
