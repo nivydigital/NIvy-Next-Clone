@@ -1,0 +1,43 @@
+id: A044
+name: Email Outreach
+version: "1.0"
+status: implementation
+category: outreach_ops
+purpose: Draft personalized outreach emails from outreach plan and personalization inputs. Side-effect capable (send) but default is draft-only under policy.
+inputs:
+  required: [outreach_plan, account_research]
+  optional: [messaging_positioning, personalization_context, email_constraints]
+outputs:
+  primary: email_drafts
+  required_fields: [drafts, personalization_notes, compliance_checks, confidence, assumptions, derived_from]
+  downstream_events: [email_outreach.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny. External send requires explicit approval.
+workflow:
+  sequence: [validate_input, validate_provenance, draft_emails, apply_personalization, run_compliance_checks, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited_by_default
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - drafts_align_with_outreach_plan
+  - compliance_checks_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A044 Email Outreach)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy. Send side-effect gated."
