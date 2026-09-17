@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A098/input.schema.json",
+  "title": "A098 Evaluation Analyst Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evaluation_suite", "run_results"],
+  "properties": {
+    "evaluation_suite": {"type": "object"},
+    "run_results": {"type": "object"},
+    "baselines": {"type": "object"},
+    "policy_rubric": {"type": "object"},
+    "prior_evaluation": {"type": "object"},
+    "thresholds": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

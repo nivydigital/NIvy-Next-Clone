@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A099/input.schema.json",
+  "title": "A099 Regression QA Agent Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["baseline_results", "candidate_results"],
+  "properties": {
+    "baseline_results": {"type": "object"},
+    "candidate_results": {"type": "object"},
+    "thresholds": {"type": "object"},
+    "affected_agents": {"type": "object"},
+    "prior_regression_report": {"type": "object"},
+    "change_context": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

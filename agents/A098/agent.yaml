@@ -1,0 +1,26 @@
+id: A098
+name: Evaluation Analyst
+version: "1.0"
+status: implementation
+category: evaluation
+purpose: Score agent runs against evaluation suites — quality, policy and task success — and summarize gaps without mutating production configs.
+inputs:
+  required: [evaluation_suite, run_results]
+  optional: [baselines, policy_rubric, prior_evaluation, thresholds]
+outputs:
+  primary: a098_result
+  required_fields: [score_summary, dimension_scores, failures, gaps, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-13 Evaluation Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a098
+  entrypoint: run_a098_evaluation_analyst
