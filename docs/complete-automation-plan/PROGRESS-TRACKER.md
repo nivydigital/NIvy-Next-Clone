@@ -1,6 +1,6 @@
 # Progress Tracker — Complete Automation
 
-**Last updated:** 2026-09-17 (Phase 6 remaining agents)
+**Last updated:** 2026-09-17 (Phase 7 Knowledge/RAG complete)
 
 Legend: 🟢 done · 🟡 partial · ⚪ not started
 
@@ -21,16 +21,19 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started
 | Status | 🟢 |
 
 ## Phase 6 — Remaining agents
+| Status | 🟢 |
+
+## Phase 7 — Knowledge, memory, RAG
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P6.1 | A100–A103 evaluation/ops | 🟢 | runtime + schemas |
-| P6.2 | A104–A108 learning/control | 🟢 | runtime + schemas |
-| P6.3 | Promotion rules | 🟢 | promotion-rules.yaml + promote_agents.py |
+| P7.1 | Knowledge packs KP* | 🟢 | KP001–KP008 bodies |
+| P7.2 | Agent knowledge bindings | 🟢 | AGENT-KNOWLEDGE-BINDINGS.yaml |
+| P7.3 | Ingest pipeline | 🟢 | extract→chunk→embed→store (mock) |
+| P7.4 | Memory policy defaults | 🟢 | memory/policy.yaml |
 
-## Phase 7+ 
+## Phase 8+
 | Phase | Status |
 |-------|--------|
-| P7 Knowledge/RAG | ⚪ |
 | P8 Marketing workflows | ⚪ |
-| P9 Memory | ⚪ |
-| P10 Full E2E | ⚪ |
+| P9 Evaluation | ⚪ |
+| P10 Hardening | ⚪ |
