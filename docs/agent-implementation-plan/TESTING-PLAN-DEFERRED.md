@@ -1,34 +1,39 @@
 # Deferred Testing Plan for All Agents
 
-**Status:** Active policy override (user direction 2026-09-17)  
-**Rule:** Full testing deferred until final phase. No agent marked COMPLETE until then.
+**Status:** Phase 9 evaluation **harness active** (2026-09-17)  
+**Rule:** Full live agent COMPLETE marks still require explicit suite evidence. Offline pyramid runs in CI.
 
-## How (final phase)
+## How
+
 Contract → unit happy-path → negative/policy → schema/golden → eval → integration → regression.
+
+### Phase 9 harness
+
+| Step | Command / path |
+|------|----------------|
+| Generate fixtures | `python scripts/generate_golden_fixtures.py` |
+| Offline tests | `pytest backend/app/test_evaluation.py backend/app/test_skills.py` |
+| Chains | `evaluation/chains.yaml` |
+| CI | `.github/workflows/evaluation-regression.yml` |
+| Docs | `docs/complete-automation-plan/phase-9/PHASE-9-EVALUATION.md` |
 
 ## Coverage inventory
 
-### Prior ranges
-A001–A094 as previously documented (strategy, lead, CS, finance, marketing, control start).
+### Strategy / lead / CS / finance / marketing / control
+A001–A099 as previously scaffolded — offline schema + dry-run workflow coverage via Phase 9.
 
-### Control + Evaluation start (A095–A099)
-| ID | Name | Extra asserts |
-|----|------|---------------|
-| **A095** | **Risk Analyst** | **risks, severity, mitigations, residual_risk** |
-| **A096** | **Executive Intelligence Analyst** | **summary, key_decisions, asks, risks_opportunities** |
-| **A097** | **Resource Planning Analyst** | **allocations, gaps, reallocation_options** |
-| **A098** | **Evaluation Analyst** | **scores, findings, pass_fail, recommendations** |
-| **A099** | **Regression QA Agent** | **regressions, severity, pass_fail, recommended_fixes** |
-
-### Higher IDs
-A117–A127 existing — deferred.
-
-### Not yet implemented
-A100 Trace Auditor, A101 Runtime Quality Monitor, A102 Cost Observability, A103 Evidence Collector, A104–A108 learning agents.
+### Evaluation / learning (A100–A108)
+Runtime modules + schemas present; offline module presence tests in `test_evaluation.py`.
 
 ## Chain tests
-Control: A092→A093→A094→A095→A096→A097  
-Eval: A098→A099→A100 (when built)
+
+| Chain | Mode |
+|-------|------|
+| lead-path | dry_schema |
+| inbound-comms, response-qa, conversation-intel | workflow_dry_run |
+| marketing-* | workflow_dry_run |
+| control-eval, learning-agents | schema_presence |
 
 ## Maintenance
-Update on every new batch. Do not mark COMPLETE until final testing phase.
+
+Update fixtures after schema changes. Do not mark agents COMPLETE until live evaluation evidence is stored.
