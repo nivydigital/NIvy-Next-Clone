@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A011 Sales Enablement Strategy Input",
+  "type": "object",
+  "required": ["icp_definition", "messaging_positioning", "offer_pricing_strategy"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "sales_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
