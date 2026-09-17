@@ -1,8 +1,7 @@
 # Progress Tracker — Complete Automation
 
-**Last updated:** 2026-09-17 (Phase 1 tools + Phase 2 prompts complete)
+**Last updated:** 2026-09-17 (Phase 1–2 + Phase 4 lead-outreach complete)
 **Owner:** unassigned
-Update checkboxes and dates after every meaningful session.
 
 Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
@@ -21,27 +20,27 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P1.1 | Tool registry schemas complete | 🟢 | TOOL-REGISTRY.yaml v2.0 with arg schemas + side_effects |
-| P1.2 | Ollama generate hardened | 🟢 | timeouts, JSON format, mock mode |
-| P1.3 | Email send + mock | 🟢 | EMAIL_MOCK default; approval-gated |
-| P1.4 | Web fetch/crawl + mock | 🟢 | public-data mocks; live opt-in |
-| P1.5 | Verification tool mock | 🟢 | tool.email.verify mock + Reacher path |
-| P1.6 | Tool audit wrapper | 🟢 | run_id, redacted args, status events |
+| P1.1 | Tool registry schemas complete | 🟢 | TOOL-REGISTRY.yaml v2.0 |
+| P1.2 | Ollama generate hardened | 🟢 | timeouts, JSON, mock |
+| P1.3 | Email send + mock | 🟢 | approval-gated |
+| P1.4 | Web fetch/crawl + mock | 🟢 | public-data mocks |
+| P1.5 | Verification tool mock | 🟢 | tool.email.verify |
+| P1.6 | Tool audit wrapper | 🟢 | redacted args |
 
 ## Phase 2 — Prompts
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P2.1 | prompts/bodies layout | 🟢 | prompts/bodies/ + README |
-| P2.2 | PR001–PR008 executable bodies | 🟢 | executable.yaml v2.0 + bodies/*.md |
-| P2.3 | Per-agent prompt mapping | 🟢 | agent-prompt-map.yaml |
-| P2.4 | Variable ↔ schema alignment script | 🟢 | scripts/check_prompt_schema_alignment.py |
+| P2.1 | prompts/bodies layout | 🟢 | |
+| P2.2 | PR001–PR008 executable bodies | 🟢 | |
+| P2.3 | Per-agent prompt mapping | 🟢 | |
+| P2.4 | Variable ↔ schema alignment script | 🟢 | |
 
 ## Phase 3 — Skills
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P3.1 | All SK* implementation files | ⚪ | registry/definitions only |
+| P3.1 | All SK* implementation files | ⚪ | |
 | P3.2 | Lead-pipeline skills prioritized | ⚪ | |
 | P3.3 | Runtime Agent→Skill→Tool resolve | ⚪ | |
 | P3.4 | Skill unit tests | ⚪ | |
@@ -50,11 +49,11 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| P4.1 | workflow.yaml registered | ⚪ | |
-| P4.2 | State machine | ⚪ | |
-| P4.3 | Idempotency | ⚪ | |
-| P4.4 | Dry-run mode | ⚪ | |
-| P4.5 | E2E with mocks | ⚪ | |
+| P4.1 | workflow.yaml registered | 🟢 | workflows/lead-outreach/workflow.yaml |
+| P4.2 | State machine | 🟢 | pending→…→done in lead_outreach.py |
+| P4.3 | Idempotency | 🟢 | campaign+lead hash keys |
+| P4.4 | Dry-run mode | 🟢 | default on; no live send |
+| P4.5 | E2E with mocks | 🟢 | test_phase4 + evidence folder |
 
 ## Phase 5 — Inbound / comms workflows
 
