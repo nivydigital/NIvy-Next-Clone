@@ -12,7 +12,7 @@ from .runtime.engine import RuntimeDenied, runtime_engine
 from .runtime.skills import resolve_agent_skills, skill_coverage_report
 from .runtime.workflows import list_workflow_defs, load_workflow, run_workflow
 
-app = FastAPI(title="Nivy Next AIOS API", version="0.9.0")
+app = FastAPI(title="Nivy Next AIOS API", version="0.9.1")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class SendEmailRequest(BaseModel):
@@ -39,9 +39,9 @@ class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); ap
 class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.0", "runtime": runtime_engine.health()}
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.1", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.0"}
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.1"}
 @app.get("/api/v1/runtime/health")
 def runtime_health(): return runtime_engine.health()
 
@@ -146,6 +146,21 @@ async def run_a005(request: A005ChannelRequest):
     except A005ChannelStrategyError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
     if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A005 runtime failed")
     return result.__dict__
+
+@app.get("/api/v1/runtime/approvals")
+def list_approvals():
+    """Owner Console: list in-memory approvals (pending + recent)."""
+    store = getattr(runtime_engine, "approvals", {}) or {}
+    items = []
+    if isinstance(store, dict):
+        for key, value in store.items():
+            if isinstance(value, dict):
+                row = {"approval_id": key, **value}
+            else:
+                row = {"approval_id": key, "value": value}
+            items.append(row)
+    return {"items": items, "count": len(items)}
+
 @app.post("/api/v1/runtime/approvals")
 def request_approval(request: ApprovalRequest):
     try: return runtime_engine.request_approval(request.agent_id, request.tool_id, request.reason)
@@ -206,7 +221,7 @@ def runtime_evaluation():
         "health": runtime_engine.health().get("status") == "ok",
         "executable_prompt_library": len(runtime_engine.prompt_library.get("prompts", {})) >= 8,
         "agent_discovery": discovery.get("count", 0) > 0,
-        "structured_entrypoints": discovery.get("structured_entrypoint_count", 0) > 0,
+        "structured_entrypoint_count": discovery.get("structured_entrypoint_count", 0) > 0,
         "lead_skills_sk034_sk050": all(f"SK{i:03d}" not in coverage.get("missing_implementations", []) for i in range(34, 51)),
         "phase5_workflows": len([w for w in wfs if w.get("id") in {"inbound-email-triage", "response-qa", "conversation-intel"}]) >= 3,
     }
