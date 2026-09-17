@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A074 Support Triage Input",
+  "type": "object",
+  "required": ["support_ticket"],
+  "properties": {
+    "support_ticket": {"type": "object"},
+    "customer_health": {"type": "object"},
+    "triage_rules": {"type": "array", "items": {"type": "object"}},
+    "triage_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
