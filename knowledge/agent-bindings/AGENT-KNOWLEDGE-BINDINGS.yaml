@@ -1,0 +1,85 @@
+version: "1.0"
+status: canonical
+description: Agent → knowledge pack bindings (Phase 7)
+fail_closed: true
+bindings:
+  - {agent: A001, knowledge: [KP001, KP004]}
+  - {agent: A002, knowledge: [KP004]}
+  - {agent: A034, knowledge: [KP004]}
+  - {agent: A035, knowledge: [KP004]}
+  - {agent: A036, knowledge: [KP004]}
+  - {agent: A037, knowledge: [KP004]}
+  - {agent: A038, knowledge: [KP004]}
+  - {agent: A039, knowledge: [KP004]}
+  - {agent: A041, knowledge: [KP004]}
+  - {agent: A043, knowledge: [KP003, KP004, KP005]}
+  - {agent: A044, knowledge: [KP002, KP003, KP005]}
+  - {agent: A049, knowledge: [KP002, KP003, KP004]}
+  - {agent: A050, knowledge: [KP005]}
+  - {agent: A052, knowledge: [KP005]}
+  - {agent: A054, knowledge: [KP004, KP005]}
+  - {agent: A055, knowledge: [KP004, KP005]}
+  - {agent: A060, knowledge: [KP003, KP005]}
+  - {agent: A065, knowledge: [KP003, KP007]}
+  - {agent: A066, knowledge: [KP005]}
+  - {agent: A067, knowledge: [KP005, KP007]}
+  - {agent: A068, knowledge: [KP002, KP005]}
+  - {agent: A069, knowledge: [KP004, KP005]}
+  - {agent: A070, knowledge: [KP004, KP007]}
+  - {agent: A071, knowledge: [KP005]}
+  - {agent: A072, knowledge: [KP003, KP007]}
+  - {agent: A073, knowledge: [KP004, KP007]}
+  - {agent: A074, knowledge: [KP005, KP007]}
+  - {agent: A075, knowledge: [KP004, KP007]}
+  - {agent: A076, knowledge: [KP004, KP007]}
+  - {agent: A077, knowledge: [KP005, KP007]}
+  - {agent: A078, knowledge: [KP003, KP004]}
+  - {agent: A079, knowledge: [KP003, KP004]}
+  - {agent: A080, knowledge: [KP003, KP004]}
+  - {agent: A081, knowledge: [KP003, KP004]}
+  - {agent: A082, knowledge: [KP003, KP004]}
+  - {agent: A083, knowledge: [KP003, KP004]}
+  - {agent: A084, knowledge: [KP001, KP003]}
+  - {agent: A085, knowledge: [KP002, KP003]}
+  - {agent: A086, knowledge: [KP001, KP002]}
+  - {agent: A087, knowledge: [KP002, KP003]}
+  - {agent: A088, knowledge: [KP003, KP004]}
+  - {agent: A089, knowledge: [KP004]}
+  - {agent: A090, knowledge: [KP001, KP004]}
+  - {agent: A091, knowledge: [KP002, KP004]}
+  - {agent: A092, knowledge: [KP004]}
+  - {agent: A093, knowledge: [KP001, KP004]}
+  - {agent: A094, knowledge: [KP004]}
+  - {agent: A095, knowledge: [KP004]}
+  - {agent: A096, knowledge: [KP001, KP004]}
+  - {agent: A097, knowledge: [KP004]}
+  - {agent: A098, knowledge: [KP004]}
+  - {agent: A099, knowledge: [KP004]}
+  - {agent: A100, knowledge: [KP004]}
+  - {agent: A101, knowledge: [KP004]}
+  - {agent: A102, knowledge: [KP004]}
+  - {agent: A103, knowledge: [KP004]}
+  - {agent: A104, knowledge: [KP004]}
+  - {agent: A105, knowledge: [KP004]}
+  - {agent: A106, knowledge: [KP004]}
+  - {agent: A107, knowledge: [KP004]}
+  - {agent: A108, knowledge: [KP004]}
+  - {agent: A109, knowledge: [KP004]}
+  - {agent: A110, knowledge: [KP004, KP007]}
+  - {agent: A111, knowledge: [KP004]}
+  - {agent: A112, knowledge: [KP004, KP007]}
+  - {agent: A113, knowledge: [KP004]}
+  - {agent: A114, knowledge: [KP004]}
+  - {agent: A115, knowledge: [KP004]}
+  - {agent: A116, knowledge: [KP004]}
+  - {agent: A117, knowledge: [KP001, KP004]}
+  - {agent: A118, knowledge: [KP004]}
+  - {agent: A119, knowledge: [KP004]}
+  - {agent: A120, knowledge: [KP001, KP004]}
+  - {agent: A121, knowledge: [KP004, KP007]}
+  - {agent: A122, knowledge: [KP004]}
+  - {agent: A123, knowledge: [KP004]}
+  - {agent: A124, knowledge: [KP004]}
+  - {agent: A125, knowledge: [KP004]}
+  - {agent: A126, knowledge: [KP004]}
+  - {agent: A127, knowledge: [KP004, KP007]}
