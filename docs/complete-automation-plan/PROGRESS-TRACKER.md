@@ -1,8 +1,6 @@
 # Progress Tracker — Complete Automation
 
-**Last updated:** 2026-09-17 (Phase 8 marketing workflows)
-
-Legend: 🟢 done · 🟡 partial · ⚪ not started
+**Last updated:** 2026-09-17 (Phase 9 evaluation harness)
 
 | Phase | Status |
 |-------|--------|
@@ -14,13 +12,15 @@ Legend: 🟢 done · 🟡 partial · ⚪ not started
 | P5 Inbound/comms | 🟢 |
 | P6 Remaining agents | 🟢 |
 | P7 Knowledge/RAG | ⚪ |
-| **P8 Marketing workflows** | **🟢** |
-| P9 Memory | ⚪ |
-| P10 Full E2E | ⚪ |
+| P8 Marketing workflows | 🟢 |
+| **P9 Evaluation** | **🟡** harness 🟢 / live COMPLETE marks ⚪ |
+| P10 Hardening | ⚪ |
 
-### Phase 8 detail
+### Phase 9 detail
 | ID | Item | Status |
 |----|------|--------|
-| P8.1 | content-calendar | 🟢 |
-| P8.2 | seo-audit | 🟢 |
-| P8.3 | social-content-pipeline | 🟢 |
+| P9.1 | Golden fixtures generator | 🟢 |
+| P9.2 | Offline pyramid tests | 🟢 |
+| P9.3 | Chain definitions | 🟢 |
+| P9.4 | CI regression job | 🟢 |
+| P9.5 | Mark agents COMPLETE | ⚪ gated on live evidence |
