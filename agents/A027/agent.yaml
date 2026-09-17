@@ -1,0 +1,43 @@
+id: A027
+name: Partner Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Define partner types, value exchange, enablement needs and joint go-to-market rules from GTM and channel strategy.
+inputs:
+  required: [gtm_strategy, channel_strategy]
+  optional: [offer_pricing_strategy, messaging_positioning, partner_constraints]
+outputs:
+  primary: partner_strategy
+  required_fields: [partner_types, value_exchange, enablement_needs, joint_gtm_rules, success_metrics, confidence, assumptions, derived_from]
+  downstream_events: [partner_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_partner_types, set_value_exchange, define_enablement, set_joint_gtm, define_metrics, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - partner_model_aligns_with_GTM_and_channels
+  - enablement_and_joint_rules_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A026
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
