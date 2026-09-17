@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A070 Communication Knowledge Extractor Output",
+  "type": "object",
+  "required": ["status", "faqs", "objection_handlers", "playbook_snippets", "tags", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "faqs": {"type": "array", "items": {"type": "object"}},
+    "objection_handlers": {"type": "array", "items": {"type": "object"}},
+    "playbook_snippets": {"type": "array", "items": {"type": "object"}},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
