@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A028 Continuous Improvement Strategy Input",
+  "type": "object",
+  "required": ["experiment_growth_plan", "revenue_operations_strategy"],
+  "properties": {
+    "experiment_growth_plan": {"type": "object"},
+    "revenue_operations_strategy": {"type": "object"},
+    "analytics_reporting_strategy": {"type": "object"},
+    "feedback_insights_strategy": {"type": "object"},
+    "improvement_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
