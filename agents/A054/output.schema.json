@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A054 Qualification Output",
+  "type": "object",
+  "required": ["status", "status_per_lead", "criteria_met", "handoff_recommendation", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "status_per_lead": {"type": "array", "items": {"type": "object"}},
+    "criteria_met": {"type": "array", "items": {"type": "object"}},
+    "handoff_recommendation": {"type": "object"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
