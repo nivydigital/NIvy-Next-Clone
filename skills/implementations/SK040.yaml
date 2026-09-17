@@ -1,0 +1,18 @@
+id: SK040
+name: Lead Segmentation
+version: "1.0"
+status: implementation
+objective: assign leads to deterministic useful segments
+inputs: [lead, segment_rules]
+outputs: [segment, rationale]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: match_rules}
+  - {step: 3, action: assign_segment}
+  - {step: 4, action: document_rationale}
+quality_checks: [segment_from_rules_only]
+failure_policy: fail_closed_on_missing_rules
+evidence_policy: rationale cites matched rules
+dependencies: [SK039]
+tools: [tool.ollama.generate]
+acceptance: [segment present, rationale present]
