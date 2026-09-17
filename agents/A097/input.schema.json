@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A097 Resource Planning Analyst Input",
+  "type": "object",
+  "required": ["operational_plan"],
+  "properties": {
+    "operational_plan": {"type": "object"},
+    "resource_inventory": {"type": "object"},
+    "capacity_constraints": {"type": "array", "items": {"type": "string"}},
+    "planning_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
