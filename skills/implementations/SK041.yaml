@@ -1,0 +1,18 @@
+id: SK041
+name: Account Research
+version: "1.0"
+status: implementation
+objective: produce an evidence-backed account brief
+inputs: [company, website, context]
+outputs: [account_brief, signals, sources]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: gather_public_evidence}
+  - {step: 3, action: synthesize_brief}
+  - {step: 4, action: extract_signals}
+quality_checks: [sources_for_material_claims]
+failure_policy: fail_closed_on_missing_company
+evidence_policy: sources array required
+dependencies: [SK001, SK034]
+tools: [tool.ollama.generate]
+acceptance: [account_brief is object, sources is array]
