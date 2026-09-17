@@ -1,10 +1,11 @@
-"""Lead → Outreach workflow orchestrator (Phase 4).
+"""Lead → Outreach workflow orchestrator (Phase 4 + P2 skill contracts).
 
 State machine: pending → running → await_approval → approved → sending → sent
 → following_up → done (or failed / cancelled).
 
 Idempotency: lead-outreach:{campaign_id}:{lead_key}
 Dry-run: never live email send
+P2/D1: each pipeline step records STD-01 skill contract execution
 """
 from __future__ import annotations
 
@@ -19,6 +20,18 @@ from uuid import uuid4
 
 from ..audit import audit_log
 from ..tools import execute_tool
+from .skill_steps import STEP_ORDER, STEP_PROMPT_MAP, STEP_SKILL_MAP, run_pipeline_steps
+
+# Re-export for tests / callers
+__all__ = [
+    "WorkflowState",
+    "LeadOutreachOrchestrator",
+    "lead_outreach",
+    "make_idempotency_key",
+    "STEP_ORDER",
+    "STEP_SKILL_MAP",
+    "STEP_PROMPT_MAP",
+]
 
 
 class WorkflowState(StrEnum):
@@ -46,8 +59,6 @@ ALLOWED_TRANSITIONS: dict[WorkflowState, set[WorkflowState]] = {
     WorkflowState.FAILED: set(),
     WorkflowState.CANCELLED: set(),
 }
-
-STEP_ORDER = ["discover", "enrich", "quality", "verify", "score", "research", "plan", "personalize", "draft"]
 
 
 def _now() -> str:
@@ -161,22 +172,51 @@ class LeadOutreachOrchestrator:
                 return run
             raise ValueError(f"cannot advance_to_draft from state {run.state.value}")
         lead = run.lead
-        for step in STEP_ORDER:
-            if step in run.steps_completed:
-                continue
-            run.artifacts[step] = self._mock_step(step, lead, run.artifacts)
-            run.steps_completed.append(step)
-            audit_log.record(event_type="workflow.step", actor=run.actor, action=step, status="completed", request_id=run.run_id, data={"step": step, "dry_run": run.dry_run})
+        steps, artifacts, errors = run_pipeline_steps(
+            lead=lead,
+            campaign_id=run.campaign_id,
+            dry_run=run.dry_run,
+            actor=run.actor,
+            steps_completed=list(run.steps_completed),
+            artifacts=dict(run.artifacts),
+            mock_step=self._mock_step,
+        )
+        run.steps_completed = steps
+        run.artifacts = artifacts
+        run.errors.extend(errors)
+        for step in steps:
+            skill_meta = (run.artifacts.get(step) or {}).get("skill") if isinstance(run.artifacts.get(step), dict) else {}
+            audit_log.record(
+                event_type="workflow.step",
+                actor=run.actor,
+                action=step,
+                status="completed",
+                request_id=run.run_id,
+                data={
+                    "step": step,
+                    "skill_id": (skill_meta or {}).get("skill_id"),
+                    "prompt_id": (skill_meta or {}).get("prompt_id"),
+                    "dry_run": run.dry_run,
+                    "mode": (skill_meta or {}).get("mode"),
+                },
+            )
         email = str(lead.get("email") or "").strip()
         if email and "verify" in run.steps_completed:
             try:
-                run.artifacts["verify_tool"] = await execute_tool(tool_id="tool.email.verify", arguments={"email": email}, actor=run.actor, approved=False, request_id=run.run_id)
+                run.artifacts["verify_tool"] = await execute_tool(
+                    tool_id="tool.email.verify",
+                    arguments={"email": email},
+                    actor=run.actor,
+                    approved=False,
+                    request_id=run.run_id,
+                )
             except Exception as exc:  # noqa: BLE001
                 run.errors.append(f"verify: {exc}")
+        draft_art = run.artifacts.get("draft") or {}
         draft = {
             "to": email,
-            "subject": run.artifacts.get("draft", {}).get("subject") or f"Intro for {lead.get('company') or lead.get('name') or 'you'}",
-            "body": run.artifacts.get("draft", {}).get("body") or f"Hi {lead.get('name') or 'there'},\n\nDraft for {lead.get('company') or 'your team'}.\n",
+            "subject": draft_art.get("subject") or f"Intro for {lead.get('company') or lead.get('name') or 'you'}",
+            "body": draft_art.get("body") or f"Hi {lead.get('name') or 'there'},\n\nDraft for {lead.get('company') or 'your team'}.\n",
         }
         run.artifacts["email_draft"] = draft
         self._transition(run, WorkflowState.AWAIT_APPROVAL, "draft_ready")
@@ -217,7 +257,13 @@ class LeadOutreachOrchestrator:
                 os.environ.setdefault("EMAIL_MOCK", "1")
                 receipt = {"ok": True, "mock": True, "dry_run": True, "message_id": f"dry-run-{run.run_id[:8]}", "to": to, "subject": subject}
             else:
-                receipt = await execute_tool(tool_id="tool.email.send", arguments={"to": to, "subject": subject, "body": body}, actor=run.actor, approved=True, request_id=run.run_id)
+                receipt = await execute_tool(
+                    tool_id="tool.email.send",
+                    arguments={"to": to, "subject": subject, "body": body},
+                    actor=run.actor,
+                    approved=True,
+                    request_id=run.run_id,
+                )
             run.artifacts["send_receipt"] = receipt
             run.steps_completed.append("send")
             self._transition(run, WorkflowState.SENT, "send_ok")
