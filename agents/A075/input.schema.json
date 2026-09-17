@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A075 Customer Success Planner Input",
+  "type": "object",
+  "required": ["health_assessment"],
+  "properties": {
+    "health_assessment": {"type": "object"},
+    "onboarding_schedule": {"type": "object"},
+    "account_context": {"type": "object"},
+    "planning_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
