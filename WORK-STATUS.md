@@ -5,10 +5,10 @@
 - Current canonical plan: `docs/plans/AIOS-FINAL-IMPLEMENTATION-PLAN-v3.1.md`.
 - Progress tracker: `docs/plans/AIOS-PROGRESS-TRACKER.md` + `docs/agent-implementation-plan/AGENT-PROGRESS-TRACKER.md`.
 - Agent testing policy: **DEFERRED** — see `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`. Full G16/G17/testing will be executed at the end for all agents.
-- Last completed (agent implementation track): A001–A009 strategy chain (implementation level).
+- Last completed (agent implementation track): A001–A012 strategy chain (implementation level).
 - Exact macro completion %: **Not yet calculated**. Phase completion is tracked separately from component runtime completion.
 - Start here: read this file → `docs/execution-system/MASTER-EXECUTION-SYSTEM.md` → canonical plan → progress tracker → highest-priority incomplete + unclaimed task.
-- Next task (agent track): Continue sequential agent implementation (A010+) under deferred-testing policy. Next task (phase track): Phase 4 — Policy, Approval, Safety & Trust.
+- Next task (agent track): Continue sequential agent implementation (A013+) under deferred-testing policy. Next task (phase track): Phase 4 — Policy, Approval, Safety & Trust.
 
 ## Canonical implementation plan
 - `docs/plans/AIOS-FINAL-IMPLEMENTATION-PLAN-v3.1.md` — canonical v3.1 sequencing restored from Raw-Repository.
@@ -26,9 +26,12 @@
 | A004 | Competitor Intelligence | implementation | Runtime + schemas |
 | A005 | Channel Strategy | implementation | Runtime + schemas |
 | A006 | Messaging & Positioning Strategy | implementation | Runtime + schemas |
-| A007 | Content Strategy | implementation | Runtime + schemas (2026-09-17) |
-| A008 | Offer & Pricing Strategy | implementation | Runtime + schemas (2026-09-17) |
-| A009 | Go-to-Market Strategy | implementation | Runtime + schemas (2026-09-17) |
+| A007 | Content Strategy | implementation | Runtime + schemas |
+| A008 | Offer & Pricing Strategy | implementation | Runtime + schemas |
+| A009 | Go-to-Market Strategy | implementation | Runtime + schemas |
+| A010 | Campaign Strategy | implementation | Runtime + schemas (2026-09-17) |
+| A011 | Sales Enablement Strategy | implementation | Runtime + schemas (2026-09-17) |
+| A012 | Experiment & Growth Planning | implementation | Runtime + schemas (2026-09-17) |
 
 Testing for all of the above is deferred per `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`.
 
@@ -96,6 +99,7 @@ Testing for all of the above is deferred per `docs/agent-implementation-plan/TES
 | 2026-09-16 | Upgraded 50 skills and created prompt/knowledge/memory/reusable-asset registries | Phase 2 VERIFIED | Phase 3 | Runtime evaluation still pending by design | `skills/registry.yaml`, `prompts/registry.yaml`, `knowledge/packs/registry.yaml`, `memory/registry.yaml`, `research/reusable-assets/registry.yaml` |
 | 2026-09-16 | Added agent factory, Tier-1 agent declarations and fail-closed capability bindings | Phase 3 VERIFIED | Phase 4 | External side-effect approval layer is Phase 4 | `agents/_template/agent.yaml`, `agents/registry.yaml`, `knowledge/agent-bindings/AGENT-SKILL-BINDINGS.yaml` |
 | 2026-09-17 | Deferred full testing policy recorded; A006 Messaging & Positioning Strategy Agent implemented | Agent track A001–A006 at implementation level | A007+ under deferred testing | Testing deferred to final phase | `docs/agent-implementation-plan/TESTING-PLAN-DEFERRED.md`, `agents/A006/*`, `backend/app/runtime/a006.py` |
-| 2026-09-17 | A007 Content Strategy, A008 Offer & Pricing Strategy, A009 Go-to-Market Strategy implemented | Agent track A001–A009 at implementation level | A010+ under deferred testing | Testing deferred to final phase | `agents/A007/*`, `agents/A008/*`, `agents/A009/*`, `backend/app/runtime/a007.py`, `a008.py`, `a009.py` |
+| 2026-09-17 | A007 Content Strategy, A008 Offer & Pricing Strategy, A009 Go-to-Market Strategy implemented | Agent track A001–A009 at implementation level | A010+ under deferred testing | Testing deferred to final phase | `agents/A007/*`–`A009/*`, runtimes a007–a009 |
+| 2026-09-17 | A010 Campaign Strategy, A011 Sales Enablement Strategy, A012 Experiment & Growth Planning implemented | Agent track A001–A012 at implementation level | A013+ under deferred testing | Testing deferred to final phase | `agents/A010/*`–`A012/*`, runtimes a010–a012 |
 
 Update this file after every meaningful work session/commit.
