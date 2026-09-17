@@ -1,0 +1,18 @@
+id: SK046
+name: Call Preparation
+version: "1.0"
+status: implementation
+objective: prepare evidence-backed call briefs and questions
+inputs: [account, meeting_context]
+outputs: [brief, agenda, questions, risks]
+procedure:
+  - {step: 1, action: validate_inputs}
+  - {step: 2, action: build_brief}
+  - {step: 3, action: propose_agenda_and_questions}
+  - {step: 4, action: list_risks}
+quality_checks: [questions_non_empty]
+failure_policy: fail_closed_on_missing_account
+evidence_policy: brief cites account research
+dependencies: [SK041, SK043]
+tools: [tool.ollama.generate]
+acceptance: [brief present, questions is array]
