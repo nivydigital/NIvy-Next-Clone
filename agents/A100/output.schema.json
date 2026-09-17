@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A100/output.schema.json",
+  "title": "A100 Trace Auditor Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["audit_summary", "policy_findings", "tool_findings", "data_handling_findings", "recommendations", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "audit_summary": {"type": "object"},
+    "policy_findings": {"type": "array", "items": {"type": "object"}},
+    "tool_findings": {"type": "array", "items": {"type": "object"}},
+    "data_handling_findings": {"type": "array", "items": {"type": "object"}},
+    "recommendations": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}
