@@ -102,7 +102,7 @@ All applicable G0–G19 pass; evidence paths/commit refs are recorded; tracker i
 
 | ID | Agent | Status | G0 | G1 | G2 | G3 | G4 | G5 | G6 | G7 | G8 | G9 | G10 | G11 | G12 | G13 | G14 | G15 | G16 | G17 | G18 | G19 | G20 | Evidence / Blocker |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A001 | Market Research | NOT_STARTED | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
+| A001 | Market Research | INTEGRATION | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ◐ | ☑ | ☑ | ☑ | ☑ | ☑ | ☑ | ◐ | ☐ | CI #72 passed; deterministic evaluation 5/5 (100%); G12/G19 live runtime evidence pending; A002 remains BLOCKED. |
 | A002 | ICP Strategist | NOT_STARTED | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
 | A034 | Lead Discovery | NOT_STARTED | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
 | A035 | Contact Discovery | NOT_STARTED | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | ☐ | |
