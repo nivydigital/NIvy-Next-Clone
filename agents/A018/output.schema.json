@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A018 Customer Onboarding Strategy Output",
+  "type": "object",
+  "required": ["status", "journey_stages", "milestones", "success_criteria", "handoff_rules", "risk_signals", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "journey_stages": {"type": "array", "items": {"type": "object"}},
+    "milestones": {"type": "array", "items": {"type": "object"}},
+    "success_criteria": {"type": "array", "items": {"type": "object"}},
+    "handoff_rules": {"type": "array", "items": {"type": "object"}},
+    "risk_signals": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
