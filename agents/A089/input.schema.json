@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A089 Marketing Analytics Input",
+  "type": "object",
+  "required": ["marketing_performance"],
+  "properties": {
+    "marketing_performance": {"type": "object"},
+    "marketing_strategy": {"type": "object"},
+    "attribution_notes": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
