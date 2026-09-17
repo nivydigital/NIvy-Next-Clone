@@ -1,0 +1,43 @@
+id: A038
+name: Verification
+version: "1.0"
+status: implementation
+category: lead_ops
+purpose: Verify critical lead and contact attributes (identity, domain, role signals) against public evidence before downstream use.
+inputs:
+  required: [enriched_leads]
+  optional: [data_quality_report, verification_fields, verification_constraints]
+outputs:
+  primary: verification_result
+  required_fields: [verified_records, failed_checks, evidence, confidence, assumptions, derived_from]
+  downstream_events: [verification.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, select_fields, verify_attributes, attach_evidence, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - verification_is_evidence_backed
+  - failed_checks_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A038 Verification)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
