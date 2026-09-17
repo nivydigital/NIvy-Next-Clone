@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A027 Partner Strategy Output",
+  "type": "object",
+  "required": ["status", "partner_types", "value_exchange", "enablement_needs", "joint_gtm_rules", "success_metrics", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "partner_types": {"type": "array", "items": {"type": "object"}},
+    "value_exchange": {"type": "object"},
+    "enablement_needs": {"type": "array", "items": {"type": "object"}},
+    "joint_gtm_rules": {"type": "array", "items": {"type": "object"}},
+    "success_metrics": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
