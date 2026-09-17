@@ -1,0 +1,43 @@
+id: A028
+name: Continuous Improvement Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_ops
+purpose: Define learning loops, experiment-to-scale process, retrospective cadence and improvement ownership from experiment and RevOps strategy.
+inputs:
+  required: [experiment_growth_plan, revenue_operations_strategy]
+  optional: [analytics_reporting_strategy, feedback_insights_strategy, improvement_constraints]
+outputs:
+  primary: continuous_improvement_strategy
+  required_fields: [learning_loops, experiment_to_scale, retrospective_cadence, improvement_ownership, prioritization_rules, confidence, assumptions, derived_from]
+  downstream_events: [continuous_improvement_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_learning_loops, set_experiment_to_scale, define_retros, assign_ownership, set_prioritization, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - improvement_system_aligns_with_experiments_and_RevOps
+  - ownership_and_cadence_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: sequential strategy chain after A027
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
