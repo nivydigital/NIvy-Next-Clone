@@ -1,18 +1,66 @@
 id: SK044
 name: Email Outreach
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: draft truthful personalized email outreach
-inputs: [lead, account_context, offer]
-outputs: [subject, body, personalization_evidence, approval_state]
+category: sales
+standard: STD-01/v2
+objective: Draft truthful personalized email outreach from verified context only; never send without approval.
+non_goals:
+  - Claiming facts not present in lead or account_context
+  - Sending email or performing external side effects without agent tool authorization
+  - Inventing personalization hooks
+inputs:
+  required:
+    - {name: lead, type: object, constraints: "must include recipient identity and preferably email"}
+    - {name: account_context, type: object, constraints: "verified account brief or enrichment"}
+    - {name: offer, type: object, constraints: "approved offer with scope and claims"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: subject, type: string}
+    - {name: body, type: string}
+    - {name: personalization_evidence, type: array}
+    - {name: approval_state, type: string}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: personalize_from_verified_context}
-  - {step: 3, action: draft_email}
-  - {step: 4, action: set_approval_state_pending}
-quality_checks: [no_unverifiable_claims, approval_state_set]
-failure_policy: fail_closed_on_missing_lead; side_effects require agent tool auth
-evidence_policy: personalization_evidence required
-dependencies: [SK043, SK049]
-tools: [tool.ollama.generate]
-acceptance: [subject present, body present, approval_state present]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require lead, account_context, and offer. Fail closed if lead missing. Warn if email address absent (draft still allowed).", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Extract only verified hooks from account_context (company name, role, recent signal, website facts). Load offer claims that are approved. Reject unverifiable claims.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Draft subject and body that (1) reference only verified personalization hooks, (2) state offer truthfully within approved claims, (3) include clear CTA. Build personalization_evidence listing each hook and its source field. Set approval_state to pending_approval (never auto-send).", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure no unverifiable claims; personalization_evidence non-empty when hooks used; approval_state set. Flag missing recipient email as warning.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm subject, body, personalization_evidence, approval_state present. approval_state must be pending_approval|approved|rejected.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return subject, body, personalization_evidence, approval_state, status, confidence, next_action (typically await_human_approval).", on_failure: fail_closed}
+preconditions:
+  - lead, account_context, offer present
+postconditions:
+  - approval_state is pending_approval by default
+  - personalization_evidence backs any personalized claims
+quality_checks:
+  - no_unverifiable_claims
+  - approval_state_set
+  - personalization_evidence_present_when_hooks_used
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing lead; side effects require agent tool auth; partial when draft produced but hooks thin
+evidence_policy: personalization_evidence required for personalized lines; never invent citations
+dependencies:
+  skills: [SK043, SK049]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal, pii]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns subject, body, personalization_evidence, approval_state", verify: schema}
+  - {id: AC2, statement: "Rejects missing lead", verify: test}
+  - {id: AC3, statement: "approval_state defaults to pending_approval; no auto-send", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_lead, thin_context, no_email_warning]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
