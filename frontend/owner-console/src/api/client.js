@@ -76,4 +76,13 @@ export const api = {
   approve: (id) => request(`/api/v1/runtime/approvals/${id}/approve`, { method: "POST" }),
   sendEmail: (body) =>
     request("/api/v1/email/send", { method: "POST", body: JSON.stringify(body) }),
+  listAudit: (params = {}) => {
+    const q = new URLSearchParams();
+    if (params.limit) q.set("limit", String(params.limit));
+    if (params.event_type) q.set("event_type", params.event_type);
+    if (params.status) q.set("status", params.status);
+    const qs = q.toString();
+    return request(`/api/v1/runtime/audit${qs ? `?${qs}` : ""}`);
+  },
+  observabilitySummary: () => request("/api/v1/runtime/observability/summary"),
 };
