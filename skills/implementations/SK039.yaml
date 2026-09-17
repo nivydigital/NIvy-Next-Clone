@@ -1,0 +1,18 @@
+id: SK039
+name: Lead Scoring
+version: "1.0"
+status: implementation
+objective: apply configured qualification criteria consistently
+inputs: [lead, scoring_model]
+outputs: [score, factors, confidence]
+procedure:
+  - {step: 1, action: validate_inputs, detail: "Validate lead and scoring_model"}
+  - {step: 2, action: apply_model, detail: "Score lead against configured factors"}
+  - {step: 3, action: explain_factors, detail: "List factor contributions"}
+  - {step: 4, action: set_confidence, detail: "high/medium/low from data completeness"}
+quality_checks: [score_numeric_or_tier, factors_non_empty]
+failure_policy: fail_closed_on_missing_scoring_model
+evidence_policy: factors reference input fields
+dependencies: [SK037, SK038]
+tools: [tool.ollama.generate]
+acceptance: [score present, factors is array]
