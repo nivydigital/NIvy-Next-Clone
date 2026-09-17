@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A106/input.schema.json",
+  "title": "A106 Skill Improvement Agent Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skill_spec", "improvement_signals"],
+  "properties": {
+    "skill_spec": {"type": "object"},
+    "improvement_signals": {"type": "object"},
+    "evaluation_evidence": {"type": "object"},
+    "dependency_map": {"type": "object"},
+    "prior_skill_versions": {"type": "object"},
+    "policy_constraints": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}
