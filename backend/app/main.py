@@ -32,139 +32,120 @@ class WorkflowRunRequest(BaseModel):
     dry_run: bool | None = None
     stop_after_stage: str | None = None
 class A001ResearchRequest(BaseModel): research_question: str; target_market: str; geography: str | None = None; industry: str | None = None; customer_segment: str | None = None; time_horizon: str | None = None; competitor_set: list[str] | None = None; source_policy: dict = Field(default_factory=dict); output_format: str | None = None; evidence: list[dict] = Field(default_factory=list)
-class A002ICPRequest(BaseModel): market_research: dict; business_offer: dict = Field(default_factory=dict); existing_customers: list = Field(default_factory=list); constraints: dict = Field(default_factory=dict)
-class A003PersonaRequest(BaseModel): icp: dict; market_context: dict = Field(default_factory=dict)
-class A004CompetitorRequest(BaseModel): competitors: list[str]; market: str | None = None; dimensions: list[str] = Field(default_factory=list)
-class A005ChannelRequest(BaseModel): icp: dict; persona: dict = Field(default_factory=dict); budget: dict = Field(default_factory=dict)
-class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
+class A002ICPRequest(BaseModel): market_research: dict; business_offer: dict = Field(default_factory=dict); existing_customers: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); geography: str | None = None; revenue_targets: dict = Field(default_factory=dict); request_id: str | None = None
+class A003PersonaRequest(BaseModel): icp_definition: dict; market_research: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); customer_interviews: list[dict] = Field(default_factory=list); exclusions: list[str] = Field(default_factory=list); request_id: str | None = None
+class A004CompetitorRequest(BaseModel): market_research: dict; icp_definition: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); competitor_set: list[str] = Field(default_factory=list); geography: str | None = None; request_id: str | None = None
+class A005ChannelRequest(BaseModel): market_research: dict; icp_definition: dict; competitor_intelligence: dict = Field(default_factory=dict); business_offer: dict = Field(default_factory=dict); channel_constraints: list[str] = Field(default_factory=list); historical_performance: list[dict] = Field(default_factory=list); request_id: str | None = None
 class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); approval_id: str | None = None
+class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health():
-    return {"status": "ok", "service": "nivy-next-aios"}
-
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.9.2", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system_status():
-    h = runtime_engine.health()
-    return {"status": "online", "runtime": h, "version": "0.9.2"}
-
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.9.2"}
 @app.get("/api/v1/runtime/health")
-def runtime_health():
-    return runtime_engine.health()
+def runtime_health(): return runtime_engine.health()
 
 @app.get("/api/v1/runtime/agents")
-def agents_list():
+def runtime_list_agents():
     return list_agents()
 
 @app.get("/api/v1/runtime/agents/{agent_id}")
-def agent_get(agent_id: str):
+def runtime_get_agent(agent_id: str):
     try:
-        return get_agent(agent_id)
-    except KeyError as exc:
+        return get_agent(agent_id.upper() if agent_id[0].lower() == "a" else agent_id)
+    except RuntimeDenied as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 @app.post("/api/v1/runtime/agents/{agent_id}/execute")
-async def agent_execute(agent_id: str, request: AgentExecuteRequest):
+async def runtime_execute_agent(agent_id: str, request: AgentExecuteRequest):
+    aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
+    body = dict(request.payload or {})
+    if request.request_id and "request_id" not in body:
+        body["request_id"] = request.request_id
     try:
-        return await execute_agent(
-            agent_id,
-            prompt_id=request.prompt_id,
-            allow_llm_fallback=request.allow_llm_fallback,
-            request_id=request.request_id,
-            payload=request.payload,
-        )
+        result = await execute_agent(aid, body, prompt_id=request.prompt_id, allow_llm_fallback=request.allow_llm_fallback)
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
     except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+        msg = str(exc)
+        if "requires" in msg or "missing" in msg.lower():
+            raise HTTPException(status_code=422, detail=msg) from exc
+        raise HTTPException(status_code=500, detail=msg) from exc
+    if getattr(result, "status", None) == "failed":
+        raise HTTPException(status_code=502, detail=result.error or f"{aid} runtime failed")
+    return result.__dict__ if hasattr(result, "__dict__") else result
 
 @app.get("/api/v1/runtime/skills/coverage")
 def skills_coverage():
     return skill_coverage_report()
 
 @app.get("/api/v1/runtime/agents/{agent_id}/skills/resolve")
-def agent_skills_resolve(agent_id: str):
+def skills_resolve(agent_id: str):
+    aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
     try:
-        return resolve_agent_skills(agent_id)
-    except Exception as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
+        return resolve_agent_skills(aid)
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
 
+# --- Phase 5 Workflows ---
 @app.get("/api/v1/runtime/workflows")
-def workflows_list():
+def runtime_list_workflows():
     return {"items": list_workflow_defs()}
 
 @app.get("/api/v1/runtime/workflows/{workflow_id}")
-def workflow_get(workflow_id: str):
+def runtime_get_workflow(workflow_id: str):
     try:
         return load_workflow(workflow_id)
-    except Exception as exc:
+    except RuntimeDenied as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 @app.post("/api/v1/runtime/workflows/{workflow_id}/run")
-async def workflow_run(workflow_id: str, request: WorkflowRunRequest):
+async def runtime_run_workflow(workflow_id: str, request: WorkflowRunRequest):
     try:
         return await run_workflow(
             workflow_id,
-            payload=request.payload,
+            dict(request.payload or {}),
             dry_run=request.dry_run,
             stop_after_stage=request.stop_after_stage,
         )
-    except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 @app.post("/api/v1/runtime/agents/{agent_id}/run")
-async def agent_run(agent_id: str, request: AgentRunRequest):
-    try:
-        return await runtime_engine.run_llm(agent_id, request.prompt, request.prompt_id, request.context)
-    except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-
+async def run_agent(agent_id: str, request: AgentRunRequest):
+    try: result = await runtime_engine.run_llm(agent_id, request.prompt or "", request.prompt_id, dict(request.context))
+    except RuntimeDenied as exc: raise HTTPException(status_code=403, detail=str(exc)) from exc
+    return result.__dict__
 @app.post("/api/v1/runtime/agents/A001/research")
-async def a001_research(request: A001ResearchRequest):
-    try:
-        result = await run_a001_research(request.model_dump())
-    except A001ResearchError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    if result.status == "failed":
-        raise HTTPException(status_code=502, detail=result.error or "A001 runtime failed")
+async def run_a001(request: A001ResearchRequest):
+    try: result = await run_a001_research(request.model_dump())
+    except A001ResearchError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A001 runtime failed")
     return result.__dict__
-
 @app.post("/api/v1/runtime/agents/A002/icp")
-async def a002_icp(request: A002ICPRequest):
-    try:
-        result = await run_a002_icp(request.model_dump())
-    except A002ICPError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    if result.status == "failed":
-        raise HTTPException(status_code=502, detail=result.error or "A002 runtime failed")
+async def run_a002(request: A002ICPRequest):
+    try: result = await run_a002_icp(request.model_dump())
+    except A002ICPError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A002 runtime failed")
     return result.__dict__
-
 @app.post("/api/v1/runtime/agents/A003/persona")
-async def a003_persona(request: A003PersonaRequest):
-    try:
-        result = await run_a003_persona(request.model_dump())
-    except A003BuyerPersonaError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    if result.status == "failed":
-        raise HTTPException(status_code=502, detail=result.error or "A003 runtime failed")
+async def run_a003(request: A003PersonaRequest):
+    try: result = await run_a003_persona(request.model_dump())
+    except A003BuyerPersonaError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A003 runtime failed")
     return result.__dict__
-
 @app.post("/api/v1/runtime/agents/A004/competitor")
-async def a004_competitor(request: A004CompetitorRequest):
-    try:
-        result = await run_a004_competitor(request.model_dump())
-    except A004CompetitorError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    if result.status == "failed":
-        raise HTTPException(status_code=502, detail=result.error or "A004 runtime failed")
+async def run_a004(request: A004CompetitorRequest):
+    try: result = await run_a004_competitor(request.model_dump())
+    except A004CompetitorError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A004 runtime failed")
     return result.__dict__
-
 @app.post("/api/v1/runtime/agents/A005/channel")
-async def a005_channel(request: A005ChannelRequest):
-    try:
-        result = await run_a005_channel(request.model_dump())
-    except A005ChannelStrategyError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    if result.status == "failed":
-        raise HTTPException(status_code=502, detail=result.error or "A005 runtime failed")
+async def run_a005(request: A005ChannelRequest):
+    try: result = await run_a005_channel(request.model_dump())
+    except A005ChannelStrategyError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
+    if result.status == "failed": raise HTTPException(status_code=502, detail=result.error or "A005 runtime failed")
     return result.__dict__
 
 @app.get("/api/v1/runtime/approvals")
@@ -183,24 +164,19 @@ def list_approvals():
 
 @app.post("/api/v1/runtime/approvals")
 def request_approval(request: ApprovalRequest):
-    try:
-        return runtime_engine.request_approval(request.agent_id, request.tool_id, request.reason)
-    except RuntimeDenied as exc:
-        raise HTTPException(status_code=403, detail=str(exc)) from exc
-
+    try: return runtime_engine.request_approval(request.agent_id, request.tool_id, request.reason)
+    except RuntimeDenied as exc: raise HTTPException(status_code=403, detail=str(exc)) from exc
 @app.post("/api/v1/runtime/approvals/{approval_id}/approve")
 def approve(approval_id: str):
-    try:
-        return runtime_engine.approve(approval_id)
-    except RuntimeDenied as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    try: return runtime_engine.approve(approval_id)
+    except RuntimeDenied as exc: raise HTTPException(status_code=404, detail=str(exc)) from exc
 
+# --- Owner Console Phase 4 ---
 @app.get("/api/v1/runtime/audit")
 def list_audit(limit: int = 100):
-    """Owner Console Phase 4: run history / audit browser."""
+    """Run history / audit browser for Owner Console."""
     engine_events = list(getattr(runtime_engine, "audit", []) or [])
     log_events = audit_log.list()
-    # Prefer engine list if populated; merge unique by event_id
     by_id = {}
     for e in log_events + engine_events:
         if isinstance(e, dict):
@@ -214,7 +190,7 @@ def list_audit(limit: int = 100):
 
 @app.get("/api/v1/runtime/observability/summary")
 def observability_summary():
-    """Owner Console Phase 4: lightweight ops cards (no Grafana required)."""
+    """Lightweight ops cards (Grafana optional)."""
     engine_events = list(getattr(runtime_engine, "audit", []) or [])
     log_events = audit_log.list()
     events = engine_events if engine_events else log_events
@@ -248,69 +224,42 @@ def observability_summary():
 @app.post("/api/v1/runtime/agents/{agent_id}/tools/{tool_id}/execute")
 async def execute_tool(agent_id: str, tool_id: str, request: ToolRunRequest):
     result = await runtime_engine.execute(agent_id, tool_id, dict(request.payload), request.approval_id)
-    if result.status == "failed" and result.error and ("approval" in result.error or "protected" in result.error):
-        raise HTTPException(status_code=403, detail=result.error)
+    if result.status == "failed" and result.error and ("approval" in result.error or "protected" in result.error): raise HTTPException(status_code=403, detail=result.error)
     return result.__dict__
-
 @app.post("/api/v1/email/send")
 async def send_email(request: SendEmailRequest):
     payload = request.model_dump()
     if not request.approval_id:
-        raise HTTPException(status_code=403, detail="approval_id required for email send")
-    result = await runtime_engine.execute("email", "send", payload, request.approval_id)
+        approval = runtime_engine.request_approval("A044", "tool.email.send", "Explicit approval required before outbound email")
+        return {"status": "approval_required", "approval": approval, "next": "Resend with approval_id set to approval.approval_id after human approval"}
+    result = await runtime_engine.execute("A044", "tool.email.send", payload, request.approval_id)
+    if result.status == "failed": return {"status": "failed", "run": result.__dict__}
     return result.__dict__
-
-@app.get("/api/v1/revenue/leads")
-def list_leads():
-    return {"items": [lead.to_dict() for lead in revenue_engine.list_leads()]}
-
-@app.post("/api/v1/revenue/leads")
+@app.post("/api/v1/revenue/leads", status_code=201)
 def create_lead(request: LeadCreateRequest):
-    lead = revenue_engine.create_lead(
-        name=request.name,
-        email=str(request.email),
-        company=request.company,
-        source=request.source,
-        request_id=request.request_id,
-        actor=request.actor,
-    )
-    return lead.to_dict()
-
+    return revenue_engine.create_lead(name=request.name, email=str(request.email), company=request.company, source=request.source, request_id=request.request_id, actor=request.actor).to_dict()
+@app.get("/api/v1/revenue/leads")
+def list_leads(): return {"items": [lead.to_dict() for lead in revenue_engine.list_leads()]}
 @app.post("/api/v1/revenue/leads/{lead_id}/qualify")
 def qualify_lead(lead_id: str, request: LeadQualifyRequest):
-    try:
-        return revenue_engine.qualify(lead_id, score=request.score).to_dict()
-    except KeyError as exc:
-        raise HTTPException(status_code=404, detail="lead not found") from exc
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-
+    try: return revenue_engine.qualify(lead_id, score=request.score).to_dict()
+    except KeyError as exc: raise HTTPException(status_code=404, detail="lead not found") from exc
+    except ValueError as exc: raise HTTPException(status_code=422, detail=str(exc)) from exc
 @app.post("/api/v1/revenue/leads/{lead_id}/proposal/request")
 def request_proposal_approval(lead_id: str):
-    try:
-        return revenue_engine.request_proposal_approval(lead_id).to_dict()
-    except KeyError as exc:
-        raise HTTPException(status_code=404, detail="lead not found") from exc
-
+    try: return revenue_engine.request_proposal_approval(lead_id).to_dict()
+    except KeyError as exc: raise HTTPException(status_code=404, detail="lead not found") from exc
 @app.post("/api/v1/revenue/leads/{lead_id}/proposal/approve")
 def approve_proposal(lead_id: str):
-    try:
-        return revenue_engine.approve_proposal(lead_id, actor="human").to_dict()
-    except KeyError as exc:
-        raise HTTPException(status_code=404, detail="lead not found") from exc
-
+    try: return revenue_engine.approve_proposal(lead_id, actor="human").to_dict()
+    except KeyError as exc: raise HTTPException(status_code=404, detail="lead not found") from exc
 @app.get("/api/v1/revenue/leads/{lead_id}/audit")
-def lead_audit(lead_id: str):
-    return {"items": revenue_engine.audit_events(lead_id)}
-
+def lead_audit(lead_id: str): return {"items": revenue_engine.audit_events(lead_id)}
 @app.get("/api/v1/revenue/summary")
 def revenue_summary():
-    leads = revenue_engine.list_leads()
-    counts = {status.value: 0 for status in LeadStatus}
-    for lead in leads:
-        counts[lead.status.value] += 1
+    leads = revenue_engine.list_leads(); counts = {status.value: 0 for status in LeadStatus}
+    for lead in leads: counts[lead.status.value] += 1
     return {"total_leads": len(leads), "by_status": counts}
-
 @app.get("/api/v1/evaluation/runtime")
 def runtime_evaluation():
     discovery = list_agents()
