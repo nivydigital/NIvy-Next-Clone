@@ -1,0 +1,85 @@
+version: "1.0"
+status: canonical
+description: Primary prompt mapping for each registered agent (Phase 2)
+default_prompt: PR005
+agents:
+  - {id: A001, name: Market Research, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A002, name: ICP Strategist, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A034, name: Lead Discovery, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A035, name: Contact Discovery, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A036, name: Lead Enrichment, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A037, name: Data Quality, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A038, name: Verification, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A039, name: Lead Scoring, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A041, name: Account Research, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A043, name: Outreach Strategy, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A044, name: Email Outreach, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A049, name: Personalization, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A050, name: Follow-Up, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A052, name: Reply Triage, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A054, name: Qualification, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A055, name: Meeting Prep, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A060, name: Proposal Agent, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A065, name: Onboarding Agent, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A066, name: Inbound Communication Triage, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A067, name: Conversation Intelligence, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A068, name: Response Drafting, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A069, name: Meeting Intelligence, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A070, name: Communication Knowledge Extractor, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A071, name: Communication Quality Reviewer, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A072, name: Customer Onboarding Planner, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A073, name: Customer Health Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A074, name: Support Triage, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A075, name: Customer Success Planner, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A076, name: Renewal Risk Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A077, name: Feedback & NPS Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A078, name: Billing Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A079, name: Accounts Receivable Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A080, name: Accounts Payable Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A081, name: Cashflow Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A082, name: Pricing Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A083, name: Revenue Analytics, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A084, name: Marketing Strategist, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A085, name: Content Strategist, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A086, name: SEO Strategist, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A087, name: Social Media Strategist, primary_prompt: PR004, prompts: [PR004]}
+  - {id: A088, name: Paid Media Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A089, name: Marketing Analytics, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A090, name: Growth Experiment Planner, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A091, name: Campaign QA Reviewer, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A092, name: KPI Intelligence Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A093, name: Planning Analyst, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A094, name: Anomaly Detection Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A095, name: Risk Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A096, name: Executive Intelligence Analyst, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A097, name: Resource Planning Analyst, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A098, name: Evaluation Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A099, name: Regression QA Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A100, name: Trace Auditor, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A101, name: Runtime Quality Monitor, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A102, name: Cost Observability Analyst, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A103, name: Evidence Collector, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A104, name: Feedback Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A105, name: Prompt Improvement Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A106, name: Skill Improvement Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A107, name: Experiment Manager, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A108, name: Regression Guard, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A109, name: Improvement Promotion Reviewer, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A110, name: Delegation Coordinator, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A111, name: Agent Handoff Manager, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A112, name: Shared Context Manager, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A113, name: Collaboration Policy Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A114, name: Collaboration Failure Handler, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A115, name: Collaboration Auditor, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A116, name: Agent Package Builder, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A117, name: Agent Discovery Agent, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A118, name: Agent Certification Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A119, name: Agent Compatibility Analyst, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A120, name: Agent Marketplace Curator, primary_prompt: PR001, prompts: [PR001]}
+  - {id: A121, name: Digital Twin Analyst, primary_prompt: PR003, prompts: [PR003]}
+  - {id: A122, name: Reliability Monitor, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A123, name: Capacity Planner, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A124, name: Tenant Isolation Auditor, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A125, name: Disaster Recovery Planner, primary_prompt: PR002, prompts: [PR002]}
+  - {id: A126, name: Deployment Rollout Agent, primary_prompt: PR005, prompts: [PR005]}
+  - {id: A127, name: Multi-Company Operations Analyst, primary_prompt: PR003, prompts: [PR003]}
