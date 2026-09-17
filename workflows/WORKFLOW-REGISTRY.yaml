@@ -1,45 +1,45 @@
-version: "2.0"
-status: canonical
+version: 2
 workflows:
-  - id: lead-outreach
-    path: workflows/lead-outreach/workflow.yaml
-    trigger: manual_or_schedule
-    stages: [discover, enrich, quality, verify, score, research, plan, personalize, draft, approve, send, followup, triage]
-    status: implementation
-    priority: revenue
-
   - id: lead-generation-to-outreach
-    alias_of: lead-outreach
     trigger: manual_or_schedule
     stages: [discover, normalize, enrich, verify, approve, send, monitor]
-    status: deprecated
-
+    definition: workflows/lead-outreach/workflow.yaml
+    status: registered
   - id: inbound-email-triage
     trigger: email_received
-    stages: [fetch, classify, retrieve_context, draft, approve_or_route]
-    status: declared
-
+    stages: [classify, reply_triage, retrieve_context, draft, approve_or_route]
+    definition: workflows/inbound-email-triage/workflow.yaml
+    agents: [A066, A052, A068]
+    status: implementation
+  - id: response-qa
+    trigger: draft_ready_or_manual
+    stages: [draft_response, quality_review, approval_gate]
+    definition: workflows/response-qa/workflow.yaml
+    agents: [A068, A071]
+    status: implementation
+  - id: conversation-intel
+    trigger: manual_or_transcript_uploaded
+    stages: [conversation_intelligence, meeting_intelligence, knowledge_extract]
+    definition: workflows/conversation-intel/workflow.yaml
+    agents: [A067, A069, A070]
+    status: implementation
   - id: outreach-follow-up
     trigger: schedule
     stages: [check_status, detect_reply, generate_followup, approve, send]
-    status: declared
-
+    status: registered
   - id: social-content-pipeline
     trigger: form_or_schedule
     stages: [brief, generate, platform_adapt, approve, publish_or_export]
-    status: declared
-
+    status: registered
   - id: seo-audit
     trigger: manual
     stages: [crawl, analyze, prioritize, report]
-    status: declared
-
+    status: registered
   - id: knowledge-ingestion
     trigger: document_uploaded
     stages: [extract, chunk, embed, store, index]
-    status: declared
-
+    status: registered
   - id: agent-evaluation
     trigger: test_run
     stages: [discover, execute, assert, evidence, report]
-    status: declared
+    status: registered
