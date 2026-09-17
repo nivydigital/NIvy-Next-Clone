@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A067 Conversation Intelligence Input",
+  "type": "object",
+  "required": ["conversation_transcript"],
+  "properties": {
+    "conversation_transcript": {"type": "object"},
+    "account_context": {"type": "object"},
+    "analysis_focus": {"type": "array", "items": {"type": "string"}},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
