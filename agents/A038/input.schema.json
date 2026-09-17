@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A038 Verification Input",
+  "type": "object",
+  "required": ["enriched_leads"],
+  "properties": {
+    "enriched_leads": {"type": "object"},
+    "data_quality_report": {"type": "object"},
+    "verification_fields": {"type": "array", "items": {"type": "string"}},
+    "verification_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
