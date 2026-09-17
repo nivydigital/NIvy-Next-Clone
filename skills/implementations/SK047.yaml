@@ -1,18 +1,56 @@
 id: SK047
 name: WhatsApp Outreach
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: draft consent-aware WhatsApp outreach
-inputs: [contact, context, offer]
-outputs: [message, stop_rules, approval_state]
+category: sales
+standard: STD-01/v2
+objective: Draft consent-aware WhatsApp outreach; never send without approval and stop rules.
+non_goals:
+  - Messaging without consent signal when required by policy
+  - Auto-send
+  - Inventing personalization
+inputs:
+  required:
+    - {name: contact, type: object}
+    - {name: context, type: object}
+    - {name: offer, type: object}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+outputs:
+  required:
+    - {name: message, type: string}
+    - {name: stop_rules, type: array}
+    - {name: approval_state, type: string}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: check_consent_context}
-  - {step: 3, action: draft_message}
-  - {step: 4, action: set_stop_rules_and_approval}
-quality_checks: [stop_rules_present, approval_state_set]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require contact, context, offer. Fail closed if contact missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Check consent signal in context when policy requires it. Fail closed if consent required and absent.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Draft short WhatsApp message from verified context. Set stop_rules (opt-out, reply, max_touches). Set approval_state=pending_approval.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "stop_rules present; approval_state set.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm message, stop_rules, approval_state.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return message, stop_rules, approval_state, status, next_action.", on_failure: fail_closed}
+preconditions: ["contact, context, offer present"]
+postconditions: ["stop_rules present", "approval_state pending"]
+quality_checks: [stop_rules_present, approval_state_set, schema_valid, policy_compliant]
 failure_policy: fail_closed_without_consent_signal_when_required
-evidence_policy: cite consent/context
-dependencies: [SK043, SK049]
-tools: [tool.ollama.generate]
-acceptance: [message present, approval_state present]
+evidence_policy: cite consent/context; never invent citations
+dependencies:
+  skills: [SK043, SK049]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal, pii]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns message, stop_rules, approval_state", verify: schema}
+  - {id: AC2, statement: "Rejects missing contact", verify: test}
+  - {id: AC3, statement: "Fails when consent required and absent", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_consent, missing_contact]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

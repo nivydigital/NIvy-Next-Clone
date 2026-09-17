@@ -1,18 +1,57 @@
 id: SK046
 name: Call Preparation
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: prepare evidence-backed call briefs and questions
-inputs: [account, meeting_context]
-outputs: [brief, agenda, questions, risks]
+category: sales
+standard: STD-01/v2
+objective: Prepare evidence-backed call briefs, agenda, and questions from account research.
+non_goals:
+  - Inventing account facts or questions not grounded in research
+  - Guaranteeing meeting outcomes
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: account, type: object, constraints: "account identity and preferably research brief"}
+  optional:
+    - {name: meeting_context, type: object}
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: brief, type: object}
+    - {name: agenda, type: array}
+    - {name: questions, type: array}
+    - {name: risks, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: build_brief}
-  - {step: 3, action: propose_agenda_and_questions}
-  - {step: 4, action: list_risks}
-quality_checks: [questions_non_empty]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require account. Fail closed if account missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load account research and meeting_context (attendees, goal, duration).", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Build brief citing account research. Propose agenda steps and discovery questions. List risks (unknowns, objections, time constraints).", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "questions non-empty; brief cites research fields.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm brief, agenda, questions, risks present.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return brief, agenda, questions, risks, status, confidence, next_action.", on_failure: fail_closed}
+preconditions: ["account present"]
+postconditions: ["questions non-empty", "brief cites research"]
+quality_checks: [questions_non_empty, schema_valid, policy_compliant]
 failure_policy: fail_closed_on_missing_account
-evidence_policy: brief cites account research
-dependencies: [SK041, SK043]
-tools: [tool.ollama.generate]
-acceptance: [brief present, questions is array]
+evidence_policy: brief cites account research; never invent citations
+dependencies:
+  skills: [SK041, SK043]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns brief, agenda, questions, risks", verify: schema}
+  - {id: AC2, statement: "Rejects missing account", verify: test}
+  - {id: AC3, statement: "questions is non-empty array", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_account, thin_research]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

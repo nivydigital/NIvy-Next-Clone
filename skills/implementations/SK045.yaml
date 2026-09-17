@@ -1,18 +1,57 @@
 id: SK045
 name: LinkedIn Outreach
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: draft policy-compliant LinkedIn outreach
-inputs: [lead, account_context, offer]
-outputs: [message_sequence, evidence, approval_state]
+category: sales
+standard: STD-01/v2
+objective: Draft policy-compliant LinkedIn outreach from verified context; never send without approval.
+non_goals:
+  - Inventing personalization or claims not in account_context
+  - Auto-send or connection request without approval
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: lead, type: object}
+    - {name: account_context, type: object}
+    - {name: offer, type: object}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: message_sequence, type: array}
+    - {name: evidence, type: array}
+    - {name: approval_state, type: string}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: draft_sequence}
-  - {step: 3, action: attach_evidence}
-  - {step: 4, action: set_approval_pending}
-quality_checks: [approval_state_set, evidence_present]
-failure_policy: fail_closed_on_missing_lead
-evidence_policy: personalization evidence required
-dependencies: [SK043, SK049]
-tools: [tool.ollama.generate]
-acceptance: [message_sequence present, approval_state present]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require lead, account_context, offer. Fail closed if lead missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Extract verified hooks; load LinkedIn length and connection-policy constraints.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Draft connection note and follow-up message sequence using only verified hooks. Attach evidence. Set approval_state=pending_approval.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "approval_state set; evidence present for personalized lines.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm message_sequence, evidence, approval_state.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return message_sequence, evidence, approval_state, status, next_action=await_human_approval.", on_failure: fail_closed}
+preconditions: ["lead, account_context, offer present"]
+postconditions: ["approval_state pending by default", "evidence for personalization"]
+quality_checks: [approval_state_set, evidence_present, schema_valid, policy_compliant]
+failure_policy: fail_closed_on_missing_lead; side effects require agent tool auth
+evidence_policy: personalization evidence required; never invent citations
+dependencies:
+  skills: [SK043, SK049]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal, pii]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns message_sequence, evidence, approval_state", verify: schema}
+  - {id: AC2, statement: "Rejects missing lead", verify: test}
+  - {id: AC3, statement: "approval_state defaults to pending_approval", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_lead, thin_context]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

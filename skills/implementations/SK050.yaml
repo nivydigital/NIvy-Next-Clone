@@ -1,18 +1,57 @@
 id: SK050
 name: Follow-Up
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: determine and draft the next permitted follow-up
-inputs: [campaign_state, prior_messages, reply_state]
-outputs: [next_action, draft, stop_reason]
+category: sales
+standard: STD-01/v2
+objective: Determine and draft the next permitted follow-up or stop based on campaign and reply state.
+non_goals:
+  - Continuing after reply or unsubscribe
+  - Inventing prior message content
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: campaign_state, type: object, constraints: "sequence position, max touches, channel"}
+    - {name: prior_messages, type: array}
+    - {name: reply_state, type: object, constraints: "replied|none|unknown plus signals"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: next_action, type: string}
+    - {name: draft, type: object}
+    - {name: stop_reason, type: string}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action_hint]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: check_reply_and_suppression}
-  - {step: 3, action: decide_next_or_stop}
-  - {step: 4, action: draft_if_allowed}
-quality_checks: [stop_on_reply_or_unsubscribe]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require campaign_state, prior_messages, reply_state. Fail closed if reply_state unknown when policy requires certainty.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load stop conditions: reply, unsubscribe, bounce, max_touches, DNC.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "If stop condition met: set next_action=stop and stop_reason. Else draft next follow-up consistent with prior_messages and remaining touches. Never invent prior content.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Must stop on reply or unsubscribe. draft empty when stopped.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm next_action present; stop_reason set when stopped.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return next_action, draft, stop_reason, status, confidence.", on_failure: fail_closed}
+preconditions: ["campaign_state, prior_messages, reply_state present"]
+postconditions: ["stop on reply/unsubscribe", "next_action present"]
+quality_checks: [stop_on_reply_or_unsubscribe, schema_valid, policy_compliant]
 failure_policy: fail_closed_if_reply_state_unknown_when_required
-evidence_policy: cite campaign_state transitions
-dependencies: [SK044, SK045]
-tools: [tool.ollama.generate]
-acceptance: [next_action present]
+evidence_policy: cite campaign_state transitions; never invent citations
+dependencies:
+  skills: [SK044, SK045]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal, pii]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns next_action, draft, stop_reason", verify: schema}
+  - {id: AC2, statement: "Stops on reply or unsubscribe", verify: test}
+  - {id: AC3, statement: "Does not invent prior message content", verify: test}
+evaluation:
+  unit_cases: [happy_path_followup, stop_on_reply, stop_on_unsubscribe, max_touches]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
