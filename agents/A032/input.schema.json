@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A032 Competitive Response Strategy Input",
+  "type": "object",
+  "required": ["competitor_intelligence", "messaging_positioning"],
+  "properties": {
+    "competitor_intelligence": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "brand_strategy": {"type": "object"},
+    "product_marketing_strategy": {"type": "object"},
+    "response_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
