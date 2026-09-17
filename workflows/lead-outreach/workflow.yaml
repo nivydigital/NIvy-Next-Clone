@@ -1,107 +1,27 @@
 id: lead-outreach
-version: "1.0"
+version: "1.1"
 status: implementation
 name: Lead Discovery to Outreach
-description: >
-  Priority revenue path: discover → enrich/verify → score → personalize →
-  human approval → send → follow-up/triage. Side effects only after approval
-  and never in dry_run mode.
-
-trigger:
-  types: [manual, schedule]
-  default: manual
-
 policy:
   side_effects: gated
   require_approval_before: [tool.email.send]
   dry_run_default: true
   fail_closed: true
-
+  skill_contracts: true
 idempotency:
   key_template: "lead-outreach:{campaign_id}:{lead_key}"
-  lead_key_fields: [email, company, external_id]
-
-states:
-  - pending
-  - running
-  - await_approval
-  - approved
-  - sending
-  - sent
-  - following_up
-  - done
-  - failed
-  - cancelled
-
-transitions:
-  - {from: pending, to: running, on: start}
-  - {from: running, to: await_approval, on: draft_ready}
-  - {from: running, to: failed, on: error}
-  - {from: await_approval, to: approved, on: approve}
-  - {from: await_approval, to: cancelled, on: reject}
-  - {from: approved, to: sending, on: send}
-  - {from: sending, to: sent, on: send_ok}
-  - {from: sending, to: failed, on: send_fail}
-  - {from: sent, to: following_up, on: schedule_followup}
-  - {from: following_up, to: done, on: complete}
-  - {from: following_up, to: await_approval, on: new_draft}
-
+states: [pending, running, await_approval, approved, sending, sent, following_up, done, failed, cancelled]
 steps:
-  - id: discover
-    agents: [A034, A035]
-    produces: [candidate_leads]
-  - id: enrich
-    agents: [A036]
-    produces: [enriched_leads]
-  - id: quality
-    agents: [A037]
-    produces: [quality_report]
-  - id: verify
-    agents: [A038]
-    tools: [tool.email.verify]
-    produces: [verified_leads]
-  - id: score
-    agents: [A039]
-    produces: [scored_leads]
-  - id: research
-    agents: [A041]
-    produces: [account_context]
-  - id: plan
-    agents: [A043]
-    produces: [outreach_plan]
-  - id: personalize
-    agents: [A049]
-    prompts: [PR004]
-    produces: [personalization]
-  - id: draft
-    agents: [A044]
-    prompts: [PR004]
-    produces: [email_draft]
-    next_state: await_approval
-  - id: approve
-    type: human_gate
-    produces: [approval]
-    next_state: approved
-  - id: send
-    tools: [tool.email.send]
-    requires_approval: true
-    skip_when_dry_run: true
-    produces: [send_receipt]
-    next_state: sent
-  - id: followup
-    agents: [A050]
-    produces: [followup_plan]
-    next_state: following_up
-  - id: triage
-    agents: [A052]
-    prompts: [PR005]
-    optional: true
-    next_state: done
-
-inputs:
-  required: [campaign_id]
-  optional: [lead_criteria, seed_leads, dry_run, actor]
-
-outputs:
-  primary: run_summary
-  fields: [state, campaign_id, idempotency_key, steps_completed, dry_run, send_receipt, errors]
+  - {id: discover, agents: [A034, A035], skills: [SK034], prompts: [PR003]}
+  - {id: enrich, agents: [A036], skills: [SK036], prompts: [PR003]}
+  - {id: quality, agents: [A037], skills: [SK037], prompts: [PR003]}
+  - {id: verify, agents: [A038], skills: [SK038], prompts: [PR003], tools: [tool.email.verify]}
+  - {id: score, agents: [A039], skills: [SK039], prompts: [PR003]}
+  - {id: research, agents: [A041], skills: [SK041], prompts: [PR003]}
+  - {id: plan, agents: [A043], skills: [SK043], prompts: [PR002]}
+  - {id: personalize, agents: [A049], skills: [SK049], prompts: [PR004]}
+  - {id: draft, agents: [A044], skills: [SK044], prompts: [PR004], next_state: await_approval}
+  - {id: approve, type: human_gate, next_state: approved}
+  - {id: send, tools: [tool.email.send], requires_approval: true, skip_when_dry_run: true, next_state: sent}
+  - {id: followup, agents: [A050], skills: [SK050], prompts: [PR005], next_state: following_up}
+  - {id: triage, agents: [A052], prompts: [PR005], optional: true, next_state: done}
