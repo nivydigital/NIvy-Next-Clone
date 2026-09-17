@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A027 Partner Strategy Input",
+  "type": "object",
+  "required": ["gtm_strategy", "channel_strategy"],
+  "properties": {
+    "gtm_strategy": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "partner_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
