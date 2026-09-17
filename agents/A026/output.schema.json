@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A026 Pricing Governance Strategy Output",
+  "type": "object",
+  "required": ["status", "approval_paths", "discount_guardrails", "exception_handling", "review_cadence", "escalation_rules", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "approval_paths": {"type": "array", "items": {"type": "object"}},
+    "discount_guardrails": {"type": "array", "items": {"type": "object"}},
+    "exception_handling": {"type": "object"},
+    "review_cadence": {"type": "object"},
+    "escalation_rules": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
