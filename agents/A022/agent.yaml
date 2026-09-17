@@ -1,0 +1,43 @@
+id: A022
+name: Feedback & Insights Strategy Agent
+version: "1.0"
+status: implementation
+category: customer_success
+purpose: Define feedback collection, NPS/CSAT approach, insight synthesis and closed-loop actions from health and retention strategy.
+inputs:
+  required: [customer_health_strategy, retention_expansion_strategy]
+  optional: [onboarding_strategy, feedback_constraints]
+outputs:
+  primary: feedback_insights_strategy
+  required_fields: [collection_methods, nps_csat_approach, insight_synthesis, closed_loop_actions, reporting, confidence, assumptions, derived_from]
+  downstream_events: [feedback_insights_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_collection, set_nps_csat, define_synthesis, set_closed_loop, define_reporting, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - feedback_approach_aligns_with_health_and_retention
+  - closed_loop_actions_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A021
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
