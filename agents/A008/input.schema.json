@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A008 Offer & Pricing Strategy Input",
+  "type": "object",
+  "required": ["icp_definition", "business_offer"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "business_offer": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "market_research": {"type": "object"},
+    "pricing_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
