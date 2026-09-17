@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A025 Forecasting Strategy Input",
+  "type": "object",
+  "required": ["pipeline_deal_strategy", "revenue_operations_strategy"],
+  "properties": {
+    "pipeline_deal_strategy": {"type": "object"},
+    "revenue_operations_strategy": {"type": "object"},
+    "historical_pipeline": {"type": "object"},
+    "gtm_strategy": {"type": "object"},
+    "forecast_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
