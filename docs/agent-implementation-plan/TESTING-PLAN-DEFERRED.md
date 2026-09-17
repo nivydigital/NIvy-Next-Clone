@@ -4,40 +4,35 @@
 **Rule:** Full testing deferred until final phase. No agent marked COMPLETE until then.
 
 ## How (final phase)
-Contract → unit happy-path → negative/policy → schema/golden → eval → integration → regression (same pyramid for every agent).
+Contract → unit happy-path → negative/policy → schema/golden → eval → integration → regression.
 
 ## Coverage inventory
 
-### Strategy / Lead / Sales / Comms / CS
-A001–A033 strategy track; A034–A060 lead/sales; A065–A071 comms; A072–A077 CS — as previously documented.
+### Prior ranges
+A001–A033 strategy; A034–A060 lead/sales; A065–A077 CS/comms; A078–A083 finance — as previously documented.
 
-### Finance (complete through A083)
+### Marketing (A084–A089)
 | ID | Name | Extra asserts |
 |----|------|---------------|
-| A078 | Billing Analyst | anomalies, dispute_candidates |
-| A079 | AR Analyst | priority_accounts, aging_summary, collection_actions |
-| **A080** | **AP Analyst** | **due_summary, payment_priorities, risk_flags** |
-| **A081** | **Cashflow Analyst** | **projection, shortfall_flags, surplus_opportunities** |
-| **A082** | **Pricing Analyst** | **performance_summary, recommended_changes, experiments** |
-| **A083** | **Revenue Analytics** | **trend_summary, cohort_insights, drivers** |
-
-### Marketing (started)
-| ID | Name | Extra asserts |
-|----|------|---------------|
-| **A084** | **Marketing Strategist** | **pillars, channel_priorities, messaging_themes, success_metrics** |
+| A084 | Marketing Strategist | pillars, channel_priorities, messaging_themes |
+| **A085** | **Content Strategist** | **pillars, formats, calendar_outline, success_metrics** |
+| **A086** | **SEO Strategist** | **keyword_themes, content_opportunities, technical_priorities** |
+| **A087** | **Social Media Strategist** | **channel_mix, content_types, engagement_plays** |
+| **A088** | **Paid Media Analyst** | **performance_summary, budget_recommendations, creative_recommendations** |
+| **A089** | **Marketing Analytics** | **channel_summary, top_insights, recommended_experiments** |
 
 ### Higher IDs
-A117–A127 existing folders — deferred.
+A117–A127 existing — deferred.
 
 ### Not yet implemented
-A085 Content Strategist, A086 SEO, A087 Social, A088 Paid Media, A089 Marketing Analytics, A090 Growth Experiment Planner, A091 Campaign QA, then A092+ control/eval/learning.
+A090 Growth Experiment Planner, A091 Campaign QA Reviewer, A092+ control/eval/learning.
 
 ## Chain tests (final phase)
 1. Lead: A034→A039→A041→A043→A044  
 2. Comms: A066→A068→A071  
 3. CS: A065→A072→A073→A075→A076  
-4. Finance: A078→A079→A080→A081 (+ A082/A083)  
-5. Marketing smoke: A084→A085 (when built)  
+4. Finance: A078→A079→A080→A081  
+5. Marketing: A084→A085→A086/A087→A088→A089→A090  
 
 ## Maintenance
-Update this file on every new batch. Do not mark COMPLETE until final testing phase.
+Update on every new batch. Do not mark COMPLETE until final testing phase.
