@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A023 Revenue Operations Strategy Input",
+  "type": "object",
+  "required": ["gtm_strategy", "pipeline_deal_strategy"],
+  "properties": {
+    "gtm_strategy": {"type": "object"},
+    "pipeline_deal_strategy": {"type": "object"},
+    "lead_generation_strategy": {"type": "object"},
+    "retention_expansion_strategy": {"type": "object"},
+    "campaign_strategy": {"type": "object"},
+    "revops_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
