@@ -1,0 +1,43 @@
+id: A021
+name: Support Strategy Agent
+version: "1.0"
+status: implementation
+category: customer_success
+purpose: Define support model, triage rules, SLA guidance and escalation paths from onboarding and health strategy.
+inputs:
+  required: [onboarding_strategy, customer_health_strategy]
+  optional: [offer_pricing_strategy, support_constraints]
+outputs:
+  primary: support_strategy
+  required_fields: [support_model, triage_rules, sla_guidance, escalation_paths, knowledge_requirements, confidence, assumptions, derived_from]
+  downstream_events: [support_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_model, set_triage, set_sla, define_escalation, map_knowledge, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - support_model_aligns_with_onboarding_and_health
+  - triage_and_escalation_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A020
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
