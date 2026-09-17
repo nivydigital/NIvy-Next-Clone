@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A078 Billing Analyst Input",
+  "type": "object",
+  "required": ["billing_records"],
+  "properties": {
+    "billing_records": {"type": "object"},
+    "customer_context": {"type": "object"},
+    "billing_rules": {"type": "array", "items": {"type": "object"}},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
