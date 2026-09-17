@@ -1,0 +1,43 @@
+id: A082
+name: Pricing Analyst
+version: "1.0"
+status: implementation
+category: finance
+purpose: Analyze pricing performance and recommend adjustments from offer strategy and revenue signals.
+inputs:
+  required: [offer_pricing_strategy]
+  optional: [revenue_signals, competitor_pricing, pricing_constraints]
+outputs:
+  primary: pricing_analysis
+  required_fields: [performance_summary, recommended_changes, experiments, confidence, assumptions, derived_from]
+  downstream_events: [pricing_analysis.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, assess_performance, recommend_changes, propose_experiments, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - recommendations_align_with_strategy
+  - experiments_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A082 Pricing Analyst)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
