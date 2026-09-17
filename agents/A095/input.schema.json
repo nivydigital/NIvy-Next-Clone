@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A095 Risk Analyst Input",
+  "type": "object",
+  "required": ["risk_signals"],
+  "properties": {
+    "risk_signals": {"type": "object"},
+    "anomaly_report": {"type": "object"},
+    "kpi_intelligence": {"type": "object"},
+    "risk_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
