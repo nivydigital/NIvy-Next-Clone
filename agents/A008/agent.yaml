@@ -1,0 +1,43 @@
+id: A008
+name: Offer & Pricing Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Design evidence-backed offers, packaging and pricing guidance from ICP, personas, competitor intelligence and business constraints.
+inputs:
+  required: [icp_definition, business_offer]
+  optional: [buyer_personas, competitor_intelligence, messaging_positioning, market_research, pricing_constraints]
+outputs:
+  primary: offer_pricing_strategy
+  required_fields: [offers, packaging, pricing_guidance, differentiation, objections, confidence, assumptions, derived_from]
+  downstream_events: [offer_pricing_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_offers, design_packaging, set_pricing_guidance, map_differentiation, anticipate_objections, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - offers_and_pricing_are_traceable_to_ICP_and_competitor_evidence
+  - differentiation_is_explicit
+  - material_assumptions_are_stated
+provenance:
+  source: sequential strategy chain after A007
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
