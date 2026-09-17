@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A079 Accounts Receivable Analyst Input",
+  "type": "object",
+  "required": ["ar_aging"],
+  "properties": {
+    "ar_aging": {"type": "object"},
+    "customer_health": {"type": "object"},
+    "collection_policy": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
