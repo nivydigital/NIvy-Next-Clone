@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A026 Pricing Governance Strategy Input",
+  "type": "object",
+  "required": ["offer_pricing_strategy", "revenue_operations_strategy"],
+  "properties": {
+    "offer_pricing_strategy": {"type": "object"},
+    "revenue_operations_strategy": {"type": "object"},
+    "pipeline_deal_strategy": {"type": "object"},
+    "pricing_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
