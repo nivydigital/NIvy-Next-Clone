@@ -1,11 +1,11 @@
 id: lead-outreach
-version: "1.0"
+version: "1.1"
 status: implementation
 name: Lead Discovery to Outreach
 description: >
   Priority revenue path: discover → enrich/verify → score → personalize →
   human approval → send → follow-up/triage. Side effects only after approval
-  and never in dry_run mode.
+  and never in dry_run mode. P2: each step binds skills + prompts.
 
 trigger:
   types: [manual, schedule]
@@ -16,6 +16,7 @@ policy:
   require_approval_before: [tool.email.send]
   dry_run_default: true
   fail_closed: true
+  skill_contracts: true
 
 idempotency:
   key_template: "lead-outreach:{campaign_id}:{lead_key}"
@@ -49,32 +50,48 @@ transitions:
 steps:
   - id: discover
     agents: [A034, A035]
+    skills: [SK034]
+    prompts: [PR003]
     produces: [candidate_leads]
   - id: enrich
     agents: [A036]
+    skills: [SK036]
+    prompts: [PR003]
     produces: [enriched_leads]
   - id: quality
     agents: [A037]
+    skills: [SK037]
+    prompts: [PR003]
     produces: [quality_report]
   - id: verify
     agents: [A038]
+    skills: [SK038]
+    prompts: [PR003]
     tools: [tool.email.verify]
     produces: [verified_leads]
   - id: score
     agents: [A039]
+    skills: [SK039]
+    prompts: [PR003]
     produces: [scored_leads]
   - id: research
     agents: [A041]
+    skills: [SK041]
+    prompts: [PR003]
     produces: [account_context]
   - id: plan
     agents: [A043]
+    skills: [SK043]
+    prompts: [PR002]
     produces: [outreach_plan]
   - id: personalize
     agents: [A049]
+    skills: [SK049]
     prompts: [PR004]
     produces: [personalization]
   - id: draft
     agents: [A044]
+    skills: [SK044]
     prompts: [PR004]
     produces: [email_draft]
     next_state: await_approval
@@ -90,6 +107,8 @@ steps:
     next_state: sent
   - id: followup
     agents: [A050]
+    skills: [SK050]
+    prompts: [PR005]
     produces: [followup_plan]
     next_state: following_up
   - id: triage
