@@ -1,0 +1,43 @@
+id: A030
+name: Product Marketing Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Define product narrative, launch messaging, competitive differentiation and enablement needs from offer, messaging and competitor strategy.
+inputs:
+  required: [offer_pricing_strategy, messaging_positioning]
+  optional: [competitor_intelligence, brand_strategy, product_constraints]
+outputs:
+  primary: product_marketing_strategy
+  required_fields: [product_narrative, launch_messaging, differentiation, enablement_needs, proof_points, confidence, assumptions, derived_from]
+  downstream_events: [product_marketing_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_narrative, set_launch_messaging, map_differentiation, define_enablement, attach_proof, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - narrative_aligns_with_offer_and_messaging
+  - differentiation_is_evidence_backed
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A029
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
