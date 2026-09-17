@@ -27,14 +27,24 @@ workflows:
     trigger: schedule
     stages: [check_status, detect_reply, generate_followup, approve, send]
     status: registered
-  - id: social-content-pipeline
+  - id: content-calendar
     trigger: form_or_schedule
-    stages: [brief, generate, platform_adapt, approve, publish_or_export]
-    status: registered
+    stages: [content_strategy, demand_context, campaign_qa, approval_gate]
+    definition: workflows/content-calendar/workflow.yaml
+    agents: [A085, A084, A091]
+    status: implementation
   - id: seo-audit
     trigger: manual
-    stages: [crawl, analyze, prioritize, report]
-    status: registered
+    stages: [seo_strategy, content_alignment, analytics_context, prioritize_and_report]
+    definition: workflows/seo-audit/workflow.yaml
+    agents: [A086, A085, A089]
+    status: implementation
+  - id: social-content-pipeline
+    trigger: form_or_schedule
+    stages: [social_strategy, content_brief, campaign_qa, approval_gate]
+    definition: workflows/social-content-pipeline/workflow.yaml
+    agents: [A087, A085, A091]
+    status: implementation
   - id: knowledge-ingestion
     trigger: document_uploaded
     stages: [extract, chunk, embed, store, index]
