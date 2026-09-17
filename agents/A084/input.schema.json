@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A084 Marketing Strategist Input",
+  "type": "object",
+  "required": ["market_research", "icp_definition"],
+  "properties": {
+    "market_research": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "growth_goals": {"type": "object"},
+    "competitive_context": {"type": "object"},
+    "strategy_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
