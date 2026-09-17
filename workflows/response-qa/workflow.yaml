@@ -1,0 +1,55 @@
+id: response-qa
+version: "1.0"
+status: implementation
+trigger: draft_ready_or_manual
+dry_run_default: true
+idempotency_key_fields: [draft_id, message_id]
+
+states:
+  - pending
+  - drafting
+  - qa_review
+  - await_approval
+  - approved
+  - completed
+  - failed
+
+transitions:
+  - {from: pending, to: drafting, on: start}
+  - {from: drafting, to: qa_review, on: draft_ready}
+  - {from: qa_review, to: await_approval, on: qa_pass}
+  - {from: qa_review, to: drafting, on: qa_fail_retry}
+  - {from: await_approval, to: approved, on: approved}
+  - {from: approved, to: completed, on: done}
+  - {from: "*", to: failed, on: error}
+
+stages:
+  - id: draft_response
+    agent: A068
+    skill_hint: [SK044, SK046]
+    input_map:
+      message: $.input.message
+      context: $.input.context
+      policy: $.input.policy
+    output_key: draft
+  - id: quality_review
+    agent: A071
+    skill_hint: [SK037, SK038]
+    input_map:
+      draft: $.outputs.draft
+      message: $.input.message
+      policy: $.input.policy
+    output_key: qa
+  - id: approval_gate
+    type: gate
+    policy: require_approval_before_send
+    when: "$.outputs.qa.pass_fail != pass or $.input.require_approval == true"
+
+stop_rules:
+  - qa_hard_fail_after_max_retries
+  - policy_violation
+
+max_qa_retries: 2
+
+audit:
+  required: true
