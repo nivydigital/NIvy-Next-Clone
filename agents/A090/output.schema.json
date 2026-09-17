@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A090 Growth Experiment Planner Output",
+  "type": "object",
+  "required": ["status", "hypotheses", "variants", "success_metrics", "run_plan", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "hypotheses": {"type": "array", "items": {"type": "object"}},
+    "variants": {"type": "array", "items": {"type": "object"}},
+    "success_metrics": {"type": "array", "items": {"type": "object"}},
+    "run_plan": {"type": "object"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
