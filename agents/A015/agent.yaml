@@ -1,0 +1,43 @@
+id: A015
+name: Qualification & Scoring Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_strategy
+purpose: Define lead qualification criteria, scoring model and routing rules from ICP, personas and sales enablement strategy.
+inputs:
+  required: [icp_definition, sales_enablement_strategy]
+  optional: [buyer_personas, lead_generation_strategy, gtm_strategy, scoring_constraints]
+outputs:
+  primary: qualification_scoring_strategy
+  required_fields: [qualification_criteria, scoring_model, routing_rules, disqualification_rules, handoff_triggers, confidence, assumptions, derived_from]
+  downstream_events: [qualification_scoring_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_criteria, build_scoring_model, define_routing, define_disqualification, set_handoff_triggers, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - criteria_and_scoring_are_traceable_to_ICP_and_enablement
+  - routing_and_handoff_rules_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A014
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
