@@ -1,0 +1,27 @@
+id: A125
+name: Disaster Recovery Planner
+version: "1.0"
+status: implementation
+category: scale_operations
+purpose: Produce evidence-backed disaster recovery (DR) plans for AIOS services, data stores and agent runtimes — RTO/RPO targets, failover sequences, backup verification, communication runbooks and recovery validation — without executing live infrastructure changes.
+inputs:
+  required: [system_inventory, recovery_objectives]
+  optional: [current_backup_state, dependency_map, compliance_constraints, prior_dr_plan, incident_history]
+outputs:
+  primary: a125_result
+  required_fields: [recovery_objectives, failover_sequences, backup_verification, communication_runbook, validation_checklist, risks, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK019, SK040]
+prompts: [PR002]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-17 Scale Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a125
+  entrypoint: run_a125_disaster_recovery

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A127/output.schema.json",
+  "title": "A127 Multi-Company Operations Analyst Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["portfolio_summary", "isolation_assessment", "shared_resource_risks", "policy_consistency", "capacity_findings", "recommendations", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "portfolio_summary": {"type": "object"},
+    "isolation_assessment": {"type": "array", "items": {"type": "object"}},
+    "shared_resource_risks": {"type": "array", "items": {"type": "object"}},
+    "policy_consistency": {"type": "object"},
+    "capacity_findings": {"type": "array", "items": {"type": "object"}},
+    "recommendations": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

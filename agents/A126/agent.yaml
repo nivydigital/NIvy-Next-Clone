@@ -1,0 +1,27 @@
+id: A126
+name: Deployment Rollout Agent
+version: "1.0"
+status: implementation
+category: scale_operations
+purpose: Plan and govern staged deployment rollouts for AIOS components and agents — canary/blue-green strategies, health gates, rollback criteria, change windows and communication — without performing live deployments itself.
+inputs:
+  required: [release_manifest, environment_target]
+  optional: [current_version_map, health_baselines, change_window, rollback_policy, stakeholder_list, prior_rollout_report]
+outputs:
+  primary: a126_result
+  required_fields: [rollout_strategy, stages, health_gates, rollback_criteria, change_window, communication_plan, risks, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK037, SK038]
+prompts: [PR005]
+knowledge: [KP004]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-17 Scale Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a126
+  entrypoint: run_a126_deployment_rollout

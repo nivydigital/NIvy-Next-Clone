@@ -1,0 +1,27 @@
+id: A127
+name: Multi-Company Operations Analyst
+version: "1.0"
+status: implementation
+category: scale_operations
+purpose: Analyze multi-company / multi-tenant operational posture across AIOS instances — shared vs isolated resources, cross-company risk, capacity sharing, policy consistency and operational recommendations — without writing to any tenant system of record.
+inputs:
+  required: [company_portfolio, operations_snapshot]
+  optional: [shared_services_map, policy_matrix, capacity_metrics, incident_summary, prior_analysis]
+outputs:
+  primary: a127_result
+  required_fields: [portfolio_summary, isolation_assessment, shared_resource_risks, policy_consistency, capacity_findings, recommendations, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK041, SK040]
+prompts: [PR003]
+knowledge: [KP004, KP007]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-17 Scale Contract
+  source_type: internal
+  modifications: "Implemented under deferred-testing policy."
+runtime:
+  adapter: backend.app.runtime.a127
+  entrypoint: run_a127_multi_company_ops

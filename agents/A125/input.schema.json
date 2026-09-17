@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A125/input.schema.json",
+  "title": "A125 Disaster Recovery Planner Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["system_inventory", "recovery_objectives"],
+  "properties": {
+    "system_inventory": {"type": "object"},
+    "recovery_objectives": {"type": "object"},
+    "current_backup_state": {"type": "object"},
+    "dependency_map": {"type": "object"},
+    "compliance_constraints": {"type": "array", "items": {"type": "string"}},
+    "prior_dr_plan": {"type": "object"},
+    "incident_history": {"type": "array", "items": {"type": "object"}},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

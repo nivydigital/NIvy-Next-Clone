@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A125/output.schema.json",
+  "title": "A125 Disaster Recovery Planner Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["recovery_objectives", "failover_sequences", "backup_verification", "communication_runbook", "validation_checklist", "risks", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "recovery_objectives": {"type": "object"},
+    "failover_sequences": {"type": "array", "items": {"type": "object"}},
+    "backup_verification": {"type": "array", "items": {"type": "object"}},
+    "communication_runbook": {"type": "array", "items": {"type": "object"}},
+    "validation_checklist": {"type": "array", "items": {"type": "object"}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}

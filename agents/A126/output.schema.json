@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A126/output.schema.json",
+  "title": "A126 Deployment Rollout Agent Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rollout_strategy", "stages", "health_gates", "rollback_criteria", "change_window", "communication_plan", "risks", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "rollout_strategy": {"type": "string"},
+    "stages": {"type": "array", "items": {"type": "object"}},
+    "health_gates": {"type": "array", "items": {"type": "object"}},
+    "rollback_criteria": {"type": "array", "items": {"type": "object"}},
+    "change_window": {"type": "object"},
+    "communication_plan": {"type": "array", "items": {"type": "object"}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}
