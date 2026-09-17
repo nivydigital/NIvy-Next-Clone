@@ -1,9 +1,18 @@
 id: social-content-pipeline
-version: "1.0"
+version: "1.1"
 status: implementation
+standard: STD-05
 trigger: form_or_schedule
+name: Social Content Pipeline
+policy:
+  side_effects: none_until_publish_gate
+  dry_run_default: true
+  fail_closed: true
+  publish_gated: true
 dry_run_default: true
-idempotency_key_fields: [campaign_id, platform, period]
+idempotency:
+  key_template: "social-content:{campaign_id}:{platform}:{period}"
+  key_fields: [campaign_id, platform, period]
 
 states:
   - pending
@@ -14,6 +23,7 @@ states:
   - await_approval
   - completed
   - failed
+  - cancelled
 
 transitions:
   - {from: pending, to: strategy, on: start}
@@ -22,12 +32,14 @@ transitions:
   - {from: platform_adapt, to: qa, on: adapted}
   - {from: qa, to: await_approval, on: qa_pass}
   - {from: await_approval, to: completed, on: approved}
+  - {from: "*", to: cancelled, on: cancel}
   - {from: "*", to: failed, on: error}
 
 stages:
   - id: social_strategy
     agent: A087
     skill_hint: [SK009, SK010, SK023]
+    knowledge_packs: [KP002, KP006]
     input_map:
       marketing_strategy: $.input.marketing_strategy
       content_strategy: $.input.content_strategy
@@ -53,13 +65,16 @@ stages:
   - id: approval_gate
     type: gate
     policy: human_approval_before_publish
-    detail: No auto-publish to social platforms
+    detail: No auto-publish to social platforms; dry-run never posts
 
 stop_rules:
   - policy_violation
   - platform_policy_block
 
 side_effects: none
+publish_requires: separate_signed_publish_job
+cancel_path: true
 
 audit:
   required: true
+  events: [workflow.started, stage.completed, approval.requested, workflow.completed, workflow.failed, workflow.cancelled]

@@ -1,11 +1,14 @@
-version: "1.1"
+version: "1.2"
 status: canonical
 packs:
-  - {id: KP001, name: Company Core Knowledge, version: "1.0", status: implementation, path: packs/KP001.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP002, name: Brand Voice, version: "1.0", status: implementation, path: packs/KP002.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP003, name: Services and Offers, version: "1.0", status: implementation, path: packs/KP003.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP004, name: ICP and Buyer Knowledge, version: "1.0", status: implementation, path: packs/KP004.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP005, name: Sales Playbooks, version: "1.0", status: implementation, path: packs/KP005.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP006, name: Marketing Playbooks, version: "1.0", status: implementation, path: packs/KP006.md, access_policy: internal, freshness: "2026-09-17"}
-  - {id: KP007, name: SOP and Policy Knowledge, version: "1.0", status: implementation, path: packs/KP007.md, access_policy: restricted, freshness: "2026-09-17"}
-  - {id: KP008, name: Technical AIOS Knowledge, version: "1.0", status: implementation, path: packs/KP008.md, access_policy: internal, freshness: "2026-09-17"}
+  - {id: KP001, name: Company Core Knowledge, version: "1.1", status: implementation, path: packs/KP001.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP002, name: Brand Voice, version: "1.1", status: implementation, path: packs/KP002.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP003, name: Services and Offers, version: "1.1", status: implementation, path: packs/KP003.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP004, name: ICP and Buyer Knowledge, version: "1.1", status: implementation, path: packs/KP004.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP005, name: Sales Playbooks, version: "1.1", status: implementation, path: packs/KP005.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP006, name: Marketing Playbooks, version: "1.1", status: implementation, path: packs/KP006.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP007, name: SOP and Policy Knowledge, version: "1.1", status: implementation, path: packs/KP007.md, access_policy: restricted, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+  - {id: KP008, name: Technical AIOS Knowledge, version: "1.1", status: implementation, path: packs/KP008.md, access_policy: internal, freshness: "2026-09-17", last_reviewed: "2026-09-17"}
+notes:
+  - P3 E1 expanded packs with review sections and retrieval hints
+  - Retrieval defaults to mock store (NIVY_KNOWLEDGE_STORE=mock)

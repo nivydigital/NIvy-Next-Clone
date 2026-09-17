@@ -16,8 +16,8 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| A2 | Deepen SK034–SK050 | 🟢 | All SK034–SK050 at STD-01 v1.1 with domain procedures, non_goals, acceptance_criteria, evaluation, provenance |
-| A4 | Unit tests lead skills | 🟢 | `backend/app/test_lead_skills.py` — load STD-01 + run happy/fail-closed for priority skills |
+| A2 | Deepen SK034–SK050 | 🟢 | All SK034–SK050 at STD-01 v1.1 |
+| A4 | Unit tests lead skills | 🟢 | `backend/app/test_lead_skills.py` |
 | C2 | A034–A052 completeness | ⚪ | |
 | C3 | Golden fixtures A034–A052 | ⚪ | |
 
@@ -33,11 +33,11 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 
 | ID | Item | Status | Notes |
 |----|------|--------|-------|
-| E1–E3 | Knowledge depth + retrieval | ⚪ | |
-| F1–F3 | CI + secrets + backup evidence | ⚪ | |
-| C5 | Later agent waves | ⚪ | After revenue path |
-| D2–D3 | Inbound + marketing workflows | ⚪ | |
-| F4 | Production activation sign-off | ⚪ | Last |
+| E1–E3 | Knowledge depth + retrieval | 🟢 | KP packs expanded; `knowledge_store.py` mock default; `test_knowledge_retrieval.py` |
+| F1–F3 | CI + secrets + backup evidence | 🟢 | `.github/workflows/quality-gates.yml`; evidence under `docs/improvement/evidence/ops/` |
+| C5 | Later agent waves | 🟢 | `docs/improvement/AGENT-WAVES.md` (waves gated on revenue path) |
+| D2–D3 | Inbound + marketing workflows | 🟢 | STD-05 parity v1.1; publish gated; cancel path |
+| F4 | Production activation sign-off | 🟢 | Checklist requires revenue path testing-green |
 
 ## Completed (reference)
 
@@ -45,7 +45,7 @@ Legend: ⚪ not started · 🟡 in progress · 🟢 done · 🔴 blocked
 |------|------|
 | Standards STD-01…08 | 2026-09-17 |
 | Master Plan v2 | 2026-09-17 |
-| Phase scaffolds (tools, prompts, workflow, knowledge, ops) | 2026-09-17 |
+| Phase scaffolds | 2026-09-17 |
 | P0 A1/A3/B1 | 2026-09-17 |
-| A2 SK034–SK050 domain depth | 2026-09-17 |
-| A4 lead skill unit tests | 2026-09-17 |
+| P1 A2/A4 | 2026-09-17 |
+| P3 E/F/D2–D3/C5/F4 | 2026-09-17 |

@@ -1,9 +1,17 @@
 id: seo-audit
-version: "1.0"
+version: "1.1"
 status: implementation
+standard: STD-05
 trigger: manual
+name: SEO Audit
+policy:
+  side_effects: none
+  dry_run_default: true
+  fail_closed: true
 dry_run_default: true
-idempotency_key_fields: [site_id, audit_date]
+idempotency:
+  key_template: "seo-audit:{site_id}:{audit_date}"
+  key_fields: [site_id, audit_date]
 
 states:
   - pending
@@ -13,6 +21,7 @@ states:
   - report
   - completed
   - failed
+  - cancelled
 
 transitions:
   - {from: pending, to: strategy, on: start}
@@ -20,12 +29,14 @@ transitions:
   - {from: technical_review, to: prioritize, on: review_done}
   - {from: prioritize, to: report, on: prioritized}
   - {from: report, to: completed, on: done}
+  - {from: "*", to: cancelled, on: cancel}
   - {from: "*", to: failed, on: error}
 
 stages:
   - id: seo_strategy
     agent: A086
     skill_hint: [SK011, SK012, SK013]
+    knowledge_packs: [KP006]
     input_map:
       marketing_strategy: $.input.marketing_strategy
       content_strategy: $.input.content_strategy
@@ -62,6 +73,8 @@ stop_rules:
   - missing_marketing_strategy
 
 side_effects: none
+cancel_path: true
 
 audit:
   required: true
+  events: [workflow.started, stage.completed, workflow.completed, workflow.failed, workflow.cancelled]

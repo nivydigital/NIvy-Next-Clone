@@ -1,9 +1,19 @@
 id: inbound-email-triage
-version: "1.0"
+version: "1.1"
 status: implementation
+standard: STD-05
 trigger: email_received
+name: Inbound Email Triage
+policy:
+  side_effects: gated
+  require_approval_before: [tool.email.send]
+  dry_run_default: true
+  fail_closed: true
+  skill_contracts: true
 dry_run_default: true
-idempotency_key_fields: [message_id, mailbox]
+idempotency:
+  key_template: "inbound-email-triage:{mailbox}:{message_id}"
+  key_fields: [message_id, mailbox]
 
 states:
   - pending
@@ -14,28 +24,32 @@ states:
   - routed
   - completed
   - failed
+  - cancelled
 
 transitions:
   - {from: pending, to: classifying, on: start}
   - {from: classifying, to: context_loaded, on: classified}
   - {from: context_loaded, to: drafted, on: draft_ready}
   - {from: drafted, to: await_approval, on: needs_approval}
-  - {from: drafted, to: routed, on: auto_route}
+  - {from: drafted, to: routed, on: auto_route_internal_only}
   - {from: await_approval, to: routed, on: approved}
   - {from: await_approval, to: failed, on: rejected}
   - {from: routed, to: completed, on: done}
+  - {from: "*", to: cancelled, on: cancel}
   - {from: "*", to: failed, on: error}
 
 stages:
   - id: classify
     agent: A066
-    skill_hint: [SK046, SK047]
+    skills: [SK037]
+    skill_hint: [SK037, SK038]
     input_map:
       message: $.inbound.message
       mailbox: $.inbound.mailbox
     output_key: triage
   - id: reply_triage
     agent: A052
+    skills: [SK037, SK038]
     skill_hint: [SK037, SK038]
     input_map:
       message: $.inbound.message
@@ -44,7 +58,8 @@ stages:
     output_key: reply_triage
   - id: retrieve_context
     type: context_lookup
-    detail: Load lead/customer from revenue store or CRM by email headers
+    detail: Load lead/customer from revenue store or CRM by email headers; optional knowledge_store retrieve
+    knowledge_query: "SOP policy inbound reply"
     output_key: context
   - id: draft
     agent: A068
@@ -59,12 +74,15 @@ stages:
     policy: human_approval_if_external_send
     on_approve: route_send_or_ticket
     on_reject: failed
+    skip_when_dry_run: false
 
 stop_rules:
   - opt_out_detected
   - spam_or_bounce
   - already_handled_message_id
 
+cancel_path: true
+
 audit:
   required: true
-  events: [workflow.started, stage.completed, approval.requested, workflow.completed, workflow.failed]
+  events: [workflow.started, stage.completed, approval.requested, workflow.completed, workflow.failed, workflow.cancelled]
