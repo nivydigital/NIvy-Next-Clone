@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A039 Lead Scoring Input",
+  "type": "object",
+  "required": ["verified_records", "qualification_scoring_strategy"],
+  "properties": {
+    "verified_records": {"type": "object"},
+    "qualification_scoring_strategy": {"type": "object"},
+    "icp_definition": {"type": "object"},
+    "data_quality_report": {"type": "object"},
+    "scoring_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
