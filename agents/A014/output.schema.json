@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A014 Outreach Strategy Output",
+  "type": "object",
+  "required": ["status", "sequences", "personalization_rules", "cadence", "channel_mix", "compliance_rules", "success_metrics", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "sequences": {"type": "array", "items": {"type": "object"}},
+    "personalization_rules": {"type": "array", "items": {"type": "object"}},
+    "cadence": {"type": "object"},
+    "channel_mix": {"type": "object"},
+    "compliance_rules": {"type": "array", "items": {"type": "object"}},
+    "success_metrics": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
