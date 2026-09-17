@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A070 Communication Knowledge Extractor Input",
+  "type": "object",
+  "required": ["conversation_insights"],
+  "properties": {
+    "conversation_insights": {"type": "object"},
+    "meeting_intelligence": {"type": "object"},
+    "knowledge_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
