@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A055 Meeting Prep Input",
+  "type": "object",
+  "required": ["account_research", "qualification_result"],
+  "properties": {
+    "account_research": {"type": "object"},
+    "qualification_result": {"type": "object"},
+    "conversation_context": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "meeting_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
