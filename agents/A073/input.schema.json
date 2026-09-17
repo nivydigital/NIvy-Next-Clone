@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A073 Customer Health Analyst Input",
+  "type": "object",
+  "required": ["customer_signals"],
+  "properties": {
+    "customer_signals": {"type": "object"},
+    "health_strategy": {"type": "object"},
+    "account_context": {"type": "object"},
+    "health_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
