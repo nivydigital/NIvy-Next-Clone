@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A033 Strategic Planning Input",
+  "type": "object",
+  "required": ["gtm_strategy", "revenue_operations_strategy"],
+  "properties": {
+    "gtm_strategy": {"type": "object"},
+    "revenue_operations_strategy": {"type": "object"},
+    "experiment_growth_plan": {"type": "object"},
+    "continuous_improvement_strategy": {"type": "object"},
+    "brand_strategy": {"type": "object"},
+    "planning_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
