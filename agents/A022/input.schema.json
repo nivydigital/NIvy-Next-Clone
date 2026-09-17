@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A022 Feedback & Insights Strategy Input",
+  "type": "object",
+  "required": ["customer_health_strategy", "retention_expansion_strategy"],
+  "properties": {
+    "customer_health_strategy": {"type": "object"},
+    "retention_expansion_strategy": {"type": "object"},
+    "onboarding_strategy": {"type": "object"},
+    "feedback_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
