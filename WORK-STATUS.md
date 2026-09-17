@@ -2,18 +2,16 @@
 
 - Last updated: 2026-09-17
 - Testing: **DEFERRED**
-- Last completed: **A065–A069** (Onboarding + Communications)
+- Last completed: **A070–A074**
 
-## Search note
-Open-source onboarding/triage agents found (HR onboarding, KYC, SaaS) are not drop-in compatible with Nivy registry contracts. Implemented from `agents/registry.yaml` definitions.
-
-## Registry pipeline progress
+## Registry progress
 | Range | Focus |
 |-------|--------|
 | A034–A060 | Lead ops → Proposal |
-| A065–A069 | Onboarding + Inbound/Conversation/Meeting intel |
+| A065–A069 | Onboarding + Communications |
+| A070–A074 | Knowledge extract, QA, CS onboarding planner, Health, Support triage |
 
 ## Next
-A070 Communication Knowledge Extractor, A071 Communication Quality Reviewer, A072–A077 Customer Success.
+A075 Customer Success Planner, A076 Renewal Risk Analyst, A077 Feedback & NPS Analyst, then Finance (A078+).
 
 Update after every meaningful session.
