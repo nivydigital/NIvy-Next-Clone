@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A099 Regression QA Agent Input",
+  "type": "object",
+  "required": ["current_output", "baseline_output"],
+  "properties": {
+    "current_output": {"type": "object"},
+    "baseline_output": {"type": "object"},
+    "tolerance_rules": {"type": "array", "items": {"type": "object"}},
+    "regression_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
