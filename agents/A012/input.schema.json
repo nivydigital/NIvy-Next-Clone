@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A012 Experiment & Growth Planning Input",
+  "type": "object",
+  "required": ["gtm_strategy", "campaign_strategy"],
+  "properties": {
+    "gtm_strategy": {"type": "object"},
+    "campaign_strategy": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "content_strategy": {"type": "object"},
+    "offer_pricing_strategy": {"type": "object"},
+    "historical_performance": {"type": "object"},
+    "experiment_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
