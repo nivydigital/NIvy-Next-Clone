@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A088 Paid Media Analyst Input",
+  "type": "object",
+  "required": ["paid_media_performance"],
+  "properties": {
+    "paid_media_performance": {"type": "object"},
+    "marketing_strategy": {"type": "object"},
+    "budget_constraints": {"type": "array", "items": {"type": "string"}},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
