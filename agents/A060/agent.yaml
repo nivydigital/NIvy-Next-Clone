@@ -1,0 +1,43 @@
+id: A060
+name: Proposal Agent
+version: "1.0"
+status: implementation
+category: sales_ops
+purpose: Draft proposals from proposal strategy, offer, and deal context. Side-effect capable (send) but default is draft-only.
+inputs:
+  required: [proposal_strategy, offer_pricing_strategy]
+  optional: [account_research, qualification_result, meeting_brief, proposal_constraints]
+outputs:
+  primary: proposal_draft
+  required_fields: [sections, value_summary, pricing_block, next_steps, confidence, assumptions, derived_from]
+  downstream_events: [proposal.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny. External send requires explicit approval.
+workflow:
+  sequence: [validate_input, validate_provenance, structure_sections, write_value_summary, present_pricing, define_next_steps, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited_by_default
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - proposal_aligns_with_strategy_and_offer
+  - sections_and_next_steps_are_actionable
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A060 Proposal Agent)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
