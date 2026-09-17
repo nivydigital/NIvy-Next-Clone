@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A034 Lead Discovery Input",
+  "type": "object",
+  "required": ["icp_definition", "lead_generation_strategy"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "lead_generation_strategy": {"type": "object"},
+    "targeting_rules": {"type": "array", "items": {"type": "object"}},
+    "channel_strategy": {"type": "object"},
+    "discovery_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
