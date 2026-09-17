@@ -1,18 +1,62 @@
 id: SK041
 name: Account Research
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: produce an evidence-backed account brief
-inputs: [company, website, context]
-outputs: [account_brief, signals, sources]
+category: sales
+standard: STD-01/v2
+objective: Produce an evidence-backed account brief from public company and website context without fabricating signals.
+non_goals:
+  - Inventing company facts, signals, or sources
+  - Using non-public or disallowed sources
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: company, type: object, constraints: "company name or identity"}
+  optional:
+    - {name: website, type: string}
+    - {name: context, type: object}
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+outputs:
+  required:
+    - {name: account_brief, type: object}
+    - {name: signals, type: array}
+    - {name: sources, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: gather_public_evidence}
-  - {step: 3, action: synthesize_brief}
-  - {step: 4, action: extract_signals}
-quality_checks: [sources_for_material_claims]
-failure_policy: fail_closed_on_missing_company
-evidence_policy: sources array required
-dependencies: [SK001, SK034]
-tools: [tool.ollama.generate]
-acceptance: [account_brief is object, sources is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require company identity. Fail closed if company missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Scope research to public website and approved context sources. Record retrieval bounds.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Gather public evidence (about, products, team size signals, news if allowed). Synthesize account_brief with only evidenced facts. Extract buying/lifecycle signals with timestamps when available. Attach sources array.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Material claims must have sources. Empty signals allowed if none found.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm account_brief object, signals array, sources array.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return account_brief, signals, sources, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - company present
+postconditions:
+  - sources for material claims
+  - signals only when evidenced
+quality_checks:
+  - sources_for_material_claims
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing company; partial when brief thin
+evidence_policy: sources array required for material claims; never invent citations
+dependencies:
+  skills: [SK001, SK034]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns account_brief, signals, sources", verify: schema}
+  - {id: AC2, statement: "Rejects missing company", verify: test}
+  - {id: AC3, statement: "Material claims have sources", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_company, thin_public_data]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

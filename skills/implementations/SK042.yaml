@@ -1,18 +1,63 @@
 id: SK042
 name: Signal Detection
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: identify supported buying or lifecycle signals
-inputs: [account, events, sources]
-outputs: [signals, timestamps, evidence]
+category: sales
+standard: STD-01/v2
+objective: Identify supported buying or lifecycle signals from account events and sources only.
+non_goals:
+  - Inventing signals without evidence
+  - Inferring intent beyond what sources support
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: account, type: object, constraints: "account identity"}
+  optional:
+    - {name: events, type: array}
+    - {name: sources, type: array}
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: signals, type: array}
+    - {name: timestamps, type: array}
+    - {name: evidence, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: scan_events}
-  - {step: 3, action: classify_signals}
-  - {step: 4, action: attach_evidence}
-quality_checks: [signal_has_evidence]
-failure_policy: empty_signals_ok
-evidence_policy: per-signal source refs
-dependencies: [SK041]
-tools: [tool.ollama.generate]
-acceptance: [signals is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require account. Empty events/sources yields empty signals (ok).", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Normalize events and sources; define signal taxonomy (hiring, funding, product launch, tech change, etc.).", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Scan events and sources for taxonomy matches. Classify signal type; attach timestamp when available; attach evidence ref per signal.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Every signal must have evidence. Empty signals ok when none found.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm signals, timestamps, evidence are arrays.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return signals, timestamps, evidence, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - account present
+postconditions:
+  - every signal has evidence
+  - empty signals allowed
+quality_checks:
+  - signal_has_evidence
+  - schema_valid
+  - policy_compliant
+failure_policy: empty_signals_ok; fail_closed on missing account
+evidence_policy: per-signal source refs; never invent citations
+dependencies:
+  skills: [SK041]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns signals, timestamps, evidence arrays", verify: schema}
+  - {id: AC2, statement: "Empty signals allowed when no evidence", verify: test}
+  - {id: AC3, statement: "Every signal has evidence", verify: test}
+evaluation:
+  unit_cases: [happy_path, no_events, missing_account]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

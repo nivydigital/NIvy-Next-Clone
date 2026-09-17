@@ -1,20 +1,62 @@
 id: SK038
 name: Data Verification
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: Verify material record claims against sources.
-inputs: [records, sources]
-outputs: [verification_results, evidence]
+category: sales
+standard: STD-01/v2
+objective: Verify material record claims against sources without marking claims verified without evidence.
+non_goals:
+  - Marking claims verified without a source match
+  - Inventing sources or claim values
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: records, type: array, constraints: "records with material claims"}
+    - {name: sources, type: array, constraints: "candidate sources for verification"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: verification_results, type: array}
+    - {name: evidence, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - step: 1
-    action: extract_claims
-  - step: 2
-    action: match_sources
-  - step: 3
-    action: mark_verified_or_unverified
-quality_checks: [no_verified_without_source, unresolved_listed]
-failure_policy: fail_closed_on_missing_records
-evidence_policy: claim-level source refs
-dependencies: [SK037]
-tools: [tool.ollama.generate]
-acceptance: [verification_results is array]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require non-empty records. Fail closed if records missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Extract material claims from records; index available sources by URL/id.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "For each claim: match against sources; mark verified only when source supports claim; mark unresolved when no match. Attach claim-level source refs to evidence.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "No verified without source; unresolved claims listed explicitly.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm verification_results and evidence are arrays.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return verification_results, evidence, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - records present
+postconditions:
+  - no verified claim without source
+  - unresolved claims listed
+quality_checks:
+  - no_verified_without_source
+  - unresolved_listed
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing records; partial when some claims unresolved
+evidence_policy: claim-level source refs; never invent citations
+dependencies:
+  skills: [SK037]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns verification_results and evidence arrays", verify: schema}
+  - {id: AC2, statement: "Rejects missing records", verify: test}
+  - {id: AC3, statement: "No verified claim without source", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_records, all_unresolved, partial_verify]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned

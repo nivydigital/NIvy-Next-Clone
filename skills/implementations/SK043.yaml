@@ -1,18 +1,64 @@
 id: SK043
 name: Outreach Strategy
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: choose an appropriate bounded outreach approach
-inputs: [icp, account, offer, channel]
-outputs: [sequence_strategy, channel, stop_rules]
+category: sales
+standard: STD-01/v2
+objective: Choose an appropriate bounded outreach approach with explicit stop rules from ICP, account, offer, and channel.
+non_goals:
+  - Unlimited sequences without stop rules
+  - Channels outside policy
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: icp, type: object}
+    - {name: account, type: object}
+    - {name: offer, type: object}
+    - {name: channel, type: string, constraints: "email|linkedin|whatsapp|sms|call"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: sequence_strategy, type: object}
+    - {name: channel, type: string}
+    - {name: stop_rules, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - {step: 1, action: validate_inputs}
-  - {step: 2, action: select_channel}
-  - {step: 3, action: design_sequence}
-  - {step: 4, action: define_stop_rules}
-quality_checks: [stop_rules_present]
-failure_policy: fail_closed_on_missing_offer
-evidence_policy: strategy cites account signals
-dependencies: [SK039, SK040, SK041]
-tools: [tool.ollama.generate]
-acceptance: [sequence_strategy present, stop_rules present]
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require icp, account, offer, channel. Fail closed if offer missing or channel invalid.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load account signals and ICP fit. Confirm channel is allowed for account/segment.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Select primary channel (or confirm input). Design bounded sequence (steps, timing, cadence). Define stop_rules: reply, unsubscribe, bounce, max_touches, do_not_contact. Cite account signals in strategy rationale.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "stop_rules must be non-empty. sequence_strategy must be bounded.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm sequence_strategy, channel, stop_rules present.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return sequence_strategy, channel, stop_rules, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - icp, account, offer, channel present
+postconditions:
+  - stop_rules non-empty
+  - sequence bounded
+quality_checks:
+  - stop_rules_present
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing offer or invalid channel
+evidence_policy: strategy cites account signals; never invent citations
+dependencies:
+  skills: [SK039, SK040, SK041]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns sequence_strategy, channel, stop_rules", verify: schema}
+  - {id: AC2, statement: "Rejects missing offer", verify: test}
+  - {id: AC3, statement: "stop_rules non-empty", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_offer, invalid_channel]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
