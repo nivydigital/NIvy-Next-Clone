@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A006 Messaging & Positioning Output",
+  "type": "object",
+  "required": [
+    "status",
+    "positioning_statement",
+    "value_propositions",
+    "messaging_pillars",
+    "proof_points",
+    "objections_and_responses",
+    "tone_and_voice",
+    "confidence",
+    "assumptions",
+    "derived_from",
+    "warnings",
+    "errors",
+    "next_action"
+  ],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "positioning_statement": {"type": "string"},
+    "value_propositions": {"type": "array", "items": {"type": "object"}},
+    "messaging_pillars": {"type": "array", "items": {"type": "object"}},
+    "proof_points": {"type": "array", "items": {"type": "object"}},
+    "objections_and_responses": {"type": "array", "items": {"type": "object"}},
+    "tone_and_voice": {"type": "object"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
