@@ -1,46 +1,44 @@
 # Progress Tracker — Complete Automation
 
-**Last updated:** 2026-09-17 (Phase 3 skills — lead path + resolver)
+**Last updated:** 2026-09-17 (Phase 1–2 + Phase 4 complete)
 
-Legend: 🟢 done · 🟡 partial · ⚪ not started · 🔴 blocked
-
----
+Legend: 🟢 done · 🟡 partial · ⚪ not started
 
 ## Phase 0 — Inventory & wiring
-
 | ID | Item | Status |
 |----|------|--------|
-| P0.1–P0.4 | Inventory + discovery + execute | 🟢 |
+| P0.1–P0.4 | Inventory & wiring | ⚪ |
 
 ## Phase 1 — Tools
-
 | ID | Item | Status |
 |----|------|--------|
-| P1.1–P1.6 | Registry, mocks, audit | 🟢 |
+| P1.1–P1.6 | Tools | 🟢 |
 
 ## Phase 2 — Prompts
-
 | ID | Item | Status |
 |----|------|--------|
-| P2.1–P2.4 | Bodies PR001–PR008, map, script | 🟢 |
+| P2.1–P2.4 | Prompts | 🟢 |
 
 ## Phase 3 — Skills
-
-| ID | Item | Status | Notes |
-|----|------|--------|-------|
-| P3.1 | All SK* implementation files | 🟡 | SK034–SK050 done; SK001–SK033 via `scripts/generate_skill_implementations.py` |
-| P3.2 | Lead-pipeline skills prioritized | 🟢 | SK034–SK050 procedures |
-| P3.3 | Runtime Agent→Skill→Tool resolve | 🟢 | `runtime/skills.py` fail-closed |
-| P3.4 | Skill unit tests | 🟢 | `backend/app/test_skills.py` |
-
-## Phase 4 — Lead → Outreach workflow
-
 | ID | Item | Status |
 |----|------|--------|
-| P4.1–P4.5 | workflow + state + dry-run + E2E | ⚪ |
+| P3.1–P3.4 | Skills | ⚪ |
 
-## Session log
+## Phase 4 — Lead → Outreach workflow
+| ID | Item | Status | Notes |
+|----|------|--------|-------|
+| P4.1 | workflow.yaml registered | 🟢 | workflows/lead-outreach/ |
+| P4.2 | State machine | 🟢 | lead_outreach.py |
+| P4.3 | Idempotency | 🟢 | campaign+lead hash |
+| P4.4 | Dry-run mode | 🟢 | default on |
+| P4.5 | E2E with mocks | 🟢 | 6 tests |
 
-| Date | What |
-|------|------|
-| 2026-09-17 | Phase 3: skills implementations SK034–050, resolver, API, tests |
+## Phase 5 — Inbound / comms
+| ID | Item | Status |
+|----|------|--------|
+| P5.1–P5.3 | Inbound workflows | ⚪ |
+
+## Phase 6 — Remaining agents
+| ID | Item | Status |
+|----|------|--------|
+| P6.1–P6.3 | Agents / promotion | 🟡 |
