@@ -9,8 +9,9 @@ from .runtime.a004 import A004CompetitorError, run_a004_competitor
 from .runtime.a005 import A005ChannelStrategyError, run_a005_channel
 from .runtime.discovery import execute_agent, get_agent, list_agents
 from .runtime.engine import RuntimeDenied, runtime_engine
+from .runtime.skills import resolve_agent_skills, skill_coverage_report
 
-app = FastAPI(title="Nivy Next AIOS API", version="0.7.0")
+app = FastAPI(title="Nivy Next AIOS API", version="0.8.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 class SendEmailRequest(BaseModel):
@@ -20,7 +21,6 @@ class LeadCreateRequest(BaseModel):
 class LeadQualifyRequest(BaseModel): score: int
 class AgentRunRequest(BaseModel): prompt: str | None = None; prompt_id: str | None = None; context: dict = Field(default_factory=dict)
 class AgentExecuteRequest(BaseModel):
-    """Unified structured execute (P0.4). Body is agent input fields + optional control keys."""
     prompt_id: str | None = None
     allow_llm_fallback: bool = True
     request_id: str | None = None
@@ -34,16 +34,14 @@ class ToolRunRequest(BaseModel): payload: dict = Field(default_factory=dict); ap
 class ApprovalRequest(BaseModel): agent_id: str; tool_id: str; reason: str
 
 @app.get("/health")
-def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.7.0", "runtime": runtime_engine.health()}
+def health(): return {"status": "ok", "service": "nivy-backend", "version": "0.8.0", "runtime": runtime_engine.health()}
 @app.get("/api/v1/system")
-def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.7.0"}
+def system(): return {"name": "Nivy Next AIOS", "status": "online", "llm": "Ollama", "memory": "Qdrant", "automation": "n8n", "crm": "Odoo", "runtime": "fail-closed", "revenue_persistence": "sqlite", "api_version": "0.8.0"}
 @app.get("/api/v1/runtime/health")
 def runtime_health(): return runtime_engine.health()
 
-# --- P0.3 Discovery ---
 @app.get("/api/v1/runtime/agents")
 def runtime_list_agents():
-    """List registry + disk agents with runtime module / entrypoint / route flags."""
     return list_agents()
 
 @app.get("/api/v1/runtime/agents/{agent_id}")
@@ -53,25 +51,17 @@ def runtime_get_agent(agent_id: str):
     except RuntimeDenied as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-# --- P0.4 Unified structured execute ---
 @app.post("/api/v1/runtime/agents/{agent_id}/execute")
 async def runtime_execute_agent(agent_id: str, request: AgentExecuteRequest):
-    """Validate input schema → structured entrypoint (or LLM fallback) → audit."""
     aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
     body = dict(request.payload or {})
     if request.request_id and "request_id" not in body:
         body["request_id"] = request.request_id
     try:
-        result = await execute_agent(
-            aid,
-            body,
-            prompt_id=request.prompt_id,
-            allow_llm_fallback=request.allow_llm_fallback,
-        )
+        result = await execute_agent(aid, body, prompt_id=request.prompt_id, allow_llm_fallback=request.allow_llm_fallback)
     except RuntimeDenied as exc:
         raise HTTPException(status_code=403, detail=str(exc)) from exc
     except Exception as exc:
-        # Structured agent validation errors (e.g. missing fields)
         msg = str(exc)
         if "requires" in msg or "missing" in msg.lower():
             raise HTTPException(status_code=422, detail=msg) from exc
@@ -79,6 +69,21 @@ async def runtime_execute_agent(agent_id: str, request: AgentExecuteRequest):
     if getattr(result, "status", None) == "failed":
         raise HTTPException(status_code=502, detail=result.error or f"{aid} runtime failed")
     return result.__dict__ if hasattr(result, "__dict__") else result
+
+# --- Phase 3 Skills ---
+@app.get("/api/v1/runtime/skills/coverage")
+def skills_coverage():
+    """Registry vs implementation files."""
+    return skill_coverage_report()
+
+@app.get("/api/v1/runtime/agents/{agent_id}/skills/resolve")
+def skills_resolve(agent_id: str):
+    """Agent → Skill → Tool resolution; fail closed if skill implementation missing."""
+    aid = agent_id.upper() if agent_id[:1].lower() == "a" else agent_id
+    try:
+        return resolve_agent_skills(aid)
+    except RuntimeDenied as exc:
+        raise HTTPException(status_code=403, detail=str(exc)) from exc
 
 @app.post("/api/v1/runtime/agents/{agent_id}/run")
 async def run_agent(agent_id: str, request: AgentRunRequest):
@@ -165,6 +170,7 @@ def revenue_summary():
 @app.get("/api/v1/evaluation/runtime")
 def runtime_evaluation():
     discovery = list_agents()
+    coverage = skill_coverage_report()
     checks = {
         "registry_loaded": len(runtime_engine.registry.get("agents", [])) > 0,
         "default_deny": runtime_engine.registry.get("policy", {}).get("default_deny", True) is True,
@@ -174,5 +180,6 @@ def runtime_evaluation():
         "executable_prompt_library": len(runtime_engine.prompt_library.get("prompts", {})) >= 8,
         "agent_discovery": discovery.get("count", 0) > 0,
         "structured_entrypoints": discovery.get("structured_entrypoint_count", 0) > 0,
+        "lead_skills_sk034_sk050": all(f"SK{i:03d}" not in coverage.get("missing_implementations", []) for i in range(34, 51)),
     }
-    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks, "discovery_summary": {"count": discovery.get("count"), "structured_entrypoint_count": discovery.get("structured_entrypoint_count")}}
+    return {"passed": sum(checks.values()), "total": len(checks), "checks": checks, "skill_coverage": coverage, "discovery_summary": {"count": discovery.get("count"), "structured_entrypoint_count": discovery.get("structured_entrypoint_count")}}
