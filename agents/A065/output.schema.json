@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A065 Onboarding Agent Output",
+  "type": "object",
+  "required": ["status", "steps", "milestones", "owners", "success_criteria", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "steps": {"type": "array", "items": {"type": "object"}},
+    "milestones": {"type": "array", "items": {"type": "object"}},
+    "owners": {"type": "array", "items": {"type": "object"}},
+    "success_criteria": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}

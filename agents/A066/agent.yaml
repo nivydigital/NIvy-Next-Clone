@@ -1,0 +1,43 @@
+id: A066
+name: Inbound Communication Triage
+version: "1.0"
+status: implementation
+category: communications
+purpose: Triage inbound communications (email, chat, form) by intent, urgency and routing target.
+inputs:
+  required: [inbound_message]
+  optional: [channel_metadata, triage_rules, triage_constraints]
+outputs:
+  primary: inbound_triage
+  required_fields: [intent, urgency, route_to, summary, confidence, assumptions, derived_from]
+  downstream_events: [inbound_triage.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, classify_intent, set_urgency, recommend_route, summarize, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - intent_and_route_are_explicit
+  - urgency_is_justified
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A066 Inbound Communication Triage)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."

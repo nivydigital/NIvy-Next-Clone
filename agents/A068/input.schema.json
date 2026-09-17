@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A068 Response Drafting Input",
+  "type": "object",
+  "required": ["inbound_triage", "messaging_positioning"],
+  "properties": {
+    "inbound_triage": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "conversation_insights": {"type": "object"},
+    "account_context": {"type": "object"},
+    "response_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
