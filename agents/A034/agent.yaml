@@ -1,0 +1,43 @@
+id: A034
+name: Lead Discovery
+version: "1.0"
+status: implementation
+category: lead_ops
+purpose: Discover target accounts and leads matching ICP and lead-generation strategy using public signals and defined targeting rules.
+inputs:
+  required: [icp_definition, lead_generation_strategy]
+  optional: [targeting_rules, channel_strategy, discovery_constraints]
+outputs:
+  primary: discovered_leads
+  required_fields: [leads, sources, match_rationale, confidence, assumptions, derived_from]
+  downstream_events: [lead_discovery.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, apply_targeting, discover_candidates, score_match, attach_sources, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - leads_align_with_ICP_and_targeting
+  - sources_and_rationale_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: agents/registry.yaml (A034 Lead Discovery)
+  source_type: internal
+  modifications: "Promoted from declared/planned to implementation under deferred-testing policy."
