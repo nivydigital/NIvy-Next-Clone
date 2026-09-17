@@ -1,35 +1,66 @@
 id: SK034
 name: Lead Discovery
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: Discover candidate businesses matching explicit ICP and source rules.
-inputs: [icp, geography, source_rules]
-outputs: [leads, sources, dedupe_keys]
+category: sales
+standard: STD-01/v2
+objective: Discover candidate businesses matching explicit ICP and source rules without fabricating contacts or sources.
+non_goals:
+  - Inventing business names, domains, contacts, or metrics not present in approved sources
+  - Using sources outside source_rules
+  - External side effects (CRM write, email send) unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: icp, type: object, constraints: "must include industry/size/geography or equivalent criteria"}
+    - {name: source_rules, type: object, constraints: "approved public source list and retrieval bounds"}
+  optional:
+    - {name: geography, type: object}
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: leads, type: array}
+    - {name: sources, type: array}
+    - {name: dedupe_keys, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - step: 1
-    action: validate_inputs
-    detail: Require icp object and source_rules; reject empty geography only if required by rules.
-  - step: 2
-    action: apply_source_rules
-    detail: Restrict discovery to approved public sources listed in source_rules.
-  - step: 3
-    action: collect_candidates
-    detail: Gather candidate business records; attach source URL per candidate.
-  - step: 4
-    action: dedupe
-    detail: Compute dedupe_keys (domain, name+geo) and collapse duplicates.
-  - step: 5
-    action: quality_gate
-    detail: Drop records missing required identity fields.
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require non-empty icp and source_rules. Fail closed if either missing or empty. Geography optional unless source_rules.requires_geography is true.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Load only sources listed in source_rules; record allowed domains and retrieval timestamp. Reject any source not on the allowlist.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "For each approved source: collect candidate business records that match ICP criteria (industry, size band, geo if specified). Attach source URL and retrieval time to every candidate. Never invent domains, names, or contact fields.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Drop records missing required identity fields (name or domain). Ensure every remaining lead has a source ref. Compute and attach dedupe_keys (normalized domain; name+geo when domain absent). Collapse exact dedupe_key matches.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm leads is array, sources is array, each lead references a source id/URL, dedupe_keys present for all leads.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return structured result with status, confidence (high if >=N matched sources used; else medium/low), assumptions, warnings for dropped records, next_action.", on_failure: fail_closed}
+preconditions:
+  - Required inputs present (icp, source_rules)
+  - source_rules lists at least one approved public source
+postconditions:
+  - Outputs include status, confidence, leads, sources, dedupe_keys
+  - No lead without a source reference
 quality_checks:
   - every_lead_has_source
   - no_fabricated_contacts
   - dedupe_keys_present
-failure_policy: fail_closed_on_missing_icp_or_sources; partial ok only if status=partial and gaps listed
-evidence_policy: preserve source URLs and retrieval timestamp for each lead
-dependencies: [SK001]
-tools: [tool.ollama.generate]
-acceptance:
-  - leads is an array
-  - sources is an array
-  - each lead references a source
+  - schema_valid
+  - policy_compliant
+failure_policy: fail_closed on missing icp or source_rules; partial only when status=partial and gaps listed (e.g. zero matches after quality gate)
+evidence_policy: preserve source URLs and retrieval timestamp for each lead; never invent citations
+dependencies:
+  skills: [SK001]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns leads, sources, and dedupe_keys arrays", verify: schema}
+  - {id: AC2, statement: "Rejects missing icp or empty source_rules", verify: test}
+  - {id: AC3, statement: "Every lead references a source; no invented contacts", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_icp, empty_source_rules, zero_matches_partial, dedupe_collapse]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
