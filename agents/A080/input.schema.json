@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A080 Accounts Payable Analyst Input",
+  "type": "object",
+  "required": ["ap_records"],
+  "properties": {
+    "ap_records": {"type": "object"},
+    "cash_position": {"type": "object"},
+    "payment_policy": {"type": "object"},
+    "analysis_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
