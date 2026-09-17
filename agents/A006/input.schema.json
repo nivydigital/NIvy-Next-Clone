@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A006 Messaging & Positioning Input",
+  "type": "object",
+  "required": ["icp_definition", "buyer_personas"],
+  "properties": {
+    "icp_definition": {"type": "object"},
+    "buyer_personas": {"type": "object"},
+    "market_research": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "business_offer": {"type": "object"},
+    "brand_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
