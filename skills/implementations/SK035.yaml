@@ -1,30 +1,65 @@
 id: SK035
 name: Contact Discovery
-version: "1.0"
+version: "1.1"
 status: implementation
-objective: Find supported contact information for known accounts and target roles.
-inputs: [account, target_role]
-outputs: [contacts, evidence, unknowns]
+category: sales
+standard: STD-01/v2
+objective: Find supported contact information for known accounts and target roles without inventing emails or names.
+non_goals:
+  - Inventing contact names, emails, or phone numbers
+  - Scraping sources outside approved public pages
+  - External side effects unless agent policy authorizes a listed tool
+inputs:
+  required:
+    - {name: account, type: object, constraints: "must include name or domain"}
+    - {name: target_role, type: string, constraints: "role or title to match"}
+  optional:
+    - {name: constraints, type: object}
+    - {name: prior_result, type: object}
+    - {name: context, type: object}
+outputs:
+  required:
+    - {name: contacts, type: array}
+    - {name: evidence, type: array}
+    - {name: unknowns, type: array}
+  common: [status, confidence, assumptions, derived_from, warnings, errors, next_action]
 procedure:
-  - step: 1
-    action: validate_account
-    detail: Require account identity (name or domain).
-  - step: 2
-    action: search_public_contacts
-    detail: Search approved public pages for role-matching contacts.
-  - step: 3
-    action: extract_fields
-    detail: Extract name, role, email, linkedin only when evidenced.
-  - step: 4
-    action: mark_unknowns
-    detail: Explicitly list fields not found; never invent emails.
+  - {step: 1, name: validate_inputs, action: validate_inputs, detail: "Require account identity (name or domain) and target_role. Fail closed if account missing.", on_failure: fail_closed}
+  - {step: 2, name: prepare_context, action: prepare_context, detail: "Limit search to approved public pages (company about/team, LinkedIn public profiles if allowed). Record allowed source types.", on_failure: fail_closed}
+  - {step: 3, name: execute_core, action: execute_core, detail: "Search approved public pages for role-matching contacts. Extract name, role, email, linkedin only when evidenced on page. Explicitly list unknowns for fields not found; never invent emails.", on_failure: fail_closed}
+  - {step: 4, name: quality_check, action: quality_check, detail: "Ensure every contact field is backed by evidence entry. unknowns must list missing fields. Empty contacts allowed with unknowns populated.", on_failure: partial}
+  - {step: 5, name: verify_outputs, action: verify_outputs, detail: "Confirm contacts, evidence, unknowns are arrays.", on_failure: fail_closed}
+  - {step: 6, name: return_audit, action: return_audit, detail: "Return contacts, evidence, unknowns, status, confidence, next_action.", on_failure: fail_closed}
+preconditions:
+  - account identity present
+  - target_role present
+postconditions:
+  - contacts and evidence arrays present
+  - unknowns explicit when fields missing
 quality_checks:
   - contacts_backed_by_evidence
   - unknowns_explicit
+  - no_invented_emails
+  - schema_valid
+  - policy_compliant
 failure_policy: fail_closed if account missing; empty contacts allowed with unknowns
-evidence_policy: each contact field cites source
-dependencies: [SK034]
-tools: [tool.ollama.generate]
-acceptance:
-  - contacts is an array
-  - evidence is an array
+evidence_policy: each contact field cites source; never invent citations
+dependencies:
+  skills: [SK034]
+  tools: [tool.ollama.generate]
+  knowledge: []
+  prompts: []
+permissions:
+  side_effects: false
+  data_classes: [internal, pii]
+acceptance_criteria:
+  - {id: AC1, statement: "Returns contacts, evidence, unknowns arrays", verify: schema}
+  - {id: AC2, statement: "Rejects missing account", verify: test}
+  - {id: AC3, statement: "No contact field without evidence; unknowns listed", verify: test}
+evaluation:
+  unit_cases: [happy_path, missing_account, no_contacts_found, partial_fields]
+  regression_required: true
+provenance:
+  source: skills/definitions.yaml + STD-01/v2 + A2 deepen
+  last_reviewed: "2026-09-17"
+  owner: unassigned
