@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A091 Campaign QA Reviewer Output",
+  "type": "object",
+  "required": ["status", "pass_fail", "issues", "suggested_fixes", "score", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"enum": ["success", "partial", "failed", "escalated"]},
+    "pass_fail": {"type": "string"},
+    "issues": {"type": "array", "items": {"type": "object"}},
+    "suggested_fixes": {"type": "array", "items": {"type": "object"}},
+    "score": {"type": "number"},
+    "confidence": {"enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array"},
+    "errors": {"type": "array"},
+    "next_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}
