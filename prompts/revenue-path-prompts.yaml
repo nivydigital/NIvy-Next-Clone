@@ -1,0 +1,20 @@
+version: "1.0"
+status: canonical
+description: P2/B2 non-generic primary prompts for lead→outreach
+revenue_path:
+  agents:
+    - {id: A003, primary_prompt: PR009}
+    - {id: A004, primary_prompt: PR010}
+    - {id: A005, primary_prompt: PR011}
+    - {id: A034, primary_prompt: PR003}
+    - {id: A035, primary_prompt: PR003}
+    - {id: A036, primary_prompt: PR003}
+    - {id: A037, primary_prompt: PR003}
+    - {id: A038, primary_prompt: PR003}
+    - {id: A039, primary_prompt: PR003}
+    - {id: A041, primary_prompt: PR003}
+    - {id: A043, primary_prompt: PR012}
+    - {id: A044, primary_prompt: PR004}
+    - {id: A049, primary_prompt: PR004}
+    - {id: A050, primary_prompt: PR012}
+    - {id: A052, primary_prompt: PR005}
