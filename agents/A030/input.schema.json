@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A030 Product Marketing Strategy Input",
+  "type": "object",
+  "required": ["offer_pricing_strategy", "messaging_positioning"],
+  "properties": {
+    "offer_pricing_strategy": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "competitor_intelligence": {"type": "object"},
+    "brand_strategy": {"type": "object"},
+    "product_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
