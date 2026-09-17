@@ -1,5 +1,190 @@
-version: 1
+version: "2.0"
+status: canonical
+schema_notes: >
+  Phase 1 complete-automation-plan. Each tool declares argument schema,
+  side_effects, approval requirements, and mock support for CI.
+
+defaults:
+  fail_closed: true
+  audit_required: true
+  redact_argument_keys: [password, secret, token, api_key, authorization, apiKey, Authorization]
+
 tools:
+  - id: tool.ollama.generate
+    aliases: [ollama.generate, ollama]
+    purpose: Local LLM inference via Ollama
+    side_effects: false
+    requires_approval: false
+    credential_env: [OLLAMA_URL, OLLAMA_BASE_URL, OLLAMA_MODEL]
+    timeout_seconds: 120
+    mock_supported: true
+    arguments:
+      type: object
+      required: [prompt]
+      properties:
+        prompt: {type: string, minLength: 1}
+        model: {type: string}
+        format: {type: string, enum: [json, text], default: text}
+        temperature: {type: number, minimum: 0, maximum: 2}
+        system: {type: string}
+      additionalProperties: false
+
+  - id: tool.email.send
+    aliases: [email.send, email]
+    purpose: Outbound email delivery (n8n webhook or mock)
+    side_effects: true
+    requires_approval: true
+    credential_env: [N8N_URL, N8N_EMAIL_WEBHOOK, EMAIL_PROVIDER_SECRET]
+    timeout_seconds: 30
+    mock_supported: true
+    mock_env: EMAIL_MOCK
+    arguments:
+      type: object
+      required: [to, subject, body]
+      properties:
+        to: {type: string, minLength: 3}
+        subject: {type: string, minLength: 1}
+        body: {type: string, minLength: 1}
+        from: {type: string}
+        cc: {type: array, items: {type: string}}
+        reply_to: {type: string}
+        metadata: {type: object}
+      additionalProperties: false
+
+  - id: tool.web.fetch
+    aliases: [web.fetch, browser.fetch]
+    purpose: Fetch a single public HTTP(S) URL (read-only)
+    side_effects: false
+    requires_approval: false
+    credential_env: []
+    timeout_seconds: 30
+    mock_supported: true
+    mock_env: WEB_FETCH_MOCK
+    public_data_only: true
+    arguments:
+      type: object
+      required: [url]
+      properties:
+        url: {type: string, format: uri}
+        method: {type: string, enum: [GET, HEAD], default: GET}
+        max_bytes: {type: integer, minimum: 1, maximum: 2000000, default: 500000}
+        headers: {type: object}
+      additionalProperties: false
+
+  - id: tool.web.crawl
+    aliases: [web.crawl]
+    purpose: Shallow crawl of public pages from a seed URL (read-only, bounded)
+    side_effects: false
+    requires_approval: false
+    credential_env: []
+    timeout_seconds: 60
+    mock_supported: true
+    mock_env: WEB_CRAWL_MOCK
+    public_data_only: true
+    arguments:
+      type: object
+      required: [seed_url]
+      properties:
+        seed_url: {type: string, format: uri}
+        max_pages: {type: integer, minimum: 1, maximum: 10, default: 3}
+        same_origin_only: {type: boolean, default: true}
+      additionalProperties: false
+
+  - id: tool.email.verify
+    aliases: [email.verify, reacher.verify, verification.email]
+    purpose: Email address verification (Reacher or mock)
+    side_effects: false
+    requires_approval: false
+    credential_env: [REACHER_BASE_URL]
+    timeout_seconds: 30
+    mock_supported: true
+    mock_env: EMAIL_VERIFY_MOCK
+    arguments:
+      type: object
+      required: [email]
+      properties:
+        email: {type: string, minLength: 3}
+      additionalProperties: false
+
+  - id: tool.audit.write
+    aliases: [audit.write]
+    purpose: Write structured audit event
+    side_effects: false
+    requires_approval: false
+    credential_env: []
+    timeout_seconds: 5
+    mock_supported: true
+    arguments:
+      type: object
+      required: [event_type]
+      properties:
+        event_type: {type: string}
+        data: {type: object}
+      additionalProperties: true
+
+  - id: tool.lead.create
+    aliases: [lead.create]
+    purpose: Create lead record (stub until CRM adapter)
+    side_effects: true
+    requires_approval: true
+    mock_supported: true
+    arguments:
+      type: object
+      additionalProperties: true
+
+  - id: tool.lead.read
+    aliases: [lead.read]
+    purpose: Read lead record (stub)
+    side_effects: false
+    requires_approval: false
+    mock_supported: true
+    arguments:
+      type: object
+      additionalProperties: true
+
+  - id: tool.lead.qualify
+    aliases: [lead.qualify]
+    purpose: Qualify lead (stub)
+    side_effects: false
+    requires_approval: false
+    mock_supported: true
+    arguments:
+      type: object
+      additionalProperties: true
+
+  - id: tool.odoo.write
+    aliases: [odoo.write]
+    purpose: Write to Odoo SoR
+    side_effects: true
+    requires_approval: true
+    credential_env: [ODOO_URL]
+    timeout_seconds: 30
+    mock_supported: false
+    arguments:
+      type: object
+      additionalProperties: true
+
+  - id: tool.crm.update
+    aliases: [crm.update]
+    purpose: CRM update (requires installed adapter)
+    side_effects: true
+    requires_approval: true
+    mock_supported: false
+    arguments:
+      type: object
+      additionalProperties: true
+
+  - id: tool.proposal.send
+    aliases: [proposal.send]
+    purpose: Send proposal (requires installed adapter)
+    side_effects: true
+    requires_approval: true
+    mock_supported: false
+    arguments:
+      type: object
+      additionalProperties: true
+
+infrastructure:
   postgres: {purpose: structured business state and audit records, credential: DATABASE_URL}
   redis: {purpose: queues locks and transient state, credential: REDIS_URL}
   qdrant: {purpose: vector knowledge retrieval, credential: QDRANT_URL}
@@ -7,7 +192,3 @@ tools:
   ollama: {purpose: local LLM inference, credential: OLLAMA_BASE_URL}
   n8n: {purpose: workflow execution, credential: N8N_BASE_URL}
   reacher: {purpose: email verification, credential: REACHER_BASE_URL}
-  email: {purpose: outbound and inbound email, credential: EMAIL_PROVIDER_SECRET}
-  business_search: {purpose: approved business and lead discovery, credential: BUSINESS_SEARCH_SECRET}
-  apify: {purpose: configured scraping and lead workflows, credential: APIFY_API_TOKEN}
-  browser: {purpose: approved browser automation, credential: BROWSER_PROVIDER_SECRET}
