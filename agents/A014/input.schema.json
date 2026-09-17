@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A014 Outreach Strategy Input",
+  "type": "object",
+  "required": ["messaging_positioning", "campaign_strategy"],
+  "properties": {
+    "messaging_positioning": {"type": "object"},
+    "campaign_strategy": {"type": "object"},
+    "lead_generation_strategy": {"type": "object"},
+    "sales_enablement_strategy": {"type": "object"},
+    "channel_strategy": {"type": "object"},
+    "outreach_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
