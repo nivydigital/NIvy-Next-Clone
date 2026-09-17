@@ -1,0 +1,43 @@
+id: A029
+name: Brand Strategy Agent
+version: "1.0"
+status: implementation
+category: growth_strategy
+purpose: Define brand positioning, personality, narrative pillars and guardrails from messaging, ICP and competitive context.
+inputs:
+  required: [messaging_positioning, icp_definition]
+  optional: [competitor_intelligence, content_strategy, brand_constraints]
+outputs:
+  primary: brand_strategy
+  required_fields: [brand_positioning, personality, narrative_pillars, visual_verbal_guardrails, proof_themes, confidence, assumptions, derived_from]
+  downstream_events: [brand_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_positioning, set_personality, define_pillars, set_guardrails, map_proof, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - brand_aligns_with_messaging_and_ICP
+  - guardrails_are_explicit
+  - assumptions_are_stated
+provenance:
+  source: sequential strategy chain after A028
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
