@@ -1,0 +1,43 @@
+id: A011
+name: Sales Enablement Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_strategy
+purpose: Produce sales enablement guidance (talk tracks, objection handling, playbooks, qualification rules) from ICP, personas, messaging and offer strategy.
+inputs:
+  required: [icp_definition, messaging_positioning, offer_pricing_strategy]
+  optional: [buyer_personas, competitor_intelligence, gtm_strategy, sales_constraints]
+outputs:
+  primary: sales_enablement_strategy
+  required_fields: [talk_tracks, objection_handling, qualification_rules, playbooks, battlecards_outline, confidence, assumptions, derived_from]
+  downstream_events: [sales_enablement_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, build_talk_tracks, map_objections, define_qualification, draft_playbooks, outline_battlecards, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - enablement_assets_are_traceable_to_strategy_artifacts
+  - qualification_and_objection_handling_are_practical
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A010
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
