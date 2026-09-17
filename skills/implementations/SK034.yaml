@@ -1,0 +1,35 @@
+id: SK034
+name: Lead Discovery
+version: "1.0"
+status: implementation
+objective: Discover candidate businesses matching explicit ICP and source rules.
+inputs: [icp, geography, source_rules]
+outputs: [leads, sources, dedupe_keys]
+procedure:
+  - step: 1
+    action: validate_inputs
+    detail: Require icp object and source_rules; reject empty geography only if required by rules.
+  - step: 2
+    action: apply_source_rules
+    detail: Restrict discovery to approved public sources listed in source_rules.
+  - step: 3
+    action: collect_candidates
+    detail: Gather candidate business records; attach source URL per candidate.
+  - step: 4
+    action: dedupe
+    detail: Compute dedupe_keys (domain, name+geo) and collapse duplicates.
+  - step: 5
+    action: quality_gate
+    detail: Drop records missing required identity fields.
+quality_checks:
+  - every_lead_has_source
+  - no_fabricated_contacts
+  - dedupe_keys_present
+failure_policy: fail_closed_on_missing_icp_or_sources; partial ok only if status=partial and gaps listed
+evidence_policy: preserve source URLs and retrieval timestamp for each lead
+dependencies: [SK001]
+tools: [tool.ollama.generate]
+acceptance:
+  - leads is an array
+  - sources is an array
+  - each lead references a source
