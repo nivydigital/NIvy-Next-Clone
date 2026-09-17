@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "A049 Personalization Input",
+  "type": "object",
+  "required": ["account_research", "messaging_positioning"],
+  "properties": {
+    "account_research": {"type": "object"},
+    "messaging_positioning": {"type": "object"},
+    "scored_leads": {"type": "object"},
+    "personalization_constraints": {"type": "array", "items": {"type": "string"}},
+    "request_id": {"type": "string"}
+  },
+  "additionalProperties": false
+}
