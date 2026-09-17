@@ -1,0 +1,26 @@
+id: A110
+name: Delegation Coordinator
+version: "1.0"
+status: implementation
+category: collaboration
+purpose: Plan multi-agent task delegation — who does what, dependencies, SLAs and escalation — without executing delegated work itself.
+inputs:
+  required: [work_request, available_agents]
+  optional: [capability_map, priority, constraints, prior_delegation, sla_targets]
+outputs:
+  primary: a110_result
+  required_fields: [delegation_plan, assignments, dependencies, escalation_paths, risks, status, confidence, assumptions, derived_from, warnings, errors, next_action]
+tools:
+  allowed: [tool.ollama.generate]
+skills: [SK041, SK046]
+prompts: [PR003]
+knowledge: [KP004, KP007]
+policy:
+  side_effects: false
+  external_actions: prohibited
+provenance:
+  source: Phase-15 Collaboration Contract
+  source_type: internal
+runtime:
+  adapter: backend.app.runtime.a110
+  entrypoint: run_a110_delegation_coordinator

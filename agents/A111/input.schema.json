@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A111/input.schema.json",
+  "title": "A111 Agent Handoff Manager Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["handoff_from", "handoff_to", "work_payload"],
+  "properties": {
+    "handoff_from": {"type": "object"},
+    "handoff_to": {"type": "object"},
+    "work_payload": {"type": "object"},
+    "acceptance_criteria": {"type": "object"},
+    "prior_handoffs": {"type": "object"},
+    "risk_notes": {"type": "object"},
+    "context_refs": {"type": "object"},
+    "tenant_id": {"type": "string"},
+    "correlation_id": {"type": "string"}
+  }
+}

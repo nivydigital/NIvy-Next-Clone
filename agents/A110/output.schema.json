@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "aios://agents/A110/output.schema.json",
+  "title": "A110 Delegation Coordinator Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["delegation_plan", "assignments", "dependencies", "escalation_paths", "risks", "status", "confidence", "assumptions", "derived_from", "warnings", "errors", "next_action"],
+  "properties": {
+    "status": {"type": "string", "enum": ["success", "partial", "failed", "escalated"]},
+    "delegation_plan": {"type": "object"},
+    "assignments": {"type": "array", "items": {"type": "object"}},
+    "dependencies": {"type": "array", "items": {"type": "object"}},
+    "escalation_paths": {"type": "array", "items": {"type": "object"}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "confidence": {"type": "string", "enum": ["high", "medium", "low"]},
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "derived_from": {"type": "array", "items": {"type": "string"}},
+    "warnings": {"type": "array", "items": {"type": "string"}},
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "next_action": {"type": "string"}
+  }
+}
