@@ -1,0 +1,43 @@
+id: A025
+name: Forecasting Strategy Agent
+version: "1.0"
+status: implementation
+category: revenue_ops
+purpose: Define forecasting model, inputs, confidence bands and review process from pipeline and RevOps strategy.
+inputs:
+  required: [pipeline_deal_strategy, revenue_operations_strategy]
+  optional: [historical_pipeline, gtm_strategy, forecast_constraints]
+outputs:
+  primary: forecasting_strategy
+  required_fields: [forecast_model, required_inputs, confidence_bands, review_process, variance_rules, confidence, assumptions, derived_from]
+  downstream_events: [forecasting_strategy.completed]
+tools:
+  allowed: [tool.ollama.generate]
+  authorization_rule: Agent -> Skill -> Tool -> Action; default deny.
+workflow:
+  sequence: [validate_input, validate_provenance, define_model, list_inputs, set_confidence_bands, define_review, set_variance_rules, score_confidence, audit]
+policy:
+  public_data_only: true
+  source_provenance_required: true
+  fabricated_claims: forbidden
+  sensitive_attribute_inference: forbidden
+  external_actions: prohibited
+quality:
+  evidence_backed: true
+  uncertainty_explicit: true
+  claims_traceable: true
+observability:
+  audit_required: true
+  execution_log_required: true
+failure_handling:
+  retry_transient_errors: true
+  max_retries: 3
+  fail_closed_on_policy_or_schema_error: true
+success_criteria:
+  - forecast_model_aligns_with_pipeline_stages
+  - review_and_variance_rules_are_actionable
+  - assumptions_are_explicit
+provenance:
+  source: sequential strategy chain after A024
+  source_type: internal
+  modifications: "Created under deferred-testing policy."
