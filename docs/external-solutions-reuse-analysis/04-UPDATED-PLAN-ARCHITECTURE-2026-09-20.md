@@ -1,9 +1,9 @@
-# Updated Plan & Architecture — Full Company FOSS Stack
+# Updated Plan & Architecture — Full Company FOSS + Freemium Stack
 
 **Source library:** https://github.com/nivyindia/Raw-Repository/tree/main/external-solutions/business-structure-planning-ai-library  
 **Updated:** 2026-09-20  
 **Core rule:** `DISCOVER → DECOMPOSE → REUSE → ADAPT → INTEGRATE → BUILD ONLY WHAT IS MISSING`  
-**Software policy:** **100% open-source first.** Proprietary only if FOSS fails evaluation.
+**Software policy:** **Open-source first.** Freemium only if FOSS insufficient after evaluation.
 
 ---
 
@@ -14,253 +14,144 @@ ONE NIVY WORKSPACE (role-aware UI)
         ↓
 CONTROL PLANE (Identity · Policy · Router · Approval · Audit · Kill Switch)
         ↓
-Agents (Intake · Specialist · Managers · Executives)
+Agents + Postiz/n8n + Media pipeline (video/audio)
         ↓
-n8n + MCP + Tools (scrape, enrich, CRM, calendar, RAG, voice, browser)
-        ↓
-Systems of Record + Knowledge + Storage + Memory
+Systems of Record + Knowledge + Storage + Warmup mail
 ```
 
 ---
 
-## COMPLETE FOSS SOFTWARE MAP — Micro Work → Major Company → Client Delivery
+## NEW / EXPANDED AREAS (requested)
 
-### 1. MICRO TASKS (L0–L1) — Daily atomic work
+### A. Social Media Scheduling (Postiz & alternatives)
 
-| Micro work | FOSS software |
-|------------|---------------|
-| Email classify / draft / follow-up | n8n + LLM (Ollama) + mail stack |
-| Calendar schedule / remind | Cal.com, Nextcloud Calendar, Xandikos |
-| Chat classify / route / task | Mattermost / Rocket.Chat + n8n |
-| Voice transcribe / intent | Whisper + LiveKit / Pipecat |
-| Document rename / OCR / extract | Nextcloud + Tesseract + agents |
-| File dedupe / version / archive | Nextcloud, Seafile |
-| Form submit → CRM | Formbricks + n8n |
-| Notification / escalate | n8n + Mattermost |
-| Data entry / clean / merge | n8n + PostgreSQL + agents |
-| Contact enrich / dedupe | n8n + enrichment MCP / scrape |
-| Task from email/message | n8n + Plane / OpenProject |
-| Approval request / remind | n8n + Keycloak roles |
-| Report collect / format | Metabase + n8n |
-| Meeting transcript → tasks | Whisper + agents + n8n |
-| Search multi-source | Onyx / RAGFlow + GPT Researcher |
-| Knowledge capture / chunk | BookStack / Outline + LlamaIndex |
-| Translate | LibreTranslate + agents |
-| Template fill (proposal/invoice) | n8n + Odoo/ERPNext templates |
-| Browser extract / fill | Playwright, Browser Use, Skyvern |
-| Media resize / caption / transcribe | FFmpeg + Whisper + agents |
+| Tool | Type | Notes |
+|------|------|-------|
+| **Postiz** (gitroomhq/postiz-app) | **OSS (AGPL)** self-host | **Primary pick.** 30+ networks (X, LinkedIn, IG, TikTok, YouTube, Reddit, Bluesky, Mastodon, Discord…). AI copilot, design editor, API + **MCP** for agents, n8n-friendly. Cloud freemium from ~$29/mo if not self-hosting. |
+| **Mixpost** | OSS Lite + paid Pro | Polished self-host UI; Lite free (few networks); Pro one-time license. |
+| SocioBoard / PostyBirb | OSS | Lighter alternatives |
+| n8n + platform APIs | OSS | Custom schedules if Postiz not used |
 
-### 2. SALES & REVENUE (client acquisition)
-
-| Work | FOSS |
-|------|------|
-| CRM / pipeline | **Odoo Community**, **ERPNext**, Twenty, EspoCRM, SuiteCRM, Dolibarr |
-| Lead gen / research | GPT Researcher, Crawl4AI, Firecrawl, Hermes lead-gen, Apify skills |
-| Enrichment | Open enrichment MCP + scrape |
-| Outreach sequences | n8n + Listmonk + approval gates |
-| Proposal / quote | Odoo/ERPNext + agent skills |
-| Booking meetings | **Cal.com** |
-| Sales skills | astDeniss, Autter agentic-sales-skills, Anthropic Sales plugin |
-
-### 3. MARKETING / DIGITAL / SEO / SOCIAL
-
-| Work | FOSS |
-|------|------|
-| Email campaigns | **Listmonk**, **Mautic** |
-| Marketing automation | Mautic |
-| Web analytics | **Matomo**, Plausible, Umami |
-| Product analytics | PostHog |
-| Blog / content CMS | Ghost, Strapi, Payload, Directus |
-| SEO / content strategy | astDeniss SEO skills + Anthropic marketing plugins |
-| Social scheduling / monitoring | n8n + Chatwoot + browser agents |
-| Design | **Penpot** (Figma alt), Excalidraw |
-| Public docs site | Docusaurus |
-
-### 4. CLIENT DELIVERY / PROJECTS / SERVICES
-
-| Work | FOSS |
-|------|------|
-| Project / task management | **Plane**, OpenProject, Taiga, Leantime, Redmine, Huly |
-| Time tracking | OpenProject, ERPNext, Leantime |
-| Client portal | Odoo/ERPNext portal, Chatwoot, Nextcloud share |
-| SOPs / runbooks | BookStack / Outline + agents |
-| Delivery handoff | n8n workflows (won deal → project → invoice) |
-| QA / checklist | n8n + wiki |
-
-### 5. CUSTOMER SUCCESS / SUPPORT
-
-| Work | FOSS |
-|------|------|
-| Live chat / omnichannel | **Chatwoot** |
-| Helpdesk / tickets | **Zammad**, FreeSCOUT, osTicket |
-| Knowledge for support | BookStack + RAG (AnythingLLM / RAGFlow) |
-| SLA / escalation | n8n + Zammad |
-| Feedback / NPS | Formbricks |
-
-### 6. FINANCE / BILLING / ACCOUNTING
-
-| Work | FOSS |
-|------|------|
-| Full accounting | **Odoo Accounting**, **ERPNext Accounting** |
-| Invoicing | Odoo, ERPNext, Invoice Ninja, Akaunting, Crater |
-| Usage billing / metering | **Lago** (Stripe Billing alt) |
-| Expenses / books (light) | Akaunting, Firefly III |
-| Bank reconcile / collections | n8n + agents + ERP |
-| Multi-currency / tax | Odoo / ERPNext localization |
-
-### 7. INVENTORY / PROCUREMENT / MANUFACTURING / POS
-
-| Work | FOSS |
-|------|------|
-| Inventory / warehouse | **Odoo**, **ERPNext**, Dolibarr |
-| Purchase / RFQ / PO | Odoo, ERPNext, Dolibarr |
-| Manufacturing / BOM / MRP | Odoo MRP, ERPNext Manufacturing |
-| Point of Sale | Odoo POS, ERPNext POS, Dolibarr |
-| Asset management | Snipe-IT |
-
-### 8. HR / EMPLOYEES / LEARNING
-
-| Work | FOSS |
-|------|------|
-| HRIS core | **OrangeHRM**, IceHrm, Odoo HR, ERPNext HR, Open HRMS |
-| Attendance / payroll | TimeTrex Community, ERPNext Payroll |
-| Appraisals / ESS | Sentrifugo, OrangeHRM |
-| Recruitment pipeline | n8n + agents + CRM |
-| Onboarding / offboarding | n8n + wiki checklists |
-| LMS / training | Moodle, Open edX, Frappe LMS |
-| Password / secrets for staff | **Vaultwarden**, Passbolt |
-
-### 9. KNOWLEDGE / STORAGE / DOCS / WIKI
-
-| Work | FOSS |
-|------|------|
-| File sync / Drive alt | **Nextcloud** |
-| Object storage | **MinIO** |
-| Office collaborative edit | Collabora Online, OnlyOffice |
-| Internal wiki | **BookStack**, **Outline**, Docmost, Wiki.js |
-| Encrypted collab docs | CryptPad |
-| Notes / whiteboard | AFFiNE, HedgeDoc, Excalidraw |
-| Personal knowledge | TriliumNext |
-
-### 10. CALENDAR / COMMUNICATION / MEETINGS
-
-| Work | FOSS |
-|------|------|
-| Booking / scheduling | **Cal.com** |
-| Team calendar | Nextcloud Calendar |
-| Team chat | **Mattermost**, Rocket.Chat, Zulip, Element |
-| Video meetings | **Jitsi** |
-| Email server | Mailcow, docker-mailserver, Postal |
-
-### 11. IDENTITY / SECURITY / IT OPS
-
-| Work | FOSS |
-|------|------|
-| SSO / IAM | **Keycloak**, ZITADEL, Authentik |
-| Password manager | Vaultwarden, Passbolt |
-| VPN | WireGuard, Headscale |
-| Remote desktop | RustDesk |
-| Monitoring | Prometheus + Grafana, Uptime Kuma |
-| Logs / SIEM light | Grafana Loki |
-| Backup | Restic, BorgBackup |
-| Git hosting | Gitea, Forgejo |
-| App hosting platform | Coolify, CapRover |
-
-### 12. ANALYTICS / BI / REPORTING
-
-| Work | FOSS |
-|------|------|
-| Business dashboards | **Metabase**, Apache Superset |
-| Web analytics | Matomo, Plausible, Umami |
-| Product analytics | PostHog |
-| Infra metrics | Grafana |
-
-### 13. LEGAL / COMPLIANCE / GOVERNANCE (light)
-
-| Work | FOSS |
-|------|------|
-| Contract templates / clause extract | Agents + wiki + n8n |
-| Policy / evidence store | BookStack + Nextcloud + audit logs |
-| GRC light | security-atlas patterns (from library registry) |
-| Consent / forms | Formbricks |
-
-### 14. E-COMMERCE / WEBSITE (if needed)
-
-| Work | FOSS |
-|------|------|
-| Storefront | Odoo eCommerce, ERPNext, Saleor, Medusa |
-| Website builder | Odoo Website, Ghost |
-| CMS | Strapi, Payload, Directus |
-
-### 15. DESIGN / CREATIVE / MEDIA
-
-| Work | FOSS |
-|------|------|
-| UI design | **Penpot** |
-| Whiteboard | Excalidraw |
-| Image gen workflows | ComfyUI |
-| Video / audio process | FFmpeg, Whisper, Coqui TTS |
-| OpenVoice | Voice cloning research |
-
-### 16. AI / AGENTS / AUTOMATION CORE
-
-| Work | FOSS |
-|------|------|
-| LLM runtime | **Ollama**, llama.cpp, vLLM |
-| AI UI | Open WebUI, AnythingLLM |
-| Gateway | LiteLLM |
-| Orchestration | LangGraph, CrewAI, AutoGen |
-| Digital workers | Hermes, Goose, OpenClaw, Agent Zero, OpenHands |
-| Memory | Mem0, Zep, Graphiti, Letta |
-| RAG | LlamaIndex, Haystack, RAGFlow, Onyx |
-| Automation bus | **n8n** |
-| Browser agents | Browser Use, Skyvern, Playwright |
+**Nivy default:** Self-host **Postiz** + wire agents via MCP/API + approval gate before publish.
 
 ---
 
-## Recommended Nivy Starter Stack (priority install)
+### B. AI Video for Marketing
 
+| Tool | Type | Role |
+|------|------|------|
+| **ComfyUI** | OSS | Node-based local video/image workflows (hub for models) |
+| **Wan 2.2 / Wan family** (Alibaba) | OSS (Apache-2.0) | Strong open text-to-video / image-to-video |
+| **LTX-Video / LTX-2.x** (Lightricks) | OSS weights | Fast / native audio+video options |
+| **HunyuanVideo** | OSS | Cinematic motion |
+| **CogVideoX / Mochi 1 / Open-Sora / SVD** | OSS | Additional T2V / I2V |
+| **MoviePy + FFmpeg** | OSS | Edit, concat, captions, render |
+| **Remotion / Motion Canvas / html-video** | OSS / source-available | Programmatic / agent-authored video |
+| **Wav2Lip / SadTalker / LivePortrait** | OSS | Lip-sync / talking head |
+| Freemium SaaS (only if local GPU weak) | Freemium | CapCut, InVideo free tiers, Kling/Haiper free credits — exit plan required |
+
+**Nivy default:** ComfyUI + Wan/LTX models locally → FFmpeg/MoviePy polish → Postiz publish.
+
+---
+
+### C. AI Sound / Music / Voice
+
+| Tool | Type | Role |
+|------|------|------|
+| **Whisper** | OSS | Speech-to-text |
+| **Coqui TTS / OpenVoice / Fish Speech / CosyVoice / MOSS-TTS** | OSS | TTS + voice clone |
+| **Amphion** | OSS | Audio/music/speech generation toolkit |
+| **AudioCraft** (Meta) | OSS | Audio generation research |
+| **YuE / ACE-Step / DiffRhythm** etc. | OSS | Music generation (quality varies; check license) |
+| **FFmpeg** | OSS | Mix, normalize, export |
+| Freemium | Freemium | ElevenLabs free tier, Suno free credits — only if OSS quality fails |
+
+**Nivy default:** Whisper + Coqui/OpenVoice/Fish Speech locally; music from OSS models when license OK.
+
+---
+
+### D. Email Warmup / Deliverability / Account Warmup
+
+| Tool | Type | Role |
+|------|------|------|
+| **Warmbly** | OSS (self-host) | Open-source B2B cold outreach + warmup platform |
+| **Kindling** | OSS | Email warmer for Gmail + IMAP (owned mailboxes mesh) |
+| Custom n8n + owned inboxes | OSS | Gradual send volume between own accounts |
+| Mailcow / docker-mailserver + proper DNS (SPF/DKIM/DMARC) | OSS | Foundation for reputation |
+| **TrulyInbox** | Freemium | Free-forever low-volume warmup (fallback) |
+| Instantly / Smartlead / MailReach / Warmup Inbox | Freemium/paid | Bundled or dedicated warmup if OSS mesh not enough |
+
+**Rules:** Warm only **owned** mailboxes. Never buy spam networks. Human approval on cold campaigns. Track bounce/complaint.
+
+**Nivy default:** Kindling or Warmbly self-host + SPF/DKIM/DMARC + gradual volume via n8n; freemium only if deliverability still fails.
+
+---
+
+### E. Related fully-functional needs (also mapped)
+
+| Need | FOSS / Freemium |
+|------|----------------|
+| Cold email sequences | n8n + Listmonk/Mautic + Warmbly + approval |
+| Link-in-bio / landing | Ghost, Odoo Website, or simple static |
+| UGC / ad variants | ComfyUI + Wan + Penpot |
+| Podcast / long audio | Whisper + TTS + FFmpeg |
+| Short-form clips from long video | FFmpeg + MoviePy + agents |
+| Hashtag / caption AI | Postiz AI + Ollama skills |
+| Multi-account social safely | Postiz workspaces + policy limits |
+| Domain / inbox health | DNS tools + blacklist checks (open) + warmup |
+
+---
+
+## FULL MAP (previous sections kept, social/media updated)
+
+### Social & content pipeline (recommended flow)
+```
+Idea → Agent draft (Ollama/skills)
+     → Image/Video (ComfyUI + Wan/LTX)
+     → Audio bed / VO (TTS + FFmpeg)
+     → Schedule (Postiz)
+     → Approval gate
+     → Publish + analytics (Postiz / Matomo)
+```
+
+### Email outbound pipeline
+```
+Lead list → Enrich → Warm mailbox (Kindling/Warmbly)
+         → Sequence (n8n + Listmonk)
+         → Approval → Send → Reply capture → CRM
+```
+
+### Core stack reminder
 | Layer | Pick |
 |-------|------|
-| AI | Ollama + Open WebUI + LiteLLM + LangGraph/CrewAI |
+| Social scheduler | **Postiz** (self-host) |
+| AI video | **ComfyUI + Wan / LTX** |
+| AI voice/music | Whisper + Coqui/OpenVoice/Fish Speech |
+| Email warmup | **Kindling** or **Warmbly** |
 | Automation | **n8n** |
-| Business core | **Odoo Community** *or* **ERPNext** |
-| Files | **Nextcloud** + Collabora |
-| Wiki | **BookStack** or **Outline** |
-| Chat | **Mattermost** or **Rocket.Chat** |
-| Support | **Chatwoot** |
-| Booking | **Cal.com** |
-| Marketing email | **Listmonk** + **Mautic** |
-| Analytics | **Matomo** + **Metabase** |
-| Identity | **Keycloak** |
-| Passwords | **Vaultwarden** |
-| Projects | **Plane** or OpenProject |
-| HR | OrangeHRM or ERPNext HR |
-| Monitoring | Uptime Kuma + Grafana |
-| Object storage | MinIO |
-| Scrape/research | Crawl4AI + Playwright + GPT Researcher |
+| CRM/ERP | Odoo Community or ERPNext |
+| Files/wiki | Nextcloud + BookStack |
+| Marketing email | Listmonk + Mautic |
+| AI runtime | Ollama + LiteLLM |
 
 ---
 
 ## Decision Rules
 
-1. Always check this list before adding software.
-2. Prefer self-hosted FOSS.
-3. One system of record per business object.
-4. External messages + payments = human approval.
-5. License: MIT/Apache/BSD preferred; AGPL with isolation.
-6. Register every adopted tool in Asset Registry.
+1. OSS first (Postiz, ComfyUI, Kindling/Warmbly, n8n…).
+2. Freemium only after FOSS test fails (document why).
+3. External publish + cold email = human approval.
+4. Warmup = owned accounts only.
+5. Register every tool in Asset Registry.
 
 ---
 
-## Delivery Order
+## Immediate add-ons for functional marketing/sales
 
-1. Foundation (registry + control plane)  
-2. P0 revenue agents (SDR, Qualify, Concierge) on FOSS stack  
-3. Nextcloud + wiki + n8n  
-4. Odoo or ERPNext as system of record  
-5. Chatwoot + Cal.com + Listmonk  
-6. HR + projects + analytics  
-7. Inventory/POS/manufacturing only if business needs them  
+1. Deploy **Postiz** (Docker).  
+2. Deploy **ComfyUI** + one video model (Wan or LTX).  
+3. Deploy **Kindling** or **Warmbly** for mailbox warmup.  
+4. Connect Postiz + n8n + approval workflow.  
+5. Only then scale channels / cold volume.
 
-**Bottom line:** Micro task se leke client delivery, inventory, POS, manufacturing, procurement, billing, LMS, design, IT, backup — sab ke liye FOSS options mapped. Proprietary tabhi jab is list se kaam na chale.
+**Bottom line:** Postiz (social), ComfyUI+Wan/LTX (AI video), Whisper/TTS (sound), Kindling/Warmbly (email warmup) — sab OSS path se cover. Freemium fallback documented jahan FOSS abhi kam padta hai.
