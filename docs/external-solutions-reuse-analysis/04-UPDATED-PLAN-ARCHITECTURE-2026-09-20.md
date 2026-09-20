@@ -4,6 +4,8 @@
 **Rescan:** 2026-09-20  
 **Core rule:** `DISCOVER → DECOMPOSE → REUSE → ADAPT → INTEGRATE → BUILD ONLY WHAT IS MISSING`
 
+**Software policy:** Prefer **100% open-source** (or OSI-compatible) software. Proprietary SaaS only if no viable open-source alternative exists after evaluation. All production choices must have inspectable code + acceptable license.
+
 ---
 
 ## 1. New Library Structure (Current)
@@ -100,14 +102,14 @@ Lead intake → normalize → enrich/research → CRM → qualify
 | Service | Sources |
 |---------|---------|
 | AI SDR | Anthropic Sales, astDeniss, Autter agentic-sales-skills, n8n AI SDR, Hermes lead-gen |
-| Lead Qualification | n8n qualify, enrichment MCPs (Apollo, Prospector), sales skills |
+| Lead Qualification | n8n qualify, enrichment MCPs, sales skills |
 | Website Concierge / Receptionist | Intake + RAG + knowledge (file 52) |
 | Appointment Setter | Calendar MCP + qualification |
 | Support (basic) | Anthropic CS + support skills |
 
-**Lead gen / scrape / extract stack:**
-- Firecrawl, Crawl4AI, Apify, Browser Use, Skyvern
-- Apollo MCP, b2b-enrichment-mcp, OpenLeads, GPT Researcher, Hermes pipelines
+**Lead gen / scrape / extract stack (open-source):**
+- Firecrawl, Crawl4AI, Browser Use, Skyvern, Playwright
+- GPT Researcher, Hermes pipelines, Apify agent-skills (open parts)
 
 ### C. Delivery Spine (Wave 2)
 ```
@@ -134,16 +136,137 @@ Navigation: Home → My Work → Company → People → Departments → Customer
 - L9 Control Tower
 - L10 Autonomous Company patterns (discovery only for now)
 
-### H. Runtime candidates (evaluate, don’t lock)
-| Need | Options |
-|------|---------|
-| Orchestration | LangGraph, CrewAI, OpenAI Agents SDK |
-| Local digital workers | Hermes Agent, Goose, OpenClaw, Agent Zero |
-| Memory | Mem0, Zep, Graphiti, Letta |
-| RAG | LlamaIndex, Haystack, RAGFlow, GraphRAG |
-| Automation | n8n + MCP + Composio |
-| Voice | LiveKit Agents, Pipecat |
-| UI workspace | Open WebUI / AnythingLLM patterns + custom shell |
+### H. Runtime candidates (evaluate, don’t lock) — Open Source First
+
+| Need | Open-source options (preferred) |
+|------|----------------------------------|
+| Orchestration | LangGraph, CrewAI, AutoGen/AG2, PydanticAI, smolagents, Agno, AgentScope |
+| Local digital workers | Hermes Agent, Goose, OpenClaw, Agent Zero, OpenHands |
+| Memory | Mem0, Zep, Graphiti, Letta, Cognee |
+| RAG / Knowledge | LlamaIndex, Haystack, RAGFlow, Microsoft GraphRAG, AnythingLLM, Onyx |
+| Automation / workflows | **n8n**, Flowise, Dify, Activepieces, Windmill, Temporal, Kestra |
+| MCP / connectors | Official MCP servers, FastMCP |
+| Voice / realtime | LiveKit Agents, Pipecat, Whisper, Coqui TTS, OpenVoice |
+| Browser / computer use | Browser Use, Skyvern, Stagehand, Playwright |
+| Local LLM runtime | **Ollama**, llama.cpp, vLLM, Open WebUI |
+| Model gateway | LiteLLM |
+| UI workspace | Open WebUI, AnythingLLM + custom shell |
+| CRM (candidate) | Odoo Community, Relaticle, crmkit |
+| ERP / Finance | Odoo Community, Hisaabo, lambda-erp |
+| Identity | Keycloak, ZITADEL |
+| Knowledge graph | Neo4j Community, Kuzu, Memgraph, FalkorDB |
+| Scraping / crawl | Firecrawl, Crawl4AI, Playwright |
+
+---
+
+## 7. Canonical Open-Source Software List (Nivy Stack Preference)
+
+**Policy:** Use only open-source / OSI-compatible software unless a critical gap has no viable FOSS alternative after evaluation.
+
+### Core AI / Agent Runtime
+| Software | License (typical) | Role |
+|----------|-------------------|------|
+| **Ollama** | MIT | Local LLM runtime |
+| **llama.cpp** | MIT | Local inference |
+| **vLLM** | Apache-2.0 | High-throughput inference |
+| **Open WebUI** | BSD-3 | Local AI workspace / chat UI |
+| **AnythingLLM** | MIT | Local RAG + workspace |
+| **LiteLLM** | MIT | Multi-provider model gateway |
+| **LangGraph** | MIT | Stateful agent orchestration |
+| **CrewAI** | MIT | Multi-agent teams |
+| **AutoGen / AG2** | Apache-2.0 / MIT | Multi-agent conversations |
+| **PydanticAI** | MIT | Typed Python agents |
+| **smolagents** | Apache-2.0 | Lightweight code agents |
+| **Hermes Agent** | (check repo) | Self-improving local agent |
+| **Goose** | Apache-2.0 | Local AI coworker |
+| **OpenClaw** | (check repo) | Local agent ecosystem |
+| **Agent Zero** | (check repo) | General computer-using agent |
+| **OpenHands** | MIT | Autonomous coding agent |
+
+### Memory / RAG / Knowledge
+| Software | Role |
+|----------|------|
+| **Mem0** | Long-term agent memory |
+| **Zep** | Temporal / agent memory |
+| **Graphiti** | Temporal knowledge graph |
+| **Letta** | Stateful agents + memory |
+| **LlamaIndex** | RAG + agents |
+| **Haystack** | RAG pipelines |
+| **RAGFlow** | Document RAG platform |
+| **Microsoft GraphRAG** | Knowledge-graph RAG |
+| **Onyx** | Enterprise search / RAG |
+| **Neo4j Community** | Graph DB |
+| **Kuzu / Memgraph / FalkorDB** | Embedded / alternative graph DBs |
+
+### Automation / Workflows / Connectors
+| Software | Role |
+|----------|------|
+| **n8n** | Primary workflow automation (self-host) |
+| **Flowise** | Visual LLM/agent flows |
+| **Dify** | LLM app platform |
+| **Activepieces** | Open automation |
+| **Windmill** | Developer-centric workflows |
+| **Temporal** | Durable workflow engine |
+| **Kestra** | Orchestration |
+| **Playwright** | Browser automation |
+| **Browser Use** | LLM browser control |
+| **Skyvern** | Vision + browser workflows |
+| **Stagehand** | AI browser automation |
+| **Crawl4AI** | Web crawling for agents |
+| **Firecrawl** | Web scraping / crawl (open parts) |
+| **Official MCP + FastMCP** | Tool / connector protocol |
+
+### Voice / Speech / Realtime
+| Software | Role |
+|----------|------|
+| **LiveKit Agents** | Realtime voice/video agents |
+| **Pipecat** | Voice + multimodal pipelines |
+| **Whisper** | Speech recognition |
+| **Coqui TTS** | Voice synthesis |
+| **OpenVoice** | Voice cloning research |
+
+### Business Systems (CRM / ERP / OS)
+| Software | Role |
+|----------|------|
+| **Odoo Community** | CRM + ERP + accounting baseline |
+| **Relaticle** | AI-first CRM (AGPL) |
+| **crmkit** | Portable AI CRM skills |
+| **Hisaabo** | India/SMB finance OS candidate |
+| **Keycloak** | Identity & access |
+| **ZITADEL** | Modern identity alternative |
+
+### Sales / Lead / Skills Libraries (open)
+| Software / Repo | Role |
+|-----------------|------|
+| **astDeniss/business-skills** | 69 business SKILL.md playbooks |
+| **Autter-dev/agentic-sales-skills** | 11 agents + 48 sales skills |
+| **TheCraigHewitt/sales-skills** | B2B sales lifecycle skills |
+| **Anthropic knowledge-work-plugins** | Official sales/marketing/ops plugins |
+| **Anthropic skills** | Skill authoring standard |
+| **gtm-skills/gtm** | Agentic GTM OS |
+| **GPT Researcher** | Deep research agent |
+| **Apify agent-skills** | Web/social acquisition skills |
+
+### Observability / Governance / Infra helpers
+| Software | Role |
+|----------|------|
+| **OpenMetadata / DataHub / OpenLineage** | Data catalog & lineage |
+| Git + structured logs | Audit trail baseline |
+| **Prefect** (optional) | Workflow observability |
+
+### Explicitly deferred / evaluate only if FOSS fails
+- Closed SaaS CRMs, closed voice platforms, closed enrichment APIs — only after open alternatives are tested and fail license/control/quality gates.
+
+---
+
+## 8. Open-Source Decision Rules
+
+1. **Default = open source.** Every new tool must be checked against the list above first.
+2. Prefer **self-hostable** (n8n, Ollama, Open WebUI, Keycloak, Odoo Community).
+3. License must allow commercial use and modification (MIT, Apache-2.0, BSD preferred; AGPL only with clear isolation).
+4. No credentials in Git, prompts, or docs.
+5. If a proprietary tool is proposed, document: why FOSS failed, data residency impact, exit plan.
+6. All adopted assets stay in the Master Asset Registry with source URL + license + adaptation date.
 
 ---
 
@@ -172,6 +295,7 @@ Navigation: Home → My Work → Company → People → Departments → Customer
 | Catalogs | Skills + agents | Full catalogs through Control Tower + Autonomous Company |
 | Foundation plan | Conceptual | Concrete Wave 0–5 + non-negotiable design rules |
 | Master checklist | Partial | Canonical **Master Business Automation List** (micro → company) |
+| Software policy | Mixed | **Open-source first** (full FOSS list added) |
 
 ---
 
@@ -190,4 +314,5 @@ Navigation: Home → My Work → Company → People → Departments → Customer
 **Bottom line:**  
 Library ab full **Company OS + Unified UI + L0–L10 automation hierarchy** tak cover karti hai.  
 Nivy ka kaam: **Foundation → P0 Revenue Agents → Lead stack → UI shell → Sales OS map**.  
-Khud se banana almost nahi — mostly reuse + adapt + govern.
+**Stack policy = open source first** (Ollama, n8n, LangGraph/CrewAI, Mem0, LlamaIndex, Playwright, Odoo Community, Keycloak, etc.).  
+Khud se banana almost nahi — mostly FOSS reuse + adapt + govern.
