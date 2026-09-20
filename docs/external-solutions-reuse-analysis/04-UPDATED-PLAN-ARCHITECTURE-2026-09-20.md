@@ -1,7 +1,7 @@
 # Updated Plan & Architecture — Library Rescan 2026-09-20
 
 **Source:** https://github.com/nivyindia/Raw-Repository/tree/main/external-solutions/business-structure-planning-ai-library  
-**Rescan:** 2026-09-20  
+**Rescan:** 2026-09-20 (expanded FOSS company-wide list)  
 **Core rule:** `DISCOVER → DECOMPOSE → REUSE → ADAPT → INTEGRATE → BUILD ONLY WHAT IS MISSING`
 
 **Software policy:** Prefer **100% open-source** (or OSI-compatible) software. Proprietary SaaS only if no viable open-source alternative exists after evaluation. All production choices must have inspectable code + acceptable license.
@@ -20,299 +20,290 @@
 | **05-architecture-infrastructure** | Control plane, identity, integrations, workforce architecture |
 | **06-adoption-implementation** | Adoption maps, registry, P0 specs, test suite, scale runbook |
 | **07-department-sales** | Complete international sales OS + micro audit |
-| **08-unified-company-ui-workspace** | **NEW** — One company UI / employee dashboard / portal |
-| **09-business-planning-strategy** | **NEW** — Business model, plan, strategy, canvas → AI company |
+| **08-unified-company-ui-workspace** | One company UI / employee dashboard / portal |
+| **09-business-planning-strategy** | Business model, plan, strategy, canvas → AI company |
 
-**Master navigation file:**  
-`00-navigation-governance/00-README.md` + `01-MASTER-BUSINESS-AUTOMATION-LIST-2026-09.md`
-
-**Automation hierarchy (canonical):**  
-**L0 Atomic Actions → L1 Micro Tasks → L2 Task Automations → L3 Workflows → L4 Business Processes → L5 Department Systems → L6 Cross-Department → L7 AI Managers → L8 AI Executives → L9 Control Tower → L10 Autonomous Company**
-
-Latest library status: L0–L10 all in **Discovery**.
+**Master navigation:** `00-README.md` + `01-MASTER-BUSINESS-AUTOMATION-LIST-2026-09.md`  
+**Hierarchy:** L0 Atomic → L1 Micro → L2 Task → L3 Workflow → L4 Process → L5 Dept → L6 Cross-Dept → L7 AI Managers → L8 Executives → L9 Control Tower → L10 Autonomous Company
 
 ---
 
-## 2. Target Architecture (Updated)
+## 2. Target Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    ONE NIVY WORKSPACE (UI Shell)                 │
-│  Home · My Work · Company · People · Departments · Customers    │
-│  Projects · Finance · Documents · Knowledge · Analytics         │
-│  AI Workforce · Automations · Approvals · Governance            │
-│  Role-aware: Owner → Exec → Dept Head → Manager → Employee      │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-┌────────────────────────────▼────────────────────────────────────┐
-│              CONTROL PLANE                                        │
-│  Identity · Policy · Router · Registry · Approval · Audit         │
-│  Observability · Cost · Exceptions · Kill Switch                  │
-└────────────────────────────┬────────────────────────────────────┘
-           ┌─────────────────┼─────────────────┐
-           │                 │                 │
-┌──────────▼────────┐ ┌──────▼──────┐ ┌────────▼────────┐
-│  Intake Agents    │ │ Specialist  │ │ AI Managers /   │
-│  (Lead/Chat/Voice │ │ Agents      │ │ Executives /    │
-│   /Web/Forms)     │ │ (SDR, CS,   │ │ Control Tower   │
-│                   │ │  Research,  │ │ (L7–L9)         │
-│                   │ │  Ops…)      │ │                 │
-└──────────┬────────┘ └──────┬──────┘ └────────┬────────┘
-           │                 │                 │
-           └─────────────────┼─────────────────┘
-                             │
-┌────────────────────────────▼────────────────────────────────────┐
-│         TOOLS / MCP / CONNECTORS / AUTOMATION LAYER               │
-│  CRM · Email · Calendar · Scrape · Enrich · RAG · n8n · Browser  │
-│  Voice · Payments · ERP · Knowledge · Analytics                   │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-┌────────────────────────────▼────────────────────────────────────┐
-│              SYSTEMS OF RECORD + KNOWLEDGE + MEMORY               │
-│  CRM/ERP · Notion/GitHub · Vector/Graph memory · Audit logs       │
-└─────────────────────────────────────────────────────────────────┘
+ONE NIVY WORKSPACE (role-aware UI shell)
+        ↓
+CONTROL PLANE (Identity · Policy · Router · Registry · Approval · Audit · Kill Switch)
+        ↓
+Intake Agents + Specialist Agents + AI Managers / Executives
+        ↓
+TOOLS / MCP / n8n / Scrape / Enrich / RAG / Voice / Browser
+        ↓
+SYSTEMS OF RECORD + Knowledge + Memory + Storage
 ```
 
-**Key design rules (from library foundation plan):**
-- One system of record per master object
-- External communication + financial moves = human-approved first
-- Agents get minimum required tools
-- Every production action has actor + outcome + audit trail
-- Production vs experimental assets separated
-- Retries idempotent; human fallback always exists
+**Rules:** One system of record per object · External comms + money = human-approved · Min tools per agent · Full audit trail · Idempotent retries · Human fallback always.
 
 ---
 
-## 3. What We Will Deliver (Updated Layers)
+## 3. Delivery Layers (Summary)
 
-### A. Foundation (Wave 0)
-- Master Asset Registry (schema from file 77)
-- Control plane minimum (identity, policy, approval classes, audit schema)
-- Autonomy levels: Recommend → Approve → Guided Execute → Bounded Autonomous
-- Secrets never in Git/prompts
-
-### B. P0 Revenue Spine (Wave 1) — First live surface
-```
-Lead intake → normalize → enrich/research → CRM → qualify 
-→ outreach draft → human approval → send → response capture 
-→ calendar → meeting prep → debrief → CRM update → follow-up
-```
-
-**Ready agents/services to reuse:**
-| Service | Sources |
-|---------|---------|
-| AI SDR | Anthropic Sales, astDeniss, Autter agentic-sales-skills, n8n AI SDR, Hermes lead-gen |
-| Lead Qualification | n8n qualify, enrichment MCPs, sales skills |
-| Website Concierge / Receptionist | Intake + RAG + knowledge (file 52) |
-| Appointment Setter | Calendar MCP + qualification |
-| Support (basic) | Anthropic CS + support skills |
-
-**Lead gen / scrape / extract stack (open-source):**
-- Firecrawl, Crawl4AI, Browser Use, Skyvern, Playwright
-- GPT Researcher, Hermes pipelines, Apify agent-skills (open parts)
-
-### C. Delivery Spine (Wave 2)
-```
-Won deal → handoff → intake → project/tasks → SOP/context 
-→ delivery → QA → client update → invoice → CS handoff
-```
-
-### D. Finance + Workforce (Wave 3)
-- Invoice → accounting → reconciliation → cash snapshot
-- Candidate → employee → role → KRA/KPI → tasks → review → learning
-
-### E. Unified Company UI (from folder 08)
-**One shell, role-aware views** — not many isolated apps.  
-Navigation: Home → My Work → Company → People → Departments → Customers/Leads → Projects → Finance → Documents → Knowledge → Analytics → AI Workforce → Automations → Approvals → Governance
-
-### F. Sales Department OS (folder 07)
-- Full international sales operating model (file 89)
-- Micro-level completeness audit (file 93)
-- Map every capability to existing skills/agents; build only gaps
-
-### G. Higher layers (later)
-- L7 Department AI Managers
-- L8 Company AI Executives
-- L9 Control Tower
-- L10 Autonomous Company patterns (discovery only for now)
-
-### H. Runtime candidates (evaluate, don’t lock) — Open Source First
-
-| Need | Open-source options (preferred) |
-|------|----------------------------------|
-| Orchestration | LangGraph, CrewAI, AutoGen/AG2, PydanticAI, smolagents, Agno, AgentScope |
-| Local digital workers | Hermes Agent, Goose, OpenClaw, Agent Zero, OpenHands |
-| Memory | Mem0, Zep, Graphiti, Letta, Cognee |
-| RAG / Knowledge | LlamaIndex, Haystack, RAGFlow, Microsoft GraphRAG, AnythingLLM, Onyx |
-| Automation / workflows | **n8n**, Flowise, Dify, Activepieces, Windmill, Temporal, Kestra |
-| MCP / connectors | Official MCP servers, FastMCP |
-| Voice / realtime | LiveKit Agents, Pipecat, Whisper, Coqui TTS, OpenVoice |
-| Browser / computer use | Browser Use, Skyvern, Stagehand, Playwright |
-| Local LLM runtime | **Ollama**, llama.cpp, vLLM, Open WebUI |
-| Model gateway | LiteLLM |
-| UI workspace | Open WebUI, AnythingLLM + custom shell |
-| CRM (candidate) | Odoo Community, Relaticle, crmkit |
-| ERP / Finance | Odoo Community, Hisaabo, lambda-erp |
-| Identity | Keycloak, ZITADEL |
-| Knowledge graph | Neo4j Community, Kuzu, Memgraph, FalkorDB |
-| Scraping / crawl | Firecrawl, Crawl4AI, Playwright |
+| Wave | Focus |
+|------|--------|
+| 0 | Foundation: Registry + control plane + approval/audit |
+| 1 | Revenue spine: AI SDR + Qualification + Concierge |
+| 1b | Lead gen / scrape / enrich stack |
+| 2 | Delivery spine: won deal → onboarding → invoice |
+| 3 | Unified UI shell |
+| 4 | Sales OS map + Marketing + HR basics |
+| 5 | Finance / workforce loops |
+| 6 | L7–L9 managers / control tower (after P0 stable) |
 
 ---
 
-## 7. Canonical Open-Source Software List (Nivy Stack Preference)
+## 7. Canonical Open-Source Software List — FULL COMPANY COVERAGE
 
-**Policy:** Use only open-source / OSI-compatible software unless a critical gap has no viable FOSS alternative after evaluation.
+**Policy:** Default = open source + self-hostable. Check this list before any new tool.
 
-### Core AI / Agent Runtime
-| Software | License (typical) | Role |
-|----------|-------------------|------|
-| **Ollama** | MIT | Local LLM runtime |
-| **llama.cpp** | MIT | Local inference |
-| **vLLM** | Apache-2.0 | High-throughput inference |
-| **Open WebUI** | BSD-3 | Local AI workspace / chat UI |
-| **AnythingLLM** | MIT | Local RAG + workspace |
-| **LiteLLM** | MIT | Multi-provider model gateway |
-| **LangGraph** | MIT | Stateful agent orchestration |
-| **CrewAI** | MIT | Multi-agent teams |
-| **AutoGen / AG2** | Apache-2.0 / MIT | Multi-agent conversations |
-| **PydanticAI** | MIT | Typed Python agents |
-| **smolagents** | Apache-2.0 | Lightweight code agents |
-| **Hermes Agent** | (check repo) | Self-improving local agent |
-| **Goose** | Apache-2.0 | Local AI coworker |
-| **OpenClaw** | (check repo) | Local agent ecosystem |
-| **Agent Zero** | (check repo) | General computer-using agent |
-| **OpenHands** | MIT | Autonomous coding agent |
-
-### Memory / RAG / Knowledge
+### A. Core AI / Agent Runtime
 | Software | Role |
 |----------|------|
-| **Mem0** | Long-term agent memory |
-| **Zep** | Temporal / agent memory |
-| **Graphiti** | Temporal knowledge graph |
-| **Letta** | Stateful agents + memory |
-| **LlamaIndex** | RAG + agents |
-| **Haystack** | RAG pipelines |
-| **RAGFlow** | Document RAG platform |
-| **Microsoft GraphRAG** | Knowledge-graph RAG |
-| **Onyx** | Enterprise search / RAG |
-| **Neo4j Community** | Graph DB |
-| **Kuzu / Memgraph / FalkorDB** | Embedded / alternative graph DBs |
+| **Ollama** | Local LLM runtime |
+| **llama.cpp / vLLM** | Local / high-throughput inference |
+| **Open WebUI / AnythingLLM** | Local AI workspace + RAG UI |
+| **LiteLLM** | Multi-provider model gateway |
+| **LangGraph / CrewAI / AutoGen(AG2)** | Agent orchestration |
+| **PydanticAI / smolagents / Agno** | Typed / lightweight agents |
+| **Hermes Agent / Goose / OpenClaw / Agent Zero / OpenHands** | Local digital workers |
 
-### Automation / Workflows / Connectors
+### B. Memory / RAG / Knowledge Graphs
+| Software | Role |
+|----------|------|
+| **Mem0 / Zep / Graphiti / Letta / Cognee** | Agent long-term + temporal memory |
+| **LlamaIndex / Haystack / RAGFlow** | RAG frameworks |
+| **Microsoft GraphRAG / Onyx** | Graph RAG + enterprise search |
+| **Neo4j Community / Kuzu / Memgraph / FalkorDB** | Graph databases |
+
+### C. Automation / Workflows / Connectors
 | Software | Role |
 |----------|------|
 | **n8n** | Primary workflow automation (self-host) |
-| **Flowise** | Visual LLM/agent flows |
-| **Dify** | LLM app platform |
-| **Activepieces** | Open automation |
-| **Windmill** | Developer-centric workflows |
-| **Temporal** | Durable workflow engine |
-| **Kestra** | Orchestration |
-| **Playwright** | Browser automation |
-| **Browser Use** | LLM browser control |
-| **Skyvern** | Vision + browser workflows |
-| **Stagehand** | AI browser automation |
-| **Crawl4AI** | Web crawling for agents |
-| **Firecrawl** | Web scraping / crawl (open parts) |
-| **Official MCP + FastMCP** | Tool / connector protocol |
+| **Flowise / Dify / Activepieces / Windmill** | Visual / LLM workflows |
+| **Temporal / Kestra** | Durable orchestration |
+| **Playwright / Browser Use / Skyvern / Stagehand** | Browser automation |
+| **Crawl4AI / Firecrawl** | Web crawl / scrape |
+| **Official MCP + FastMCP** | Tool/connector protocol |
 
-### Voice / Speech / Realtime
+### D. CRM / Sales / ERP (core business systems)
 | Software | Role |
 |----------|------|
-| **LiveKit Agents** | Realtime voice/video agents |
-| **Pipecat** | Voice + multimodal pipelines |
-| **Whisper** | Speech recognition |
-| **Coqui TTS** | Voice synthesis |
-| **OpenVoice** | Voice cloning research |
+| **Odoo Community** | CRM + ERP + accounting + inventory baseline |
+| **ERPNext** | Full open ERP (sales, inventory, HR, manufacturing) |
+| **Dolibarr** | Lightweight SMB ERP/CRM |
+| **Twenty CRM** | Modern developer-first CRM |
+| **EspoCRM / SuiteCRM / Krayin** | Classic open CRMs |
+| **Relaticle / crmkit** | AI-native CRM patterns |
 
-### Business Systems (CRM / ERP / OS)
+### E. Marketing / Digital Marketing / SEO / Content
 | Software | Role |
 |----------|------|
-| **Odoo Community** | CRM + ERP + accounting baseline |
-| **Relaticle** | AI-first CRM (AGPL) |
-| **crmkit** | Portable AI CRM skills |
-| **Hisaabo** | India/SMB finance OS candidate |
-| **Keycloak** | Identity & access |
-| **ZITADEL** | Modern identity alternative |
+| **Listmonk** | Newsletter / email campaigns (self-host) |
+| **Mautic** | Marketing automation (campaigns, segments, forms) |
+| **Matomo / Plausible / Umami** | Web analytics (privacy-first GA alternative) |
+| **PostHog** | Product analytics + session replay |
+| **Ghost** | Blog / content CMS |
+| **Strapi / Payload / Directus** | Headless CMS for content |
+| **Docusaurus** | Docs / public knowledge sites |
+| **Penpot** | Design (Figma alternative) |
+| SEO skills from **astDeniss/business-skills** + Anthropic marketing plugins | SEO audit, content strategy, keyword work |
+| Social scheduling via **n8n** + open APIs | Cross-post, queues, monitoring |
+| **scayver/marketing-skills** | Marketing skill library |
 
-### Sales / Lead / Skills Libraries (open)
-| Software / Repo | Role |
-|-----------------|------|
-| **astDeniss/business-skills** | 69 business SKILL.md playbooks |
-| **Autter-dev/agentic-sales-skills** | 11 agents + 48 sales skills |
-| **TheCraigHewitt/sales-skills** | B2B sales lifecycle skills |
-| **Anthropic knowledge-work-plugins** | Official sales/marketing/ops plugins |
-| **Anthropic skills** | Skill authoring standard |
-| **gtm-skills/gtm** | Agentic GTM OS |
-| **GPT Researcher** | Deep research agent |
-| **Apify agent-skills** | Web/social acquisition skills |
-
-### Observability / Governance / Infra helpers
+### F. Social Media / Community / Reputation
 | Software | Role |
 |----------|------|
-| **OpenMetadata / DataHub / OpenLineage** | Data catalog & lineage |
-| Git + structured logs | Audit trail baseline |
-| **Prefect** (optional) | Workflow observability |
+| **n8n workflows** | Post scheduling, mention monitoring, reply drafts |
+| **Chatwoot** | Social + live chat + customer messaging |
+| **Rocket.Chat / Mattermost** | Internal + community chat |
+| Browser agents (Browser Use / Skyvern) | Authenticated social actions (with policy) |
+| Mention/sentiment via scrape + LLM classification | Reputation monitoring |
 
-### Explicitly deferred / evaluate only if FOSS fails
-- Closed SaaS CRMs, closed voice platforms, closed enrichment APIs — only after open alternatives are tested and fail license/control/quality gates.
+### G. HR / Employees / Workforce
+| Software | Role |
+|----------|------|
+| **OrangeHRM** | Core HRIS (self-host) |
+| **IceHrm** | Modern HRIS |
+| **Odoo HR / ERPNext HR / Open HRMS** | HR inside ERP suite |
+| **TimeTrex Community** | Time, attendance, payroll |
+| **Sentrifugo** | Appraisals + employee self-service |
+| Recruitment: CV parse + score via agents + n8n | Screening workflows |
+| Onboarding checklists via **n8n** + wiki | Employee lifecycle |
+
+### H. Calendar / Scheduling / Meetings
+| Software | Role |
+|----------|------|
+| **Cal.com** (self-host / Cal.diy fork) | Booking + scheduling (Calendly alternative) |
+| **Nextcloud Calendar** | Team calendar + contacts |
+| **Xandikos** | CalDAV / CardDAV server |
+| **Baikal** | Lightweight CalDAV/CardDAV |
+| Meeting notes → tasks via agents + n8n | Transcript → decisions → CRM |
+
+### I. Storage / Files / Collaboration Docs
+| Software | Role |
+|----------|------|
+| **Nextcloud** | Primary file sync, share, Office (Collabora/OnlyOffice) |
+| **Seafile** | Alternative file sync |
+| **MinIO** | S3-compatible object storage |
+| **Collabora Online / OnlyOffice** | Real-time office editing |
+| **CryptPad** | Encrypted collaborative docs |
+| **HedgeDoc / AFFiNE / Docmost** | Collaborative notes / whiteboards |
+
+### J. Wiki / Knowledge Base / Internal Docs
+| Software | Role |
+|----------|------|
+| **BookStack** | Structured internal wiki (books/chapters/pages) |
+| **Outline** | Modern team knowledge base |
+| **Wiki.js** | Developer-friendly wiki (Git-backed) |
+| **Docmost** | Self-hosted Notion/Confluence alternative + AI |
+| **DokuWiki / MediaWiki / XWiki** | Classic / large-scale wikis |
+| **Docusaurus** | Public/docs sites |
+| **AFFiNE** | Docs + whiteboard + databases |
+
+### K. Project / Task / Delivery Management
+| Software | Role |
+|----------|------|
+| **Plane** | Modern product/project management |
+| **OpenProject** | Program/portfolio + Gantt + wiki |
+| **Taiga** | Agile / Scrum |
+| **Leantime** | Goal-oriented small teams |
+| **Redmine** | Classic issues + wiki + Gantt |
+| **Focalboard** (Mattermost) | Kanban boards |
+| **Huly** | Project + chat + docs (Linear/Notion/Slack alt) |
+| **Odoo Project / ERPNext Project** | Projects inside ERP |
+
+### L. Team Chat / Communication
+| Software | Role |
+|----------|------|
+| **Mattermost** | Slack alternative (enterprise) |
+| **Rocket.Chat** | Team chat + customer channels |
+| **Zulip** | Threaded team chat |
+| **Element (Matrix)** | Decentralized secure chat |
+| **Huly** | All-in-one chat + projects + docs |
+
+### M. Customer Support / Helpdesk
+| Software | Role |
+|----------|------|
+| **Chatwoot** | Live chat + omnichannel support |
+| **Zammad** | Helpdesk + ticketing |
+| **FreeSCOUT** | Lightweight helpdesk |
+| **OsTicket** | Classic ticket system |
+| AI support drafts via Anthropic CS skills + RAG | Reply assist + escalate |
+
+### N. Email / Newsletter / Forms
+| Software | Role |
+|----------|------|
+| **Listmonk** | Newsletters + campaigns |
+| **Postal / Mailcow / docker-mailserver** | Self-hosted mail stack |
+| **Formbricks** | Forms / surveys (Typeform alt) |
+| **Mautic** | Marketing automation + forms |
+| Outbound sequences via **n8n** + approval gates | Sales/email sequences |
+
+### O. Analytics / BI / Reporting
+| Software | Role |
+|----------|------|
+| **Metabase** | Business intelligence / dashboards |
+| **Apache Superset** | Advanced BI |
+| **Grafana** | Metrics + observability dashboards |
+| **Matomo / Plausible / Umami** | Web analytics |
+| **PostHog** | Product + session analytics |
+| **Lightdash** | dbt-native BI |
+
+### P. Identity / Security / Secrets
+| Software | Role |
+|----------|------|
+| **Keycloak / ZITADEL** | SSO, IAM, RBAC |
+| **Vaultwarden** | Password manager (Bitwarden-compatible) |
+| **Authelia / Authentik** | Auth gateway |
+| **Trilium / structured audit logs** | Audit baseline |
+
+### Q. Finance / Accounting (beyond ERP modules)
+| Software | Role |
+|----------|------|
+| **Odoo Accounting / ERPNext Accounting** | Core books |
+| **Akaunting** | Lightweight accounting |
+| **Firefly III** | Personal/SMB finance tracking |
+| Invoice + payment matching via n8n + agents | Collections workflows |
+
+### R. Sales / Marketing Skills Libraries (reuse)
+| Source | Role |
+|--------|------|
+| **astDeniss/business-skills** | 69 operational playbooks |
+| **Autter agentic-sales-skills** | 11 agents + 48 sales skills |
+| **TheCraigHewitt/sales-skills** | B2B sales lifecycle |
+| **Anthropic knowledge-work-plugins** | Sales, marketing, CS, ops plugins |
+| **scayver/marketing-skills** | Marketing skills |
+| **gtm-skills/gtm** | GTM OS |
+| **GPT Researcher** | Deep research |
+
+### S. Infra / Hosting helpers
+| Software | Role |
+|----------|------|
+| **Coolify / CapRover** | Self-host app platform |
+| **PostgreSQL / Redis / MinIO** | Data + cache + object store |
+| **Prometheus + Grafana** | Monitoring |
+| **OpenMetadata / DataHub** | Data catalog |
+
+### Explicitly deferred (only if FOSS fails evaluation)
+Closed SaaS CRMs, closed enrichment APIs, closed social schedulers, closed payroll (India-specific may need hybrid), closed ad platforms — document why FOSS failed + exit plan.
 
 ---
 
 ## 8. Open-Source Decision Rules
 
-1. **Default = open source.** Every new tool must be checked against the list above first.
-2. Prefer **self-hostable** (n8n, Ollama, Open WebUI, Keycloak, Odoo Community).
-3. License must allow commercial use and modification (MIT, Apache-2.0, BSD preferred; AGPL only with clear isolation).
-4. No credentials in Git, prompts, or docs.
-5. If a proprietary tool is proposed, document: why FOSS failed, data residency impact, exit plan.
-6. All adopted assets stay in the Master Asset Registry with source URL + license + adaptation date.
+1. **Default = open source.** Check Section 7 first.
+2. Prefer **self-hostable** (Nextcloud, n8n, Ollama, Keycloak, Odoo/ERPNext, BookStack/Outline).
+3. License: MIT / Apache-2.0 / BSD preferred; AGPL only with isolation.
+4. No secrets in Git or prompts.
+5. Proprietary only with written FOSS-failure justification + data residency + exit plan.
+6. Every adopted tool → Master Asset Registry (source, license, adaptation date).
 
 ---
 
-## 4. Delivery Sequence (Practical)
+## 9. Recommended Starter FOSS Stack (Nivy)
 
-| Phase | Focus | Outcome |
-|-------|--------|---------|
-| **0** | Foundation | Registry + control plane + approval/audit rules live |
-| **1** | Revenue spine | AI SDR + Qualification + Concierge working with approval gates |
-| **1b** | Lead stack | Scrape/enrich MCPs wired into SDR/Qualification |
-| **2** | Delivery spine | Won-deal → onboarding → delivery → invoice path |
-| **3** | UI shell | One Nivy workspace (role-aware) over existing systems |
-| **4** | Sales OS map | Every sales capability mapped; gaps only custom |
-| **5** | Finance/HR | Invoice + workforce basic loops |
-| **6** | Managers / Control Tower | L7–L9 patterns after P0/P1 stable |
-
----
-
-## 5. What Changed Since Last Plan
-
-| Area | Before | Now |
-|------|--------|-----|
-| Folders | 00–07 | **+08 UI workspace +09 Business planning/strategy** |
-| Hierarchy | Implicit | Explicit **L0→L10** automation universe |
-| UI | Not primary | **One unified company UI** is now a first-class target |
-| Catalogs | Skills + agents | Full catalogs through Control Tower + Autonomous Company |
-| Foundation plan | Conceptual | Concrete Wave 0–5 + non-negotiable design rules |
-| Master checklist | Partial | Canonical **Master Business Automation List** (micro → company) |
-| Software policy | Mixed | **Open-source first** (full FOSS list added) |
+| Function | Primary FOSS pick |
+|----------|-------------------|
+| AI runtime | Ollama + Open WebUI + LiteLLM |
+| Agents | LangGraph / CrewAI + Hermes/Goose |
+| Automation | **n8n** |
+| CRM/ERP | **Odoo Community** or **ERPNext** |
+| Files / Office | **Nextcloud** + Collabora |
+| Wiki / Knowledge | **BookStack** or **Outline** or **Docmost** |
+| Calendar / booking | **Cal.com** (self-host) |
+| Chat | **Mattermost** or **Rocket.Chat** |
+| Support | **Chatwoot** |
+| Marketing email | **Listmonk** + **Mautic** |
+| Analytics | **Matomo** or **Plausible** + **Metabase** |
+| HR | **OrangeHRM** or ERPNext HR |
+| Projects | **Plane** or **OpenProject** |
+| Identity | **Keycloak** |
+| Scrape / research | Crawl4AI + Playwright + GPT Researcher |
 
 ---
 
-## 6. Immediate Next Actions
+## 10. Immediate Next Actions
 
-1. Freeze Asset Registry schema (from file 77 + foundation plan).
-2. Implement control-plane minimum (approval classes + audit schema).
-3. Pick 3 P0 services: **AI SDR + Lead Qualification + Website Concierge**.
-4. Map each to concrete ready sources; synthetic test; add approval gate.
-5. Only then wire scrape/enrich MCPs and CRM writes.
+1. Freeze Asset Registry schema.
+2. Control plane minimum (approval + audit).
+3. P0 agents: AI SDR + Lead Qualification + Concierge (FOSS stack only).
+4. Wire Nextcloud + BookStack/Outline as knowledge/storage baseline.
+5. n8n as central automation bus.
 
-**Do not** build L7–L10 autonomous layers before P0 revenue spine is stable and audited.
+**Do not** scale to L7–L10 before P0 revenue spine is stable and audited.
 
 ---
 
 **Bottom line:**  
-Library ab full **Company OS + Unified UI + L0–L10 automation hierarchy** tak cover karti hai.  
-Nivy ka kaam: **Foundation → P0 Revenue Agents → Lead stack → UI shell → Sales OS map**.  
-**Stack policy = open source first** (Ollama, n8n, LangGraph/CrewAI, Mem0, LlamaIndex, Playwright, Odoo Community, Keycloak, etc.).  
-Khud se banana almost nahi — mostly FOSS reuse + adapt + govern.
+Full company = **open-source first**. Sales, marketing, SEO, social, HR, calendar, storage, wiki, projects, chat, support, analytics, finance — sab ke liye FOSS options listed.  
+Primary spine: **Ollama + n8n + Odoo/ERPNext + Nextcloud + BookStack/Outline + Keycloak + Chatwoot + Listmonk + Matomo**.  
+Khud se banana nahi — FOSS reuse + adapt + govern.
